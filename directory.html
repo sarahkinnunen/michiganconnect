@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browse and search all resources across Wayne and Monroe counties — housing, food, healthcare, legal aid, and crisis services." />
+  <meta name="theme-color" content="#1a6ebd" />
+  <title>Resource Directory | The Connect</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+        <div class="logo-icon" aria-hidden="true">TC</div>
+        The <span>Connect</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html" aria-current="page">Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
+        <span class="toggle-icon" aria-hidden="true">☰</span>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html" aria-current="page">All Resources</a></li>
+        <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+        <li><a href="category.html?cat=food">🍎 Food</a></li>
+        <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+        <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+        <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data-reports.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb">
+            <li><a href="index.html">Home</a></li>
+            <li><span aria-current="page">Resource Directory</span></li>
+          </ol>
+        </nav>
+        <h1>Resource Directory</h1>
+        <p>Search and filter resources across Wayne and Monroe counties. Real-time results — no page reload needed.</p>
+      </div>
+    </div>
+
+    <section class="section section--sm" aria-labelledby="directory-heading">
+      <div class="container">
+        <h2 id="directory-heading" class="sr-only">Search and filter resources</h2>
+
+        <!-- SEARCH + FILTER BAR -->
+        <div class="search-filter-bar" role="search" aria-label="Search and filter resources">
+
+          <!-- Search input -->
+          <div class="search-input-wrapper">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <label for="search-input" class="sr-only">Search resources by name, keyword, or service</label>
+            <input
+              type="search"
+              id="search-input"
+              name="search"
+              placeholder="Search by name, keyword, or type of help…"
+              autocomplete="off"
+              aria-label="Search resources"
+              aria-describedby="search-hint"
+            />
+          </div>
+          <p id="search-hint" class="form-hint mb-4">Type to filter results in real time. Try "shelter", "food", "mental health", or a city name.</p>
+
+          <!-- Filter selects -->
+          <div class="filters-row">
+
+            <div class="filter-group">
+              <label for="filter-category">Category</label>
+              <select id="filter-category" aria-label="Filter by category">
+                <option value="">All categories</option>
+                <!-- Populated dynamically by search.js -->
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="filter-county">County</label>
+              <select id="filter-county" aria-label="Filter by county">
+                <option value="">All counties</option>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="filter-city">City</label>
+              <select id="filter-city" aria-label="Filter by city">
+                <option value="">All cities</option>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <div class="filter-group filter-clear-btn">
+              <button class="btn btn-ghost" id="filter-clear" aria-label="Clear all filters and search">
+                ✕ Clear
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Results summary (announced to screen readers on update) -->
+        <p class="results-summary" id="results-summary" aria-live="polite" aria-atomic="true">
+          Loading resources…
+        </p>
+
+        <!-- Results grid (populated by search.js) -->
+        <div
+          class="resource-grid"
+          id="results-container"
+          aria-live="polite"
+          aria-label="Search results"
+        >
+          <!-- Cards injected dynamically -->
+        </div>
+
+        <!-- Category quick links below results -->
+        <div class="section section--sm" style="padding-top:3rem; border-top:1px solid var(--color-border); margin-top:3rem;">
+          <div class="section-header section-header--accented">
+            <h2>Browse by Category</h2>
+          </div>
+          <nav aria-label="Resource categories">
+            <ul class="category-grid" role="list">
+              <li><a href="category.html?cat=housing" class="category-tile tile--housing"><span class="tile-icon" aria-hidden="true">🏠</span><span>Housing</span></a></li>
+              <li><a href="category.html?cat=food" class="category-tile tile--food"><span class="tile-icon" aria-hidden="true">🍎</span><span>Food</span></a></li>
+              <li><a href="category.html?cat=healthcare" class="category-tile tile--healthcare"><span class="tile-icon" aria-hidden="true">🏥</span><span>Healthcare</span></a></li>
+              <li><a href="category.html?cat=legal" class="category-tile tile--legal"><span class="tile-icon" aria-hidden="true">⚖️</span><span>Legal Aid</span></a></li>
+              <li><a href="category.html?cat=crisis" class="category-tile tile--crisis"><span class="tile-icon" aria-hidden="true">🆘</span><span>Crisis</span></a></li>
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+            <div class="logo-icon" aria-hidden="true">TC</div>
+            The <span>Connect</span>
+          </a>
+          <p>Connecting youth and families in Wayne and Monroe counties to critical services.</p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul role="list">
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="data-reports.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3>Categories</h3>
+          <ul role="list">
+            <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+            <li><a href="category.html?cat=food">🍎 Food</a></li>
+            <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+            <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+            <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. Resource information is verified regularly but may change. Always call ahead.</p>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+          <a href="contact.html">Suggest a Resource</a>
+          <a href="about.html#accessibility">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>
