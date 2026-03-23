@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About The Connect — our mission, transparency, and commitment to youth and families in Wayne and Monroe counties." />
+  <meta name="theme-color" content="#1a6ebd" />
+  <title>About | The Connect</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+        <div class="logo-icon" aria-hidden="true">TC</div>
+        The <span>Connect</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html">Resources</a></li>
+          <li><a href="about.html" aria-current="page">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
+        <span class="toggle-icon" aria-hidden="true">☰</span>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">All Resources</a></li>
+        <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+        <li><a href="category.html?cat=food">🍎 Food</a></li>
+        <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+        <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+        <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+        <li><a href="about.html" aria-current="page">About</a></li>
+        <li><a href="data-reports.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb">
+            <li><a href="index.html">Home</a></li>
+            <li><span aria-current="page">About</span></li>
+          </ol>
+        </nav>
+        <h1>About The Connect</h1>
+        <p>Our mission, our values, and our commitment to transparency.</p>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MISSION
+         ===================================================== -->
+    <section class="section" aria-labelledby="mission-heading">
+      <div class="container">
+        <div class="about-content">
+          <div>
+            <div class="section-header section-header--accented">
+              <h2 id="mission-heading">Our Mission</h2>
+            </div>
+            <p style="font-size:var(--font-size-md); line-height:1.8; color:var(--color-text-secondary); margin-bottom:1.5rem;">
+              The Connect exists to close the gap between people who need help and the organizations that provide it.
+              We serve youth and families across Wayne and Monroe counties — with a focus on removing barriers like
+              complex language, confusing eligibility rules, and outdated information.
+            </p>
+            <p style="font-size:var(--font-size-md); line-height:1.8; color:var(--color-text-secondary); margin-bottom:1.5rem;">
+              We believe that no one should go without housing, food, healthcare, or safety because they didn't
+              know where to look. This site is built to be simple, fast, and trustworthy — designed for people
+              under real stress, who need real answers, right now.
+            </p>
+            <p style="font-size:var(--font-size-md); line-height:1.8; color:var(--color-text-secondary);">
+              Resources listed here are regularly verified by our team. We contact each organization to confirm
+              current hours, eligibility, and contact information. Every resource card shows a "Last Verified" date
+              so you can trust what you see.
+            </p>
+          </div>
+
+          <!-- Stats -->
+          <div>
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="stat-card__number">2</div>
+                <div class="stat-card__label">Counties served</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__number">5</div>
+                <div class="stat-card__label">Resource categories</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__number">10+</div>
+                <div class="stat-card__label">Verified resources</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__number">Free</div>
+                <div class="stat-card__label">Always, forever</div>
+              </div>
+            </div>
+            <div class="alert alert--info mt-6" role="note">
+              <strong>This site is growing.</strong> We're actively adding more resources across Wayne and Monroe counties.
+              Know of a service we're missing? <a href="contact.html">Tell us →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         VALUES
+         ===================================================== -->
+    <section class="section section--alt" aria-labelledby="values-heading">
+      <div class="container">
+        <div class="section-header text-center section-header--accented">
+          <h2 id="values-heading">Our Values</h2>
+        </div>
+
+        <div style="display:grid; gap:1.5rem; grid-template-columns:1fr; max-width:900px; margin:0 auto;">
+          <style>
+            @media (min-width:640px) { .values-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+            @media (min-width:900px) { .values-grid { grid-template-columns: repeat(3, 1fr) !important; } }
+          </style>
+          <div class="values-grid" style="display:grid; gap:1.5rem; grid-template-columns:1fr;">
+            <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1.5rem;">
+              <div style="font-size:1.75rem; margin-bottom:0.75rem;">🎯</div>
+              <h3 style="margin-bottom:0.5rem;">Accuracy</h3>
+              <p class="text-secondary text-sm">Every resource is manually verified. We list a "Last Verified" date on every card so you always know how current the information is.</p>
+            </div>
+            <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1.5rem;">
+              <div style="font-size:1.75rem; margin-bottom:0.75rem;">♿</div>
+              <h3 style="margin-bottom:0.5rem;">Accessibility</h3>
+              <p class="text-secondary text-sm">Built WCAG-conscious from the ground up. High contrast, keyboard navigable, screen-reader friendly, mobile-first. This site should work for everyone.</p>
+            </div>
+            <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1.5rem;">
+              <div style="font-size:1.75rem; margin-bottom:0.75rem;">🔒</div>
+              <h3 style="margin-bottom:0.5rem;">Privacy</h3>
+              <p class="text-secondary text-sm">We do not collect personal data, require sign-up, or track individual searches. This site exists to help, not to harvest information.</p>
+            </div>
+            <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1.5rem;">
+              <div style="font-size:1.75rem; margin-bottom:0.75rem;">🤝</div>
+              <h3 style="margin-bottom:0.5rem;">Community</h3>
+              <p class="text-secondary text-sm">We work with local organizations, advocates, and community members to keep this directory useful and relevant. Anyone can <a href="contact.html">suggest a resource</a>.</p>
+            </div>
+            <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1.5rem;">
+              <div style="font-size:1.75rem; margin-bottom:0.75rem;">📖</div>
+              <h3 style="margin-bottom:0.5rem;">Plain Language</h3>
+              <p class="text-secondary text-sm">We write for a 6th-grade reading level. No jargon. Clear instructions. If it's confusing, we rewrite it.</p>
+            </div>
+            <div style="background:var(--color-bg); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1.5rem;">
+              <div style="font-size:1.75rem; margin-bottom:0.75rem;">🌱</div>
+              <h3 style="margin-bottom:0.5rem;">Growth</h3>
+              <p class="text-secondary text-sm">We started with Wayne and Monroe counties and will expand geographically as capacity grows. The data architecture is built to scale.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         DATA POLICY
+         ===================================================== -->
+    <section class="section" id="data-policy" aria-labelledby="data-policy-heading">
+      <div class="container" style="max-width:800px;">
+        <div class="section-header section-header--accented">
+          <h2 id="data-policy-heading">Data &amp; Verification Policy</h2>
+        </div>
+        <p style="color:var(--color-text-secondary); line-height:1.8; margin-bottom:1rem;">
+          Resource data is stored in a structured JSON file and updated manually by our team. Each resource record includes a
+          <code style="background:var(--color-bg-alt); padding:0.1rem 0.4rem; border-radius:4px; font-size:0.875rem;">last_verified_date</code> field.
+          Our goal is to verify each resource at least every 90 days.
+        </p>
+        <p style="color:var(--color-text-secondary); line-height:1.8; margin-bottom:1rem;">
+          Verification means we have confirmed the organization's name, phone number, address, hours, and eligibility via
+          direct contact or their official website.
+        </p>
+        <p style="color:var(--color-text-secondary); line-height:1.8;">
+          If you find outdated or incorrect information, please <a href="contact.html">let us know immediately</a>.
+          We take data accuracy seriously — lives may depend on this information being correct.
+        </p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         ACCESSIBILITY STATEMENT
+         ===================================================== -->
+    <section class="section section--alt" id="accessibility" aria-labelledby="a11y-heading">
+      <div class="container" style="max-width:800px;">
+        <div class="section-header section-header--accented">
+          <h2 id="a11y-heading">Accessibility Statement</h2>
+        </div>
+        <p style="color:var(--color-text-secondary); line-height:1.8; margin-bottom:1rem;">
+          The Connect is committed to digital accessibility for people with disabilities. We aim to conform to
+          <strong>WCAG 2.1 Level AA</strong> guidelines. Our site is designed to be:
+        </p>
+        <ul style="color:var(--color-text-secondary); line-height:2; padding-left:1.5rem; margin-bottom:1rem;">
+          <li>Fully keyboard navigable (use Tab, Enter, Space, Arrow keys)</li>
+          <li>Screen reader compatible (semantic HTML, ARIA labels, live regions)</li>
+          <li>High contrast (meets or exceeds 4.5:1 color contrast ratio)</li>
+          <li>Zoomable up to 200% without loss of functionality</li>
+          <li>Operable with reduced motion settings</li>
+          <li>Mobile and touch accessible (minimum 44×44px tap targets)</li>
+        </ul>
+        <p style="color:var(--color-text-secondary); line-height:1.8;">
+          If you experience an accessibility barrier, please <a href="contact.html">contact us</a> and we will
+          work to address it promptly.
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section--sm">
+      <div class="container text-center">
+        <h2>Ready to Find Resources?</h2>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1.5rem;">
+          <a href="directory.html" class="btn btn-primary btn-lg">Browse Resources</a>
+          <a href="contact.html" class="btn btn-ghost btn-lg">Contact Us</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+            <div class="logo-icon" aria-hidden="true">TC</div>
+            The <span>Connect</span>
+          </a>
+          <p>Connecting youth and families in Wayne and Monroe counties to critical services.</p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul role="list">
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="data-reports.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3>Categories</h3>
+          <ul role="list">
+            <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+            <li><a href="category.html?cat=food">🍎 Food</a></li>
+            <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+            <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+            <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. Resource information is verified regularly but may change. Always call ahead.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

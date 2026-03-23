@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Connect — Michigan youth resource hub for Wayne and Monroe counties. Find housing, food, healthcare, legal aid, and crisis services fast." />
+  <meta name="theme-color" content="#1a6ebd" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="The Connect — Michigan Youth Resource Hub" />
+  <meta property="og:description" content="Find critical resources across Wayne and Monroe counties — housing, food, healthcare, legal aid, and crisis services." />
+  <meta property="og:site_name" content="The Connect" />
+
+  <title>The Connect — Michigan Youth Resource Hub</title>
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+</head>
+<body>
+
+  <!-- Skip to main content (accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+        <div class="logo-icon" aria-hidden="true">TC</div>
+        The <span>Connect</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html">Resources</a></li>
+          <li><a href="category.html?cat=housing">Housing</a></li>
+          <li><a href="category.html?cat=food">Food</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+        </ul>
+      </nav>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
+        <span class="toggle-icon" aria-hidden="true">☰</span>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">All Resources</a></li>
+        <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+        <li><a href="category.html?cat=food">🍎 Food</a></li>
+        <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+        <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+        <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data-reports.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- ================ END HEADER ================== -->
+
+  <main id="main-content">
+
+    <!-- =====================================================
+         HOME PAGE HERO
+         ===================================================== -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <h1 id="hero-heading">Find the Help You Need,<br>Right Now.</h1>
+        <p class="lead">
+          The Connect links youth and families in Wayne and Monroe counties
+          to housing, food, healthcare, legal aid, and crisis support — free and fast.
+        </p>
+        <div class="hero-actions">
+          <a href="find-help.html" class="btn btn-crisis btn-lg">
+            🆘 Find Help Now
+          </a>
+          <a href="directory.html" class="btn btn-outline btn-lg" style="color:#fff; border-color:rgba(255,255,255,0.6);">
+            Browse All Resources
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Crisis Banner -->
+    <div class="crisis-banner" role="alert" aria-label="Crisis resources">
+      <div class="container">
+        <p>In immediate danger or crisis?</p>
+        <a href="tel:911">Call 911</a>
+        <a href="tel:988">Call/Text 988 (Suicide &amp; Crisis)</a>
+        <a href="tel:211">Dial 211 (All Needs)</a>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         CATEGORIES SECTION
+         ===================================================== -->
+    <section class="section" aria-labelledby="categories-heading">
+      <div class="container">
+        <div class="section-header text-center section-header--accented">
+          <h2 id="categories-heading">What Do You Need Help With?</h2>
+          <p>Choose a category to see focused resources in your area.</p>
+        </div>
+
+        <nav aria-label="Resource categories">
+          <ul class="category-grid" role="list">
+            <li>
+              <a href="category.html?cat=housing" class="category-tile tile--housing">
+                <span class="tile-icon" aria-hidden="true">🏠</span>
+                <span>Housing</span>
+              </a>
+            </li>
+            <li>
+              <a href="category.html?cat=food" class="category-tile tile--food">
+                <span class="tile-icon" aria-hidden="true">🍎</span>
+                <span>Food</span>
+              </a>
+            </li>
+            <li>
+              <a href="category.html?cat=healthcare" class="category-tile tile--healthcare">
+                <span class="tile-icon" aria-hidden="true">🏥</span>
+                <span>Healthcare</span>
+              </a>
+            </li>
+            <li>
+              <a href="category.html?cat=legal" class="category-tile tile--legal">
+                <span class="tile-icon" aria-hidden="true">⚖️</span>
+                <span>Legal Aid</span>
+              </a>
+            </li>
+            <li>
+              <a href="category.html?cat=crisis" class="category-tile tile--crisis">
+                <span class="tile-icon" aria-hidden="true">🆘</span>
+                <span>Crisis Services</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FEATURED RESOURCES
+         ===================================================== -->
+    <section class="section section--alt" aria-labelledby="featured-heading">
+      <div class="container">
+        <div class="section-header section-header--accented">
+          <h2 id="featured-heading">Featured Resources</h2>
+          <p>A sample of what's available across Wayne and Monroe counties.</p>
+        </div>
+
+        <!-- Cards injected by search.js -->
+        <div class="resource-grid" id="featured-resources" aria-live="polite" aria-label="Featured resources">
+          <!-- Loaded dynamically -->
+        </div>
+
+        <div class="mt-8 text-center">
+          <a href="directory.html" class="btn btn-primary btn-lg">View All Resources →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         HOW IT WORKS
+         ===================================================== -->
+    <section class="section" aria-labelledby="how-heading">
+      <div class="container">
+        <div class="section-header text-center section-header--accented">
+          <h2 id="how-heading">How The Connect Works</h2>
+        </div>
+        <div style="display:grid; gap:2rem; grid-template-columns:1fr; max-width:800px; margin:0 auto;">
+          <!-- Step 1 -->
+          <div style="display:flex; gap:1.5rem; align-items:flex-start;">
+            <div style="background:var(--color-primary); color:#fff; border-radius:50%; width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:1.25rem; font-weight:900; flex-shrink:0;">1</div>
+            <div>
+              <h3 style="margin-bottom:0.5rem;">Choose a category or search</h3>
+              <p class="text-secondary">Pick what you need from the tiles above, or type keywords in the <a href="directory.html">Resource Directory</a> search bar.</p>
+            </div>
+          </div>
+          <!-- Step 2 -->
+          <div style="display:flex; gap:1.5rem; align-items:flex-start;">
+            <div style="background:var(--color-primary); color:#fff; border-radius:50%; width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:1.25rem; font-weight:900; flex-shrink:0;">2</div>
+            <div>
+              <h3 style="margin-bottom:0.5rem;">Filter by location</h3>
+              <p class="text-secondary">Narrow results to Wayne or Monroe county, or a specific city.</p>
+            </div>
+          </div>
+          <!-- Step 3 -->
+          <div style="display:flex; gap:1.5rem; align-items:flex-start;">
+            <div style="background:var(--color-primary); color:#fff; border-radius:50%; width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:1.25rem; font-weight:900; flex-shrink:0;">3</div>
+            <div>
+              <h3 style="margin-bottom:0.5rem;">Call or visit</h3>
+              <p class="text-secondary">Each resource card shows the phone number, address, hours, and eligibility so you can act immediately.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         COUNTIES SERVED
+         ===================================================== -->
+    <section class="section section--alt" aria-labelledby="counties-heading">
+      <div class="container text-center">
+        <div class="section-header text-center section-header--accented">
+          <h2 id="counties-heading">Counties We Serve</h2>
+          <p>Currently covering Wayne and Monroe counties, with plans to expand.</p>
+        </div>
+        <div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+          <a href="directory.html?county=Wayne" class="btn btn-outline btn-lg">📍 Wayne County</a>
+          <a href="directory.html?county=Monroe" class="btn btn-outline btn-lg">📍 Monroe County</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <!-- ================ END MAIN ================== -->
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand -->
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+            <div class="logo-icon" aria-hidden="true">TC</div>
+            The <span>Connect</span>
+          </a>
+          <p>A youth-centered resource hub connecting people in Wayne and Monroe counties to the services they need.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul role="list">
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="data-reports.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Categories -->
+        <div class="footer-links">
+          <h3>Categories</h3>
+          <ul role="list">
+            <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+            <li><a href="category.html?cat=food">🍎 Food</a></li>
+            <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+            <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+            <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. All resource information is verified regularly but may change. Always call ahead.</p>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+          <a href="contact.html">Suggest a Resource</a>
+          <a href="about.html#data-policy">Data Policy</a>
+          <a href="about.html#accessibility">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- ================ END FOOTER ================== -->
+
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browse resources by category — The Connect Michigan youth resource hub." />
+  <meta name="theme-color" content="#1a6ebd" />
+  <title>Resources by Category | The Connect</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+        <div class="logo-icon" aria-hidden="true">TC</div>
+        The <span>Connect</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html">Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
+        <span class="toggle-icon" aria-hidden="true">☰</span>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">All Resources</a></li>
+        <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+        <li><a href="category.html?cat=food">🍎 Food</a></li>
+        <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+        <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+        <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data-reports.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Category hero — populated by JS based on ?cat= param -->
+    <div id="category-hero" class="category-page-header">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb" style="--color-text-muted:rgba(255,255,255,0.7);">
+            <li><a href="index.html" style="color:rgba(255,255,255,0.8);">Home</a></li>
+            <li><a href="directory.html" style="color:rgba(255,255,255,0.8);">Resources</a></li>
+            <li><span aria-current="page" id="breadcrumb-cat" style="color:#fff;">Category</span></li>
+          </ol>
+        </nav>
+        <h1 id="category-title">Resources</h1>
+        <p id="category-desc">Loading category information…</p>
+      </div>
+    </div>
+
+    <section class="section section--sm" aria-labelledby="cat-resources-heading">
+      <div class="container">
+
+        <!-- How to Access accordion -->
+        <div id="how-to-access" class="mb-8" aria-labelledby="how-access-heading">
+          <h2 id="how-access-heading" style="font-size:1.25rem; margin-bottom:1rem;">How to Access These Services</h2>
+          <div class="accordion-group">
+            <div class="accordion-item">
+              <button
+                class="accordion-header"
+                aria-expanded="false"
+                aria-controls="acc-body-1"
+                id="acc-btn-1"
+              >
+                <span id="acc-how-title">What to expect when reaching out</span>
+                <span class="accordion-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="accordion-body" id="acc-body-1" hidden role="region" aria-labelledby="acc-btn-1">
+                <p id="acc-how-text">Loading guidance…</p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button
+                class="accordion-header"
+                aria-expanded="false"
+                aria-controls="acc-body-2"
+                id="acc-btn-2"
+              >
+                <span>What documents might help</span>
+                <span class="accordion-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="accordion-body" id="acc-body-2" hidden role="region" aria-labelledby="acc-btn-2">
+                <p>Having ID (even an expired one), proof of address, and any relevant paperwork can help speed up the process. However, <strong>most services will help you even without documentation.</strong> Don't let missing documents stop you from reaching out.</p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button
+                class="accordion-header"
+                aria-expanded="false"
+                aria-controls="acc-body-3"
+                id="acc-btn-3"
+              >
+                <span>What if I don't qualify?</span>
+                <span class="accordion-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="accordion-body" id="acc-body-3" hidden role="region" aria-labelledby="acc-btn-3">
+                <p>If one resource can't serve you, ask them for a referral. You can also call <strong>211</strong> or browse the <a href="directory.html">full directory</a> to find alternatives. Never give up — help exists.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2 id="cat-resources-heading" class="sr-only">Resources list</h2>
+
+        <!-- Results summary -->
+        <p class="results-summary" id="results-summary" aria-live="polite" aria-atomic="true">
+          Loading resources…
+        </p>
+
+        <!-- Resource cards — populated by search.js when body[data-category] is set -->
+        <div
+          class="resource-grid"
+          id="results-container"
+          aria-live="polite"
+          aria-label="Category resources"
+        >
+          <!-- Loaded dynamically -->
+        </div>
+
+        <div class="mt-8 text-center">
+          <a href="directory.html" class="btn btn-outline">← Browse all resources</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Other categories -->
+    <section class="section section--alt" aria-labelledby="other-cats-heading">
+      <div class="container">
+        <div class="section-header text-center section-header--accented">
+          <h2 id="other-cats-heading">Other Categories</h2>
+        </div>
+        <nav aria-label="Other resource categories">
+          <ul class="category-grid" role="list">
+            <li><a href="category.html?cat=housing" class="category-tile tile--housing"><span class="tile-icon" aria-hidden="true">🏠</span><span>Housing</span></a></li>
+            <li><a href="category.html?cat=food" class="category-tile tile--food"><span class="tile-icon" aria-hidden="true">🍎</span><span>Food</span></a></li>
+            <li><a href="category.html?cat=healthcare" class="category-tile tile--healthcare"><span class="tile-icon" aria-hidden="true">🏥</span><span>Healthcare</span></a></li>
+            <li><a href="category.html?cat=legal" class="category-tile tile--legal"><span class="tile-icon" aria-hidden="true">⚖️</span><span>Legal Aid</span></a></li>
+            <li><a href="category.html?cat=crisis" class="category-tile tile--crisis"><span class="tile-icon" aria-hidden="true">🆘</span><span>Crisis</span></a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+            <div class="logo-icon" aria-hidden="true">TC</div>
+            The <span>Connect</span>
+          </a>
+          <p>Connecting youth and families in Wayne and Monroe counties to critical services.</p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul role="list">
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3>Categories</h3>
+          <ul role="list">
+            <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+            <li><a href="category.html?cat=food">🍎 Food</a></li>
+            <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+            <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+            <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. Resource information is verified regularly but may change. Always call ahead.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+
+  <!--
+    Category page initialization script.
+    Reads the ?cat= URL param and sets body[data-category] so search.js
+    knows which category to load. Also updates the page title and hero.
+  -->
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var cat = params.get('cat') || 'housing';
+      document.body.setAttribute('data-category', cat);
+
+      var CATEGORIES = {
+        housing: {
+          label: 'Housing', icon: '🏠', color: 'housing',
+          description: 'Emergency shelter, transitional housing, and permanent housing support.',
+          howTo: 'Contact the organization directly by phone or walk in. Many require basic ID but some serve those without documentation.'
+        },
+        food: {
+          label: 'Food', icon: '🍎', color: 'food',
+          description: 'Food pantries, meal programs, SNAP assistance, and community kitchens.',
+          howTo: 'Most food pantries are walk-in. Bring proof of address if you have it, but many serve without documentation. Check hours before visiting.'
+        },
+        healthcare: {
+          label: 'Healthcare', icon: '🏥', color: 'healthcare',
+          description: 'Medical care, mental health services, dental, and health navigation.',
+          howTo: 'Call ahead or walk in. Ask about sliding-scale fees or Medicaid enrollment support. You do not need insurance to get help.'
+        },
+        legal: {
+          label: 'Legal Aid', icon: '⚖️', color: 'legal',
+          description: 'Free legal help with housing, family law, ID, and youth rights.',
+          howTo: 'Call or visit the legal aid office. Bring any documents related to your issue. Services are confidential and typically free.'
+        },
+        crisis: {
+          label: 'Crisis Services', icon: '🆘', color: 'crisis',
+          description: '24/7 crisis lines, emergency services, and immediate intervention.',
+          howTo: 'Call or text the crisis line. You do not need to give your name. Describe your situation and a counselor will help immediately.'
+        }
+      };
+
+      var meta = CATEGORIES[cat] || { label: cat, icon: '', color: 'housing', description: '', howTo: '' };
+
+      // Update page title
+      document.title = meta.label + ' Resources | The Connect';
+
+      // Update hero
+      var hero = document.getElementById('category-hero');
+      if (hero) {
+        hero.classList.add('bg--' + meta.color);
+      }
+
+      var titleEl = document.getElementById('category-title');
+      if (titleEl) titleEl.textContent = meta.icon + ' ' + meta.label + ' Resources';
+
+      var descEl = document.getElementById('category-desc');
+      if (descEl) descEl.textContent = meta.description;
+
+      var breadcrumb = document.getElementById('breadcrumb-cat');
+      if (breadcrumb) breadcrumb.textContent = meta.label;
+
+      // Update meta description
+      var metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute('content', meta.label + ' resources in Wayne and Monroe counties — The Connect Michigan youth hub.');
+      }
+
+      // Update accordion "how to" text
+      var accHowTitle = document.getElementById('acc-how-title');
+      if (accHowTitle) accHowTitle.textContent = 'How to access ' + meta.label.toLowerCase() + ' services';
+
+      var accHowText = document.getElementById('acc-how-text');
+      if (accHowText) accHowText.textContent = meta.howTo;
+    }());
+  </script>
+
+</body>
+</html>

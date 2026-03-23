@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact The Connect or suggest a resource for Wayne and Monroe counties." />
+  <meta name="theme-color" content="#1a6ebd" />
+  <title>Contact &amp; Suggest a Resource | The Connect</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+        <div class="logo-icon" aria-hidden="true">TC</div>
+        The <span>Connect</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html">Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html" aria-current="page">Contact</a></li>
+          <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
+        <span class="toggle-icon" aria-hidden="true">☰</span>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">All Resources</a></li>
+        <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+        <li><a href="category.html?cat=food">🍎 Food</a></li>
+        <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+        <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+        <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data-reports.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
+        <li><a href="find-help.html" class="nav-crisis-btn">🆘 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb">
+            <li><a href="index.html">Home</a></li>
+            <li><span aria-current="page">Contact</span></li>
+          </ol>
+        </nav>
+        <h1>Contact &amp; Suggest a Resource</h1>
+        <p>Have a question, found incorrect information, or want to add a resource? We want to hear from you.</p>
+      </div>
+    </div>
+
+    <section class="section" aria-labelledby="contact-heading">
+      <div class="container">
+        <h2 id="contact-heading" class="sr-only">Contact forms</h2>
+
+        <!-- Crisis reminder -->
+        <div class="alert alert--crisis" role="note" style="max-width:700px; margin:0 auto 2rem;">
+          <strong>Need help right now?</strong>
+          This is not a crisis line. If you need immediate help, please <a href="find-help.html">visit Find Help Now</a>
+          or call <strong>211</strong> or <strong>988</strong>.
+        </div>
+
+        <div style="display:grid; gap:2.5rem; grid-template-columns:1fr; align-items:start; max-width:1000px; margin:0 auto;">
+          <style>
+            @media (min-width:768px) { .contact-grid { grid-template-columns: 1fr 1fr !important; } }
+          </style>
+          <div class="contact-grid" style="display:grid; gap:2.5rem; grid-template-columns:1fr; align-items:start;">
+
+            <!-- =====================================================
+                 CONTACT FORM — General inquiry
+                 Netlify-compatible: data-netlify="true"
+                 ===================================================== -->
+            <div>
+              <h2 style="font-size:var(--font-size-xl); margin-bottom:1.5rem;">Send Us a Message</h2>
+              <div class="form-card" style="margin:0;">
+                <form
+                  name="contact"
+                  method="POST"
+                  data-netlify="true"
+                  data-netlify-honeypot="bot-field"
+                  novalidate
+                  aria-label="General contact form"
+                >
+                  <!-- Netlify required hidden field -->
+                  <input type="hidden" name="form-name" value="contact" />
+
+                  <!-- Honeypot field (hidden from real users) -->
+                  <div class="form-honeypot" aria-hidden="true">
+                    <label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="contact-name">
+                        Your name <span class="required" aria-label="required">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="contact-name"
+                        name="name"
+                        required
+                        autocomplete="name"
+                        placeholder="First name is fine"
+                        aria-required="true"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="contact-email">Email address</label>
+                      <input
+                        type="email"
+                        id="contact-email"
+                        name="email"
+                        autocomplete="email"
+                        placeholder="Optional — for a reply"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="contact-subject">
+                      Subject <span class="required" aria-label="required">*</span>
+                    </label>
+                    <select id="contact-subject" name="subject" required aria-required="true">
+                      <option value="" disabled selected>Select a topic</option>
+                      <option value="incorrect-info">Incorrect or outdated resource info</option>
+                      <option value="suggest-resource">Suggest a new resource</option>
+                      <option value="accessibility">Accessibility issue</option>
+                      <option value="partnership">Partnership or collaboration</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="contact-message">
+                      Message <span class="required" aria-label="required">*</span>
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      required
+                      aria-required="true"
+                      placeholder="Tell us what's on your mind…"
+                      aria-describedby="contact-message-hint"
+                    ></textarea>
+                    <p id="contact-message-hint" class="form-hint">Be as specific as possible. If reporting incorrect info, include the resource name.</p>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary" style="width:100%;">
+                    Send Message →
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- =====================================================
+                 SUGGEST A RESOURCE FORM
+                 ===================================================== -->
+            <div>
+              <h2 style="font-size:var(--font-size-xl); margin-bottom:1.5rem;">Suggest a Resource</h2>
+              <div class="form-card" style="margin:0;">
+                <p class="text-secondary text-sm mb-4" style="margin-bottom:1.5rem;">
+                  Know of a local organization serving Wayne or Monroe counties that isn't listed here?
+                  Fill out what you know and we'll verify and add it.
+                </p>
+
+                <form
+                  name="suggest-resource"
+                  method="POST"
+                  data-netlify="true"
+                  data-netlify-honeypot="bot-field"
+                  novalidate
+                  aria-label="Suggest a resource form"
+                >
+                  <input type="hidden" name="form-name" value="suggest-resource" />
+
+                  <div class="form-honeypot" aria-hidden="true">
+                    <label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="res-name">
+                      Organization name <span class="required" aria-label="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="res-name"
+                      name="resource_name"
+                      required
+                      aria-required="true"
+                      placeholder="e.g. Detroit Food Pantry Network"
+                    />
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="res-category">Category</label>
+                      <select id="res-category" name="category">
+                        <option value="" disabled selected>Select…</option>
+                        <option value="housing">Housing</option>
+                        <option value="food">Food</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="legal">Legal Aid</option>
+                        <option value="crisis">Crisis Services</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="res-county">County</label>
+                      <select id="res-county" name="county">
+                        <option value="" disabled selected>Select…</option>
+                        <option value="Wayne">Wayne</option>
+                        <option value="Monroe">Monroe</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="res-phone">Phone number</label>
+                    <input
+                      type="tel"
+                      id="res-phone"
+                      name="phone"
+                      autocomplete="tel"
+                      placeholder="(313) 555-0100"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="res-address">Address</label>
+                    <input
+                      type="text"
+                      id="res-address"
+                      name="address"
+                      autocomplete="street-address"
+                      placeholder="123 Main St, Detroit, MI 48000"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="res-website">Website</label>
+                    <input
+                      type="url"
+                      id="res-website"
+                      name="website"
+                      placeholder="https://example.org"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="res-notes">
+                      Additional notes <span class="required" aria-label="required">*</span>
+                    </label>
+                    <textarea
+                      id="res-notes"
+                      name="notes"
+                      required
+                      aria-required="true"
+                      placeholder="What does this organization do? Who does it serve? Any other details that would help us verify it."
+                      aria-describedby="res-notes-hint"
+                    ></textarea>
+                    <p id="res-notes-hint" class="form-hint">The more detail you provide, the faster we can verify and add the resource.</p>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="res-your-name">Your name (optional)</label>
+                    <input
+                      type="text"
+                      id="res-your-name"
+                      name="submitter_name"
+                      autocomplete="name"
+                      placeholder="Optional"
+                    />
+                  </div>
+
+                  <button type="submit" class="btn btn-primary" style="width:100%;">
+                    Submit Resource →
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT HAPPENS NEXT -->
+    <section class="section section--alt" aria-labelledby="next-heading">
+      <div class="container" style="max-width:700px;">
+        <div class="section-header section-header--accented">
+          <h2 id="next-heading">What Happens Next</h2>
+        </div>
+        <ol style="padding-left:1.5rem; color:var(--color-text-secondary); line-height:2.2; font-size:var(--font-size-md);">
+          <li>We receive your submission and review it within 3–5 business days.</li>
+          <li>If you suggested a resource, we contact the organization to verify details.</li>
+          <li>Once verified, we add the resource to the directory.</li>
+          <li>If you included your email, we'll let you know when it goes live.</li>
+        </ol>
+        <p class="mt-4 text-secondary text-sm">
+          We do not sell or share your contact information. See our <a href="about.html#data-policy">Data Policy</a>.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo" aria-label="The Connect — Home">
+            <div class="logo-icon" aria-hidden="true">TC</div>
+            The <span>Connect</span>
+          </a>
+          <p>Connecting youth and families in Wayne and Monroe counties to critical services.</p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul role="list">
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="data-reports.html">Data &amp; Reports</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3>Categories</h3>
+          <ul role="list">
+            <li><a href="category.html?cat=housing">🏠 Housing</a></li>
+            <li><a href="category.html?cat=food">🍎 Food</a></li>
+            <li><a href="category.html?cat=healthcare">🏥 Healthcare</a></li>
+            <li><a href="category.html?cat=legal">⚖️ Legal Aid</a></li>
+            <li><a href="category.html?cat=crisis">🆘 Crisis Services</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. This is not a crisis line. In emergency call 911 or text 988.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
