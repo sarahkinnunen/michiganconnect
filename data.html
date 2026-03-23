@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Download resource data, reports, and datasets from The Connect for Wayne and Monroe counties." />
+  <title>Data &amp; Reports – The Connect</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="crisis-banner" role="alert">
+    <strong>In a crisis?</strong> Call or text <a href="tel:988">988</a> — available 24/7, free and confidential.
+  </div>
+
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="site-logo" aria-label="The Connect – Home">The <span>Connect</span></a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+        <ul role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="category.html?cat=housing">Housing</a></li>
+          <li><a href="category.html?cat=food">Food</a></li>
+          <li><a href="category.html?cat=health">Health</a></li>
+          <li><a href="category.html?cat=legal">Legal</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="help.html" class="nav-help-btn">🆘 Get Help Now</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb__sep" aria-hidden="true">/</span>
+        <span aria-current="page">Data &amp; Reports</span>
+      </nav>
+
+      <div class="page-hero" style="border-top: 5px solid var(--color-primary);">
+        <h1 class="page-hero__title">Data &amp; Reports</h1>
+        <p class="page-hero__desc">Download our resource database, explore community data, and use our open datasets to inform your work.</p>
+      </div>
+
+      <!-- Open data notice -->
+      <div class="alert alert--info" role="note">
+        <span aria-hidden="true">ℹ️</span>
+        <div>
+          All data from The Connect is freely available for community use, research, and advocacy.
+          If you use our data, please credit <strong>The Connect (michigan-connect)</strong> and link back to this site.
+        </div>
+      </div>
+
+      <!-- Raw Data Downloads -->
+      <section class="section" aria-labelledby="downloads-heading">
+        <h2 class="section__title" id="downloads-heading" style="margin-bottom:1.5rem;">Raw Data Downloads</h2>
+
+        <div class="download-grid">
+
+          <div class="download-card">
+            <div class="download-card__icon" aria-hidden="true">📄</div>
+            <div class="download-card__title">Complete Resource Database (JSON)</div>
+            <p class="download-card__desc">All resources in machine-readable JSON format. Suitable for developers and data analysts.</p>
+            <a href="data/resources.json" download class="btn btn-secondary" style="font-size:.9rem; padding:.6rem 1rem; min-height:2.5rem;" aria-label="Download complete resource database as JSON">
+              ⬇️ Download JSON
+            </a>
+          </div>
+
+          <div class="download-card">
+            <div class="download-card__icon" aria-hidden="true">📊</div>
+            <div class="download-card__title">Housing Resources (CSV)</div>
+            <p class="download-card__desc">Housing resources for Wayne and Monroe counties in spreadsheet format.</p>
+            <a href="#" class="btn btn-secondary" style="font-size:.9rem; padding:.6rem 1rem; min-height:2.5rem;" aria-label="Housing resources CSV – coming soon" aria-disabled="true">
+              ⬇️ Coming Soon
+            </a>
+          </div>
+
+          <div class="download-card">
+            <div class="download-card__icon" aria-hidden="true">📊</div>
+            <div class="download-card__title">Food Resources (CSV)</div>
+            <p class="download-card__desc">Food pantries, banks, and meal programs across both counties.</p>
+            <a href="#" class="btn btn-secondary" style="font-size:.9rem; padding:.6rem 1rem; min-height:2.5rem;" aria-label="Food resources CSV – coming soon" aria-disabled="true">
+              ⬇️ Coming Soon
+            </a>
+          </div>
+
+          <div class="download-card">
+            <div class="download-card__icon" aria-hidden="true">📋</div>
+            <div class="download-card__title">Crisis Services Quick Reference (PDF)</div>
+            <p class="download-card__desc">Printable one-page reference card for crisis hotlines and emergency services.</p>
+            <a href="#" class="btn btn-secondary" style="font-size:.9rem; padding:.6rem 1rem; min-height:2.5rem;" aria-label="Crisis services PDF – coming soon" aria-disabled="true">
+              ⬇️ Coming Soon
+            </a>
+          </div>
+
+          <div class="download-card">
+            <div class="download-card__icon" aria-hidden="true">📋</div>
+            <div class="download-card__title">Youth Services Guide (PDF)</div>
+            <p class="download-card__desc">Comprehensive guide to youth-specific services, ages 16–24.</p>
+            <a href="#" class="btn btn-secondary" style="font-size:.9rem; padding:.6rem 1rem; min-height:2.5rem;" aria-label="Youth services guide PDF – coming soon" aria-disabled="true">
+              ⬇️ Coming Soon
+            </a>
+          </div>
+
+          <div class="download-card">
+            <div class="download-card__icon" aria-hidden="true">📋</div>
+            <div class="download-card__title">Monroe County Resource List (PDF)</div>
+            <p class="download-card__desc">Printable resource list specific to Monroe County services.</p>
+            <a href="#" class="btn btn-secondary" style="font-size:.9rem; padding:.6rem 1rem; min-height:2.5rem;" aria-label="Monroe County list PDF – coming soon" aria-disabled="true">
+              ⬇️ Coming Soon
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Data schema -->
+      <section class="section section--alt" aria-labelledby="schema-heading">
+        <div class="container">
+          <h2 class="section__title" id="schema-heading" style="margin-bottom:1rem;">Data Schema</h2>
+          <p style="margin-bottom:1rem; color:var(--color-text-muted);">Each resource entry in our database includes the following fields:</p>
+
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:.9rem;" aria-label="Resource data schema">
+              <thead>
+                <tr style="background:var(--color-primary); color:#fff; text-align:left;">
+                  <th style="padding:.75rem 1rem;">Field</th>
+                  <th style="padding:.75rem 1rem;">Type</th>
+                  <th style="padding:.75rem 1rem;">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid var(--color-border);">
+                  <td style="padding:.6rem 1rem;"><code>id</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">number</td>
+                  <td style="padding:.6rem 1rem;">Unique identifier</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border); background:var(--color-bg-alt);">
+                  <td style="padding:.6rem 1rem;"><code>name</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">Organization/program name</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border);">
+                  <td style="padding:.6rem 1rem;"><code>category</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">housing | food | health | legal | crisis</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border); background:var(--color-bg-alt);">
+                  <td style="padding:.6rem 1rem;"><code>county</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">Wayne | Monroe | Statewide</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border);">
+                  <td style="padding:.6rem 1rem;"><code>city</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">City name</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border); background:var(--color-bg-alt);">
+                  <td style="padding:.6rem 1rem;"><code>address</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">Full street address</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border);">
+                  <td style="padding:.6rem 1rem;"><code>phone</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">Phone number</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border); background:var(--color-bg-alt);">
+                  <td style="padding:.6rem 1rem;"><code>website</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">URL or N/A</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border);">
+                  <td style="padding:.6rem 1rem;"><code>hours</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">Operating hours</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border); background:var(--color-bg-alt);">
+                  <td style="padding:.6rem 1rem;"><code>eligibility</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">Who can access this resource</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border);">
+                  <td style="padding:.6rem 1rem;"><code>intake_process</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string</td>
+                  <td style="padding:.6rem 1rem;">How to access the service</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border); background:var(--color-bg-alt);">
+                  <td style="padding:.6rem 1rem;"><code>tags</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string[]</td>
+                  <td style="padding:.6rem 1rem;">Array of keyword tags</td>
+                </tr>
+                <tr>
+                  <td style="padding:.6rem 1rem;"><code>last_verified_date</code></td>
+                  <td style="padding:.6rem 1rem; color:var(--color-text-muted);">string (ISO 8601)</td>
+                  <td style="padding:.6rem 1rem;">Date this entry was last verified</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contribute -->
+      <section class="section" aria-labelledby="contribute-heading">
+        <h2 class="section__title" id="contribute-heading" style="margin-bottom:.75rem;">Contribute to Our Data</h2>
+        <p style="max-width:680px; margin-bottom:1.25rem; color:var(--color-text-muted);">
+          Found a resource we're missing? Noticed outdated information? You can submit a new resource or correction using our contact form.
+          All submissions are reviewed before publication.
+        </p>
+        <a href="contact.html" class="btn btn-secondary">Suggest a Resource</a>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-brand__title">The Connect</div>
+          <p class="footer-brand__desc">A youth-centered resource hub for Wayne and Monroe counties, Michigan.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav__title">Resources</div>
+          <ul role="list">
+            <li><a href="category.html?cat=housing">Housing</a></li>
+            <li><a href="category.html?cat=food">Food</a></li>
+            <li><a href="category.html?cat=health">Healthcare</a></li>
+            <li><a href="category.html?cat=legal">Legal Aid</a></li>
+            <li><a href="help.html">Crisis Help</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-nav" aria-label="Site navigation">
+          <div class="footer-nav__title">Site</div>
+          <ul role="list">
+            <li><a href="resources.html">Resource Directory</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="data.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact / Suggest</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> The Connect.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

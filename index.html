@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Connect – Youth-centered resource hub helping people quickly find housing, food, healthcare, legal aid, and crisis services across Wayne and Monroe counties." />
+  <title>The Connect – Find Help in Wayne &amp; Monroe Counties</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+</head>
+<body>
+
+  <!-- Skip navigation for keyboard/screen reader users -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- ── Crisis Banner ─────────────────────────────────────────── -->
+  <div class="crisis-banner" role="alert">
+    <strong>In a crisis?</strong> Call or text <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) — available 24/7, free and confidential.
+  </div>
+
+  <!-- ── Site Header ───────────────────────────────────────────── -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="site-logo" aria-label="The Connect – Home">The <span>Connect</span></a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+        <ul role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="category.html?cat=housing">Housing</a></li>
+          <li><a href="category.html?cat=food">Food</a></li>
+          <li><a href="category.html?cat=health">Health</a></li>
+          <li><a href="category.html?cat=legal">Legal</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="help.html" class="nav-help-btn">🆘 Get Help Now</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ── Main Content ──────────────────────────────────────────── -->
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <span class="hero__tag">Wayne &amp; Monroe Counties, Michigan</span>
+        <h1 class="hero__title" id="hero-heading">Find Help<br>When You Need It Most</h1>
+        <p class="hero__subtitle">
+          Free, confidential resources for housing, food, health, legal aid, and crisis support —
+          designed for young people and families across southeast Michigan.
+        </p>
+        <div class="hero__actions">
+          <a href="help.html" class="btn btn-danger">🆘 Find Help Now</a>
+          <a href="resources.html" class="btn btn-outline">Browse All Resources</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category tiles -->
+    <section class="section" aria-labelledby="categories-heading">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title" id="categories-heading">What Do You Need?</h2>
+          <p class="section__subtitle">Select a category to find resources fast.</p>
+        </div>
+
+        <nav aria-label="Resource categories">
+          <ul class="category-grid" role="list">
+            <li>
+              <a href="category.html?cat=housing" class="category-tile tile--housing">
+                <span class="category-tile__icon" aria-hidden="true">🏠</span>
+                <span>Housing</span>
+              </a>
+            </li>
+            <li>
+              <a href="category.html?cat=food" class="category-tile tile--food">
+                <span class="category-tile__icon" aria-hidden="true">🍎</span>
+                <span>Food</span>
+              </a>
+            </li>
+            <li>
+              <a href="category.html?cat=health" class="category-tile tile--health">
+                <span class="category-tile__icon" aria-hidden="true">🏥</span>
+                <span>Healthcare</span>
+              </a>
+            </li>
+            <li>
+              <a href="category.html?cat=legal" class="category-tile tile--legal">
+                <span class="category-tile__icon" aria-hidden="true">⚖️</span>
+                <span>Legal Aid</span>
+              </a>
+            </li>
+            <li>
+              <a href="help.html" class="category-tile tile--crisis">
+                <span class="category-tile__icon" aria-hidden="true">🆘</span>
+                <span>Crisis</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Quick access callout -->
+    <section class="section section--alt" aria-labelledby="quick-access-heading">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title" id="quick-access-heading">Need Help Right Now?</h2>
+          <p class="section__subtitle">If you're in crisis or need immediate assistance, we've made it as easy as possible.</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+
+          <div class="info-card">
+            <div class="info-card__title">📞 Crisis Hotlines</div>
+            <p><strong>988</strong> — Suicide &amp; Crisis Lifeline (call or text)<br>
+            <strong>211</strong> — Michigan 2-1-1 Community Resources<br>
+            <strong>911</strong> — Life-threatening emergency</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card__title">🏠 Emergency Shelter</div>
+            <p>24/7 emergency shelter is available in Detroit. Walk-ins accepted. No ID required for emergency placement.
+            <a href="category.html?cat=housing" style="display:block;margin-top:.5rem;font-weight:700;">Find shelter →</a></p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card__title">🍎 Same-Day Food</div>
+            <p>Food distributions across Wayne and Monroe counties. Most require no registration or documentation.
+            <a href="category.html?cat=food" style="display:block;margin-top:.5rem;font-weight:700;">Find food →</a></p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Search teaser -->
+    <section class="section" aria-labelledby="search-teaser-heading">
+      <div class="container" style="max-width: 700px;">
+        <div class="section__header text-center">
+          <h2 class="section__title" id="search-teaser-heading">Search All Resources</h2>
+          <p class="section__subtitle">Type anything — a service type, city, or keyword.</p>
+        </div>
+        <form action="resources.html" method="get" role="search" aria-label="Resource search">
+          <div class="search-bar">
+            <span class="search-bar__icon" aria-hidden="true">🔍</span>
+            <label for="home-search" class="sr-only">Search resources</label>
+            <input
+              type="search"
+              id="home-search"
+              name="q"
+              placeholder="e.g. shelter, food pantry, mental health…"
+              autocomplete="off"
+              aria-label="Search resources"
+            />
+          </div>
+          <div style="text-align:center; margin-top: 1rem;">
+            <button type="submit" class="btn btn-secondary">Search Resources</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- County quick links -->
+    <section class="section section--alt" aria-labelledby="counties-heading">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title" id="counties-heading">Find by County</h2>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap: 1rem;">
+          <a href="resources.html?county=Wayne"   class="btn btn-secondary">🗺️ Wayne County</a>
+          <a href="resources.html?county=Monroe"  class="btn btn-secondary">🗺️ Monroe County</a>
+          <a href="resources.html?county=Statewide" class="btn btn-secondary">🗺️ Statewide / Any County</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About teaser -->
+    <section class="section" aria-labelledby="about-teaser-heading">
+      <div class="container" style="max-width: 800px;">
+        <div class="section__header">
+          <h2 class="section__title" id="about-teaser-heading">About The Connect</h2>
+        </div>
+        <p style="font-size:1.05rem; color: var(--color-text-muted); margin-bottom: 1.25rem;">
+          The Connect is a youth-centered public resource hub for Wayne and Monroe counties in Michigan.
+          Our mission is to ensure every young person — regardless of documentation, income, or background —
+          can quickly find accurate, up-to-date information about critical services.
+        </p>
+        <a href="about.html" class="btn btn-secondary">Learn More About Us</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Site Footer ───────────────────────────────────────────── -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-brand__title">The Connect</div>
+          <p class="footer-brand__desc">A youth-centered resource hub for Wayne and Monroe counties, Michigan. Helping people find critical services quickly and with dignity.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav__title">Resources</div>
+          <ul role="list">
+            <li><a href="category.html?cat=housing">Housing</a></li>
+            <li><a href="category.html?cat=food">Food</a></li>
+            <li><a href="category.html?cat=health">Healthcare</a></li>
+            <li><a href="category.html?cat=legal">Legal Aid</a></li>
+            <li><a href="help.html">Crisis Help</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-nav" aria-label="Site navigation">
+          <div class="footer-nav__title">Site</div>
+          <ul role="list">
+            <li><a href="resources.html">Resource Directory</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="data.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact / Suggest</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> The Connect. Community resource data updated regularly.</span>
+        <span>Wayne &amp; Monroe Counties, Michigan</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About The Connect — our mission, how we verify data, and our commitment to accuracy and youth-centered design." />
+  <title>About – The Connect</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="crisis-banner" role="alert">
+    <strong>In a crisis?</strong> Call or text <a href="tel:988">988</a> — available 24/7, free and confidential.
+  </div>
+
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="site-logo" aria-label="The Connect – Home">The <span>Connect</span></a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+        <ul role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="category.html?cat=housing">Housing</a></li>
+          <li><a href="category.html?cat=food">Food</a></li>
+          <li><a href="category.html?cat=health">Health</a></li>
+          <li><a href="category.html?cat=legal">Legal</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="help.html" class="nav-help-btn">🆘 Get Help Now</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb__sep" aria-hidden="true">/</span>
+        <span aria-current="page">About</span>
+      </nav>
+
+      <div class="page-hero" style="border-top: 5px solid var(--color-primary);">
+        <h1 class="page-hero__title">About The Connect</h1>
+        <p class="page-hero__desc">Our mission, how we work, and our commitment to accuracy and community.</p>
+      </div>
+
+      <!-- Mission -->
+      <section class="section" aria-labelledby="mission-heading">
+        <h2 class="section__title" id="mission-heading" style="margin-bottom:1rem;">Our Mission</h2>
+        <p style="font-size:1.1rem; max-width:760px; line-height:1.7; margin-bottom:1rem;">
+          The Connect is a free, public-facing resource hub designed to help young people — and anyone in need —
+          quickly find accurate, up-to-date information about critical services in Wayne and Monroe counties, Michigan.
+        </p>
+        <p style="font-size:1.05rem; max-width:760px; line-height:1.7; margin-bottom:1rem;">
+          We believe access to housing, food, healthcare, legal help, and crisis support is a human right.
+          No one should struggle to find these services because of a difficult website, outdated information,
+          or a design that wasn't built for people under stress.
+        </p>
+        <p style="font-size:1.05rem; max-width:760px; line-height:1.7;">
+          The Connect is built with dignity in mind — for people experiencing homelessness, food insecurity,
+          mental health crises, and other challenges. Every design decision prioritizes simplicity, speed, and clarity.
+        </p>
+      </section>
+
+      <!-- Values -->
+      <section class="section section--alt" aria-labelledby="values-heading">
+        <div class="container">
+          <h2 class="section__title" id="values-heading" style="margin-bottom: 1.5rem;">Our Values</h2>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+
+            <div class="info-card">
+              <div class="info-card__title">🎯 Accessibility First</div>
+              <p>Our site meets WCAG 2.1 AA standards. Large text, high contrast, and keyboard navigation ensure everyone can use it, regardless of ability or device.</p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card__title">✅ Verified Information</div>
+              <p>Every resource in our database includes a <em>last verified date</em>. We regularly review and update listings, and encourage the community to report outdated information.</p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card__title">🔒 Privacy by Default</div>
+              <p>We do not collect personal data from visitors. The site uses no tracking cookies, no analytics third parties, and no user accounts.</p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card__title">🌐 Open Data</div>
+              <p>Our resource data is available for download in open formats. We encourage other organizations to use and build on this data to serve their communities.</p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card__title">🤝 Youth-Centered</div>
+              <p>The Connect is designed with and for young people — particularly those ages 16–24 facing housing instability, foster care transitions, or other life challenges.</p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card__title">📍 Local Focus, Expandable</div>
+              <p>We start with Wayne and Monroe counties. Our data architecture is designed to scale to additional Michigan counties as the project grows.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- How data is verified -->
+      <section class="section" aria-labelledby="data-heading">
+        <h2 class="section__title" id="data-heading" style="margin-bottom: 1rem;">How We Verify Data</h2>
+        <p style="max-width:760px; margin-bottom: 1rem; color: var(--color-text-muted);">
+          We understand that outdated resource information can cause real harm — someone in crisis may show up
+          at a location that has moved or closed. That's why accuracy is non-negotiable.
+        </p>
+
+        <ol style="display:flex; flex-direction:column; gap:.75rem; max-width:700px; list-style:decimal; padding-left:1.5rem; color:var(--color-text-muted); font-size:.95rem;">
+          <li>Each resource is researched from primary sources (official organization websites, direct phone calls).</li>
+          <li>A <strong>last_verified_date</strong> is recorded for every entry.</li>
+          <li>Community members can <a href="contact.html">report outdated information</a> using our contact form.</li>
+          <li>All suggested resources are reviewed before publication.</li>
+          <li>Resources not verified within 12 months are marked for re-verification and temporarily flagged.</li>
+        </ol>
+      </section>
+
+      <!-- Contact teaser -->
+      <section class="section section--alt" aria-labelledby="contact-teaser-heading">
+        <div class="container">
+          <h2 class="section__title" id="contact-teaser-heading" style="margin-bottom:.75rem;">Get Involved</h2>
+          <p style="max-width:640px; margin-bottom:1.25rem; color:var(--color-text-muted);">
+            Know of a resource we're missing? Found outdated information? Want to partner with us?
+            We'd love to hear from you.
+          </p>
+          <a href="contact.html" class="btn btn-secondary">Contact Us / Suggest a Resource</a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-brand__title">The Connect</div>
+          <p class="footer-brand__desc">A youth-centered resource hub for Wayne and Monroe counties, Michigan.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav__title">Resources</div>
+          <ul role="list">
+            <li><a href="category.html?cat=housing">Housing</a></li>
+            <li><a href="category.html?cat=food">Food</a></li>
+            <li><a href="category.html?cat=health">Healthcare</a></li>
+            <li><a href="category.html?cat=legal">Legal Aid</a></li>
+            <li><a href="help.html">Crisis Help</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-nav" aria-label="Site navigation">
+          <div class="footer-nav__title">Site</div>
+          <ul role="list">
+            <li><a href="resources.html">Resource Directory</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="data.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact / Suggest</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> The Connect.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
