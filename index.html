@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Connect – Wayne and Monroe County youth resource hub for housing, food, healthcare, legal aid, and crisis services.">
+  <title>The Connect | Youth Resource Hub – Wayne &amp; Monroe Counties</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+</head>
+<body>
+
+  <!-- Skip to main content for keyboard / screen reader users -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- Announcement bar for urgent notices -->
+  <div class="announcement-bar" role="banner" aria-label="Site announcement">
+    <div class="container">
+      <span aria-hidden="true">⚠️</span>
+      <span>If you are in immediate danger, call <strong>911</strong>.
+        For crisis support, call or text <strong>988</strong> (Suicide &amp; Crisis Lifeline).</span>
+    </div>
+  </div>
+
+  <!-- Site header & navigation -->
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand" aria-label="The Connect – Home">
+        The <span>Connect</span>
+      </a>
+
+      <!-- Desktop navigation -->
+      <nav aria-label="Main navigation">
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html">Find Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="data.html">Data &amp; Reports</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+        </ul>
+      </nav>
+
+      <!-- Mobile menu toggle -->
+      <button class="nav-toggle" id="nav-toggle"
+              aria-expanded="false" aria-controls="mobile-menu"
+              aria-label="Toggle navigation menu">
+        <span aria-hidden="true">☰</span>
+        <span class="toggle-label">Menu</span>
+      </button>
+    </div>
+
+    <!-- Mobile navigation drawer -->
+    <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">Find Resources</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content">
+
+    <!-- Hero section -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <h1 id="hero-heading">Your Connection to Critical Resources</h1>
+        <p>
+          Free, confidential help for youth and families across Wayne and Monroe counties —
+          housing, food, healthcare, legal aid, and crisis support.
+        </p>
+        <div class="hero-actions">
+          <a href="find-help.html" class="btn btn-crisis btn-lg" aria-label="Find help now — emergency resources">
+            🚨 Find Help Now
+          </a>
+          <a href="directory.html" class="btn btn-outline btn-lg" style="color:#fff;border-color:#fff;">
+            Browse All Resources
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category tiles -->
+    <section class="section" aria-labelledby="categories-heading">
+      <div class="container">
+        <div class="section-title">
+          <h2 id="categories-heading">What do you need help with?</h2>
+          <p>Choose a category to find resources near you</p>
+        </div>
+
+        <div class="category-grid" role="list">
+          <a href="category/housing.html" class="category-tile" data-category="housing"
+             role="listitem" aria-label="Housing resources">
+            <span class="tile-icon" aria-hidden="true">🏠</span>
+            <span>Housing</span>
+          </a>
+          <a href="category/food.html" class="category-tile" data-category="food"
+             role="listitem" aria-label="Food access resources">
+            <span class="tile-icon" aria-hidden="true">🥗</span>
+            <span>Food</span>
+          </a>
+          <a href="category/health.html" class="category-tile" data-category="health"
+             role="listitem" aria-label="Healthcare resources">
+            <span class="tile-icon" aria-hidden="true">🏥</span>
+            <span>Healthcare</span>
+          </a>
+          <a href="category/legal.html" class="category-tile" data-category="legal"
+             role="listitem" aria-label="Legal aid resources">
+            <span class="tile-icon" aria-hidden="true">⚖️</span>
+            <span>Legal Aid</span>
+          </a>
+          <a href="category/crisis.html" class="category-tile" data-category="crisis"
+             role="listitem" aria-label="Crisis services">
+            <span class="tile-icon" aria-hidden="true">🆘</span>
+            <span>Crisis Services</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works / quick intro -->
+    <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);"
+             aria-labelledby="how-heading">
+      <div class="container">
+        <div class="section-title">
+          <h2 id="how-heading">How to use The Connect</h2>
+          <p>Quick steps to find the help you need</p>
+        </div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div style="font-size:2rem;margin-bottom:.75rem" aria-hidden="true">1️⃣</div>
+            <h3>Choose a Category</h3>
+            <p>Pick from housing, food, health, legal, or crisis services using the tiles above.</p>
+          </div>
+          <div class="info-card">
+            <div style="font-size:2rem;margin-bottom:.75rem" aria-hidden="true">2️⃣</div>
+            <h3>Search or Filter</h3>
+            <p>Use the <a href="directory.html">Resource Directory</a> to search by keyword, county, city, or tag.</p>
+          </div>
+          <div class="info-card">
+            <div style="font-size:2rem;margin-bottom:.75rem" aria-hidden="true">3️⃣</div>
+            <h3>Connect Directly</h3>
+            <p>Every resource card includes a phone number, address, hours, and eligibility information.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Crisis CTA -->
+    <div class="crisis-banner" role="complementary" aria-label="Crisis resources">
+      <div class="container">
+        <p>
+          <span aria-hidden="true">🆘</span>
+          In crisis right now? You're not alone.
+        </p>
+        <a href="find-help.html" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.7);">
+          View Emergency Resources →
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>The <span>Connect</span></h2>
+          <p>A youth-centered resource hub for Wayne and Monroe County communities.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="category/housing.html">Housing</a></li>
+            <li><a href="category/food.html">Food</a></li>
+            <li><a href="category/health.html">Healthcare</a></li>
+            <li><a href="category/legal.html">Legal Aid</a></li>
+            <li><a href="category/crisis.html">Crisis Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
+          <ul>
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="data.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Emergency</h3>
+          <ul>
+            <li><a href="tel:911">911 – Emergency</a></li>
+            <li><a href="tel:988">988 – Crisis Lifeline</a></li>
+            <li><a href="tel:18002414949">DWIHN Crisis Line</a></li>
+            <li><a href="tel:18002738255">Crisis Text Line – text HOME to 741741</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. Resource data is verified periodically — always call ahead to confirm.</p>
+        <p><a href="contact.html">Suggest a resource</a> · <a href="data.html">Download data</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

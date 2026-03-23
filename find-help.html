@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Emergency and crisis resources — hotlines, shelter, food, and immediate help in Wayne and Monroe Counties.">
+  <title>Find Help Now | The Connect</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+  <style>
+    /* Extra styles for the emergency page — high contrast, maximum readability */
+    .crisis-hero {
+      background: var(--color-crisis);
+      color: #fff;
+      padding: var(--space-10) 0;
+      text-align: center;
+    }
+    .crisis-hero h1 { color: #fff; font-size: clamp(2rem, 6vw, 3rem); }
+    .crisis-hero p  { font-size: var(--font-size-xl); opacity: .95; max-width: 50ch; margin-inline: auto; }
+
+    .hotline-number {
+      display: block;
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      font-weight: 900;
+      color: var(--color-crisis);
+      text-decoration: none;
+      letter-spacing: 1px;
+      margin: var(--space-2) 0;
+    }
+    .hotline-number:hover { text-decoration: underline; }
+
+    .emergency-section {
+      padding: var(--space-8) 0;
+    }
+    .emergency-section + .emergency-section {
+      border-top: 2px solid var(--color-border);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-sm);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-crisis);
+      margin-bottom: var(--space-3);
+    }
+
+    .crisis-card-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    @media (min-width: 640px) { .crisis-card-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .crisis-card {
+      background: #fdf2f2;
+      border: 2px solid #f5c6c6;
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+    .crisis-card h3 { font-size: var(--font-size-xl); margin-bottom: var(--space-2); }
+    .crisis-card p  { font-size: var(--font-size-base); color: var(--color-text-muted); margin-bottom: var(--space-3); }
+    .crisis-card .availability {
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      color: #1e8449;
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand" aria-label="The Connect – Home">
+        The <span>Connect</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html">Find Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="data.html">Data &amp; Reports</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-emergency" aria-current="page">🚨 Find Help Now</a></li>
+        </ul>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle"
+              aria-expanded="false" aria-controls="mobile-menu"
+              aria-label="Toggle navigation menu">
+        <span aria-hidden="true">☰</span>
+        <span class="toggle-label">Menu</span>
+      </button>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">Find Resources</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Crisis hero -->
+    <div class="crisis-hero" role="banner" aria-label="Emergency information">
+      <div class="container">
+        <h1>🚨 Find Help Now</h1>
+        <p>You are not alone. Immediate help is available right now.</p>
+        <a href="tel:988" class="btn btn-outline btn-lg" style="color:#fff;border-color:#fff;margin-top:1.5rem;">
+          Call or Text 988 — Free &amp; Confidential
+        </a>
+      </div>
+    </div>
+
+    <div class="container crisis-page">
+
+      <!-- National crisis hotlines -->
+      <section class="emergency-section" aria-labelledby="hotlines-heading">
+        <div class="section-label">
+          <span aria-hidden="true">📞</span> Crisis Hotlines
+        </div>
+        <h2 id="hotlines-heading">Call or Text Right Now</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-6)">
+          All hotlines below are free, confidential, and available 24/7.
+        </p>
+
+        <div class="crisis-card-grid">
+
+          <div class="crisis-card" role="region" aria-label="988 Suicide and Crisis Lifeline">
+            <h3>988 Suicide &amp; Crisis Lifeline</h3>
+            <p>Talk to a trained counselor. For anyone in emotional distress or suicidal crisis.</p>
+            <a href="tel:988" class="hotline-number" aria-label="Call 988">988</a>
+            <p class="availability">✓ Available 24/7 · Call or Text</p>
+          </div>
+
+          <div class="crisis-card" role="region" aria-label="Crisis Text Line">
+            <h3>Crisis Text Line</h3>
+            <p>Prefer texting? Text HOME to 741741 to connect with a live crisis counselor.</p>
+            <a href="sms:741741&body=HOME" class="hotline-number" aria-label="Text HOME to 741741">
+              Text HOME to 741741
+            </a>
+            <p class="availability">✓ Available 24/7 · Text Only</p>
+          </div>
+
+          <div class="crisis-card" role="region" aria-label="Detroit Wayne Integrated Health Network">
+            <h3>DWIHN Crisis Line (Wayne County)</h3>
+            <p>Mental health &amp; substance use crisis support for Wayne County residents.</p>
+            <a href="tel:18002414949" class="hotline-number" aria-label="Call 1-800-241-4949">
+              1-800-241-4949
+            </a>
+            <p class="availability">✓ Available 24/7 · Call</p>
+          </div>
+
+          <div class="crisis-card" role="region" aria-label="Ozone House Youth Crisis">
+            <h3>Ozone House – Youth Crisis (Wayne)</h3>
+            <p>Youth ages 14–24 in crisis or at risk of homelessness in the Wayne County area.</p>
+            <a href="tel:17346622222" class="hotline-number" aria-label="Call 734-662-2222">
+              734-662-2222
+            </a>
+            <p class="availability">✓ 24/7 Crisis Hotline · Drop-in Mon–Fri 10am–6pm</p>
+          </div>
+
+          <div class="crisis-card" role="region" aria-label="National Domestic Violence Hotline">
+            <h3>National Domestic Violence Hotline</h3>
+            <p>Confidential support for anyone experiencing domestic violence or abuse.</p>
+            <a href="tel:18007997233" class="hotline-number" aria-label="Call 1-800-799-7233">
+              1-800-799-7233
+            </a>
+            <p class="availability">✓ Available 24/7 · Call or Text</p>
+          </div>
+
+          <div class="crisis-card" role="region" aria-label="Trevor Project LGBTQ+ crisis">
+            <h3>The Trevor Project (LGBTQ+ Youth)</h3>
+            <p>Crisis &amp; suicide prevention for LGBTQ+ young people.</p>
+            <a href="tel:18664887386" class="hotline-number" aria-label="Call 1-866-488-7386">
+              1-866-488-7386
+            </a>
+            <p class="availability">✓ Available 24/7 · Call, Text, or Chat</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Emergency shelter -->
+      <section class="emergency-section" aria-labelledby="shelter-heading">
+        <div class="section-label">
+          <span aria-hidden="true">🏠</span> Emergency Shelter
+        </div>
+        <h2 id="shelter-heading">Need a Place to Stay Tonight?</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-6)">
+          Call ahead if possible — availability changes daily.
+        </p>
+
+        <div class="crisis-card-grid">
+
+          <div class="crisis-card" role="region" aria-label="COTS Detroit Youth Housing">
+            <h3>COTS Detroit – Youth Housing</h3>
+            <p>Emergency and transitional housing for youth ages 16–24. Walk-in or call.</p>
+            <a href="tel:13138313777" class="hotline-number" aria-label="Call 313-831-3777">
+              313-831-3777
+            </a>
+            <p>26 Peterboro St, Detroit, MI 48201</p>
+            <p class="availability">Mon–Fri 8am–5pm · Crisis line 24/7</p>
+          </div>
+
+          <div class="crisis-card" role="region" aria-label="Monroe County Community Action Agency">
+            <h3>Monroe County CAA – Housing</h3>
+            <p>Emergency shelter referrals and housing assistance for Monroe County residents.</p>
+            <a href="tel:17342412775" class="hotline-number" aria-label="Call 734-241-2775">
+              734-241-2775
+            </a>
+            <p>1600 S. Raisinville Rd, Monroe, MI 48161</p>
+            <p class="availability">Mon–Fri 8:30am–4:30pm</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Immediate food access -->
+      <section class="emergency-section" aria-labelledby="food-heading">
+        <div class="section-label">
+          <span aria-hidden="true">🥗</span> Immediate Food Access
+        </div>
+        <h2 id="food-heading">Need Food Today?</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-6)">
+          These organizations provide free food with no or minimal barriers to access.
+        </p>
+
+        <div class="crisis-card-grid">
+
+          <div class="crisis-card" role="region" aria-label="Gleaners Community Food Bank">
+            <h3>Gleaners Community Food Bank</h3>
+            <p>Free food distribution across Wayne County. Find your nearest distribution site online or call.</p>
+            <a href="tel:13139233535" class="hotline-number" aria-label="Call 313-923-3535">
+              313-923-3535
+            </a>
+            <p><a href="https://www.gcfb.org" target="_blank" rel="noopener noreferrer">gcfb.org</a></p>
+            <p class="availability">Mon–Fri 8am–4pm · Distribution sites vary</p>
+          </div>
+
+          <div class="crisis-card" role="region" aria-label="Monroe County Food Pantry Network">
+            <h3>Monroe County Food Pantry Network</h3>
+            <p>Multiple pantry locations across Monroe County. No appointment needed at most sites.</p>
+            <a href="tel:17342420804" class="hotline-number" aria-label="Call 734-242-0804">
+              734-242-0804
+            </a>
+            <p class="availability">Tue &amp; Thu 10am–2pm at most locations</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- What to expect -->
+      <section class="emergency-section" aria-labelledby="expect-heading">
+        <h2 id="expect-heading">What to Expect When You Call</h2>
+        <div class="alert alert-info">
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem">
+            <li>✅ <strong>You don't need ID</strong> to call a crisis line or access most emergency services.</li>
+            <li>✅ <strong>Your call is confidential.</strong> What you share stays with the counselor.</li>
+            <li>✅ <strong>No judgment.</strong> Crisis counselors are trained to listen and help without judging.</li>
+            <li>✅ <strong>You can hang up</strong> at any time. There's no obligation.</li>
+            <li>✅ <strong>Language access</strong> is available on most hotlines — tell them your language.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Links to full resource directory -->
+      <section class="emergency-section" aria-labelledby="more-heading">
+        <h2 id="more-heading">Need More Options?</h2>
+        <p>Browse the full resource directory for more services across Wayne and Monroe counties.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem">
+          <a href="directory.html" class="btn btn-primary">Browse All Resources</a>
+          <a href="category/housing.html" class="btn btn-outline">Housing</a>
+          <a href="category/food.html"    class="btn btn-outline">Food</a>
+          <a href="category/health.html"  class="btn btn-outline">Healthcare</a>
+          <a href="category/legal.html"   class="btn btn-outline">Legal Aid</a>
+        </div>
+      </section>
+
+    </div><!-- /.container -->
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>The <span>Connect</span></h2>
+          <p>A youth-centered resource hub for Wayne and Monroe County communities.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="category/housing.html">Housing</a></li>
+            <li><a href="category/food.html">Food</a></li>
+            <li><a href="category/health.html">Healthcare</a></li>
+            <li><a href="category/legal.html">Legal Aid</a></li>
+            <li><a href="category/crisis.html">Crisis Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
+          <ul>
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="data.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Emergency</h3>
+          <ul>
+            <li><a href="tel:911">911 – Emergency</a></li>
+            <li><a href="tel:988">988 – Crisis Lifeline</a></li>
+            <li><a href="tel:18002414949">DWIHN Crisis Line</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. Resource data is verified periodically — always call ahead to confirm.</p>
+        <p><a href="contact.html">Suggest a resource</a> · <a href="data.html">Download data</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

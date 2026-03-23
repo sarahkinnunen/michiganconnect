@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Download resource data and reports for Wayne and Monroe County social services.">
+  <title>Data &amp; Reports | The Connect</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="announcement-bar" role="banner" aria-label="Site announcement">
+    <div class="container">
+      <span aria-hidden="true">⚠️</span>
+      <span>If you are in immediate danger, call <strong>911</strong>.
+        For crisis support, call or text <strong>988</strong>.</span>
+    </div>
+  </div>
+
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">The <span>Connect</span></a>
+      <nav aria-label="Main navigation">
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html">Find Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="data.html" aria-current="page">Data &amp; Reports</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+        </ul>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle"
+              aria-expanded="false" aria-controls="mobile-menu"
+              aria-label="Toggle navigation menu">
+        <span aria-hidden="true">☰</span>
+        <span class="toggle-label">Menu</span>
+      </button>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">Find Resources</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <div class="page-banner">
+      <div class="container">
+        <h1>Data &amp; Reports</h1>
+        <p>Open data and downloadable resources for researchers, advocates, and community partners</p>
+      </div>
+    </div>
+
+    <!-- Raw data downloads -->
+    <section class="section" aria-labelledby="downloads-heading">
+      <div class="container">
+        <h2 id="downloads-heading">Download Our Data</h2>
+        <p style="color:var(--color-text-muted);margin:1rem 0 2rem">
+          All data is freely available for non-commercial use. Please credit The Connect
+          and include the data's last-verified date in any publications.
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:1rem;max-width:800px">
+
+          <a href="data/resources.json" download="the-connect-resources.json"
+             class="download-card" aria-label="Download full resource database as JSON">
+            <div class="dl-icon" aria-hidden="true">📄</div>
+            <div>
+              <h3>Full Resource Database (JSON)</h3>
+              <p>All 10+ entries with complete fields — name, category, county, city, address,
+                 phone, website, hours, eligibility, intake process, tags, and verification dates.</p>
+              <p class="dl-meta">Format: JSON · Updated: November 2025</p>
+            </div>
+          </a>
+
+          <div class="download-card" style="opacity:.6;cursor:default"
+               aria-label="CSV download coming soon">
+            <div class="dl-icon" aria-hidden="true">📊</div>
+            <div>
+              <h3>Resource Database (CSV) <span class="badge badge-blue" style="margin-left:.5rem">Coming Soon</span></h3>
+              <p>Spreadsheet-friendly version of the full resource database.</p>
+              <p class="dl-meta">Format: CSV · Estimated: Q1 2026</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Reference reports -->
+    <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);"
+             aria-labelledby="reports-heading">
+      <div class="container">
+        <h2 id="reports-heading">External Reports &amp; Resources</h2>
+        <p style="color:var(--color-text-muted);margin:1rem 0 2rem">
+          Research and policy reports from trusted partners relevant to youth needs in Michigan.
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:1rem;max-width:800px">
+
+          <a href="https://mlpp.org/wp-content/uploads/2023/03/MLPP-Housing-Michigan-report-2023.pdf"
+             target="_blank" rel="noopener noreferrer"
+             class="download-card" aria-label="Michigan Affordable Housing Report 2023 (opens in new tab)">
+            <div class="dl-icon" aria-hidden="true">📑</div>
+            <div>
+              <h3>Michigan Affordable Housing Report 2023</h3>
+              <p>Michigan League for Public Policy analysis of housing affordability across the state.</p>
+              <p class="dl-meta">Source: MLPP · Opens in new tab · PDF</p>
+            </div>
+          </a>
+
+          <a href="https://www.feedingamerica.org/research/map-the-meal-gap/by-county"
+             target="_blank" rel="noopener noreferrer"
+             class="download-card" aria-label="Map the Meal Gap – Food Insecurity by County (opens in new tab)">
+            <div class="dl-icon" aria-hidden="true">📑</div>
+            <div>
+              <h3>Map the Meal Gap – Food Insecurity by County</h3>
+              <p>Feeding America's county-level food insecurity data including Wayne and Monroe counties.</p>
+              <p class="dl-meta">Source: Feeding America · Opens in new tab</p>
+            </div>
+          </a>
+
+          <a href="https://www.michigan.gov/mdhhs/adult-child-serv/children-youth/youth-homelessness"
+             target="_blank" rel="noopener noreferrer"
+             class="download-card" aria-label="Michigan Youth Homelessness Data (opens in new tab)">
+            <div class="dl-icon" aria-hidden="true">📑</div>
+            <div>
+              <h3>Michigan Youth Homelessness Data</h3>
+              <p>MDHHS data on youth experiencing homelessness, including trends and demographics.</p>
+              <p class="dl-meta">Source: Michigan DHHS · Opens in new tab</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Data standards / methodology -->
+    <section class="section" aria-labelledby="methodology-heading">
+      <div class="container">
+        <div style="max-width:800px">
+          <h2 id="methodology-heading">Data Standards &amp; Methodology</h2>
+          <p style="margin-top:1rem;margin-bottom:1.5rem">
+            Our resource database follows a consistent schema designed for interoperability and transparency.
+          </p>
+
+          <div class="info-card">
+            <h3 style="margin-bottom:1rem">Resource Schema Fields</h3>
+            <dl style="display:grid;grid-template-columns:auto 1fr;gap:.5rem 1.5rem;font-size:var(--font-size-sm)">
+              <dt style="font-weight:700">name</dt>
+              <dd>Official name of the organization or program</dd>
+              <dt style="font-weight:700">category</dt>
+              <dd>One of: housing, food, health, legal, crisis</dd>
+              <dt style="font-weight:700">county</dt>
+              <dd>Wayne or Monroe (primary service area)</dd>
+              <dt style="font-weight:700">city</dt>
+              <dd>Primary service city</dd>
+              <dt style="font-weight:700">address</dt>
+              <dd>Physical address or "Various locations" if applicable</dd>
+              <dt style="font-weight:700">phone</dt>
+              <dd>Primary contact phone number</dd>
+              <dt style="font-weight:700">website</dt>
+              <dd>Official website URL</dd>
+              <dt style="font-weight:700">hours</dt>
+              <dd>Operating hours as plain text</dd>
+              <dt style="font-weight:700">eligibility</dt>
+              <dd>Who can access this resource</dd>
+              <dt style="font-weight:700">intake_process</dt>
+              <dd>How to access or apply for the service</dd>
+              <dt style="font-weight:700">tags</dt>
+              <dd>Array of keyword tags for filtering</dd>
+              <dt style="font-weight:700">last_verified_date</dt>
+              <dd>ISO 8601 date when this entry was last verified</dd>
+            </dl>
+          </div>
+
+          <p style="margin-top:1.5rem;color:var(--color-text-muted);font-size:var(--font-size-sm)">
+            Entries are verified by calling the organization directly or checking their official website.
+            We aim to reverify all entries at least quarterly. Entries older than 6 months are flagged
+            for priority reverification.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to contribute -->
+    <div class="crisis-banner" style="background:var(--color-primary)" role="complementary">
+      <div class="container">
+        <p>Know of a resource we're missing?</p>
+        <a href="contact.html" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.7);">
+          Suggest a Resource →
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>The <span>Connect</span></h2>
+          <p>A youth-centered resource hub for Wayne and Monroe County communities.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="category/housing.html">Housing</a></li>
+            <li><a href="category/food.html">Food</a></li>
+            <li><a href="category/health.html">Healthcare</a></li>
+            <li><a href="category/legal.html">Legal Aid</a></li>
+            <li><a href="category/crisis.html">Crisis Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
+          <ul>
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="data.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Emergency</h3>
+          <ul>
+            <li><a href="tel:911">911 – Emergency</a></li>
+            <li><a href="tel:988">988 – Crisis Lifeline</a></li>
+            <li><a href="tel:18002414949">DWIHN Crisis Line</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. Resource data is verified periodically — always call ahead to confirm.</p>
+        <p><a href="contact.html">Suggest a resource</a> · <a href="data.html">Download data</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

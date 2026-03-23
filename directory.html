@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Search and filter all resources across Wayne and Monroe counties — housing, food, health, legal aid, and crisis services.">
+  <title>Resource Directory | The Connect</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="announcement-bar" role="banner" aria-label="Site announcement">
+    <div class="container">
+      <span aria-hidden="true">⚠️</span>
+      <span>If you are in immediate danger, call <strong>911</strong>.
+        For crisis support, call or text <strong>988</strong>.</span>
+    </div>
+  </div>
+
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand" aria-label="The Connect – Home">
+        The <span>Connect</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html" aria-current="page">Find Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="data.html">Data &amp; Reports</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+        </ul>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle"
+              aria-expanded="false" aria-controls="mobile-menu"
+              aria-label="Toggle navigation menu">
+        <span aria-hidden="true">☰</span>
+        <span class="toggle-label">Menu</span>
+      </button>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">Find Resources</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Page banner -->
+    <div class="page-banner">
+      <div class="container">
+        <h1>Resource Directory</h1>
+        <p>Search and filter resources across Wayne and Monroe counties</p>
+      </div>
+    </div>
+
+    <!-- Sticky search + filter bar -->
+    <section class="search-section" aria-label="Search and filter resources">
+      <div class="container">
+
+        <!-- Search bar -->
+        <div class="search-bar" role="search">
+          <div class="search-input-wrapper">
+            <em class="search-icon" aria-hidden="true">🔍</em>
+            <label for="search-input" class="sr-only">Search resources</label>
+            <input
+              type="search"
+              id="search-input"
+              name="q"
+              placeholder="Search by name, keyword, or need (e.g. "shelter", "food", "mental health")…"
+              autocomplete="off"
+              aria-label="Search resources"
+              aria-describedby="search-hint"
+            >
+            <button class="search-clear" id="search-clear"
+                    aria-label="Clear search" title="Clear search">✕</button>
+          </div>
+        </div>
+
+        <p id="search-hint" class="sr-only">
+          Type to filter resources. Results update in real time.
+        </p>
+
+        <!-- Dropdown filters -->
+        <div class="filters" role="group" aria-label="Filter options">
+          <div class="filter-group">
+            <label for="filter-category">Category</label>
+            <select id="filter-category" aria-label="Filter by category">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-county">County</label>
+            <select id="filter-county" aria-label="Filter by county">
+              <option value="">All Counties</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-city">City</label>
+            <select id="filter-city" aria-label="Filter by city">
+              <option value="">All Cities</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-tag">Tag</label>
+            <select id="filter-tag" aria-label="Filter by tag">
+              <option value="">All Tags</option>
+            </select>
+          </div>
+
+          <button class="filter-reset" id="filter-reset" type="button"
+                  aria-label="Reset all filters and search">
+            Reset Filters
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="section" aria-label="Search results">
+      <div class="container">
+        <div class="results-meta" role="status" aria-live="polite" aria-atomic="true">
+          <span class="results-count" id="results-count">Loading resources…</span>
+        </div>
+
+        <!-- Resource grid; populated by search.js -->
+        <div class="resource-grid" id="results-grid" aria-label="Resource cards">
+          <!-- JS populates this -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>The <span>Connect</span></h2>
+          <p>A youth-centered resource hub for Wayne and Monroe County communities.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="category/housing.html">Housing</a></li>
+            <li><a href="category/food.html">Food</a></li>
+            <li><a href="category/health.html">Healthcare</a></li>
+            <li><a href="category/legal.html">Legal Aid</a></li>
+            <li><a href="category/crisis.html">Crisis Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
+          <ul>
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="data.html">Data &amp; Reports</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Emergency</h3>
+          <ul>
+            <li><a href="tel:911">911 – Emergency</a></li>
+            <li><a href="tel:988">988 – Crisis Lifeline</a></li>
+            <li><a href="tel:18002414949">DWIHN Crisis Line</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 The Connect. Resource data is verified periodically — always call ahead to confirm.</p>
+        <p><a href="contact.html">Suggest a resource</a> · <a href="data.html">Download data</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>
