@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Download resource data and reports for Wayne and Monroe County social services.">
   <title>Data &amp; Reports | The Connect</title>
+  
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%235b2c83'/><text x='50' y='64' text-anchor='middle' font-size='56' fill='white' font-family='Arial'>C</text></svg>">
 </head>
 <body>
 
@@ -14,7 +16,7 @@
 
   <div class="announcement-bar" role="banner" aria-label="Site announcement">
     <div class="container">
-      <span aria-hidden="true">⚠️</span>
+      <span aria-hidden="true"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i></span>
       <span>If you are in immediate danger, call <strong>911</strong>.
         For crisis support, call or text <strong>988</strong>.</span>
     </div>
@@ -30,13 +32,13 @@
           <li><a href="about.html">About</a></li>
           <li><a href="data.html" aria-current="page">Data &amp; Reports</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+          <li><a href="find-help.html" class="nav-emergency"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</a></li>
         </ul>
       </nav>
       <button class="nav-toggle" id="nav-toggle"
               aria-expanded="false" aria-controls="mobile-menu"
               aria-label="Toggle navigation menu">
-        <span aria-hidden="true">☰</span>
+        <i class="bi bi-list" aria-hidden="true"></i>
         <span class="toggle-label">Menu</span>
       </button>
     </div>
@@ -47,7 +49,7 @@
         <li><a href="about.html">About</a></li>
         <li><a href="data.html">Data &amp; Reports</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+        <li><a href="find-help.html" class="nav-emergency"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</a></li>
       </ul>
     </nav>
   </header>
@@ -74,10 +76,10 @@
 
           <a href="data/resources.json" download="the-connect-resources.json"
              class="download-card" aria-label="Download full resource database as JSON">
-            <div class="dl-icon" aria-hidden="true">📄</div>
+            <div class="dl-icon" aria-hidden="true"><i class="bi bi-file-earmark-text-fill" aria-hidden="true"></i></div>
             <div>
               <h3>Full Resource Database (JSON)</h3>
-              <p>All 10+ entries with complete fields — name, category, county, city, address,
+              <p>All 10+ entries with complete fields - name, category, county, city, address,
                  phone, website, hours, eligibility, intake process, tags, and verification dates.</p>
               <p class="dl-meta">Format: JSON · Updated: November 2025</p>
             </div>
@@ -85,7 +87,7 @@
 
           <div class="download-card" style="opacity:.6;cursor:default"
                aria-label="CSV download coming soon">
-            <div class="dl-icon" aria-hidden="true">📊</div>
+            <div class="dl-icon" aria-hidden="true"><i class="bi bi-bar-chart-fill" aria-hidden="true"></i></div>
             <div>
               <h3>Resource Database (CSV) <span class="badge badge-blue" style="margin-left:.5rem">Coming Soon</span></h3>
               <p>Spreadsheet-friendly version of the full resource database.</p>
@@ -111,7 +113,7 @@
           <a href="https://mlpp.org/wp-content/uploads/2023/03/MLPP-Housing-Michigan-report-2023.pdf"
              target="_blank" rel="noopener noreferrer"
              class="download-card" aria-label="Michigan Affordable Housing Report 2023 (opens in new tab)">
-            <div class="dl-icon" aria-hidden="true">📑</div>
+            <div class="dl-icon" aria-hidden="true"><i class="bi bi-files" aria-hidden="true"></i></div>
             <div>
               <h3>Michigan Affordable Housing Report 2023</h3>
               <p>Michigan League for Public Policy analysis of housing affordability across the state.</p>
@@ -122,7 +124,7 @@
           <a href="https://www.feedingamerica.org/research/map-the-meal-gap/by-county"
              target="_blank" rel="noopener noreferrer"
              class="download-card" aria-label="Map the Meal Gap – Food Insecurity by County (opens in new tab)">
-            <div class="dl-icon" aria-hidden="true">📑</div>
+            <div class="dl-icon" aria-hidden="true"><i class="bi bi-files" aria-hidden="true"></i></div>
             <div>
               <h3>Map the Meal Gap – Food Insecurity by County</h3>
               <p>Feeding America's county-level food insecurity data including Wayne and Monroe counties.</p>
@@ -133,7 +135,7 @@
           <a href="https://www.michigan.gov/mdhhs/adult-child-serv/children-youth/youth-homelessness"
              target="_blank" rel="noopener noreferrer"
              class="download-card" aria-label="Michigan Youth Homelessness Data (opens in new tab)">
-            <div class="dl-icon" aria-hidden="true">📑</div>
+            <div class="dl-icon" aria-hidden="true"><i class="bi bi-files" aria-hidden="true"></i></div>
             <div>
               <h3>Michigan Youth Homelessness Data</h3>
               <p>MDHHS data on youth experiencing homelessness, including trends and demographics.</p>
@@ -242,7 +244,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 The Connect. Resource data is verified periodically — always call ahead to confirm.</p>
+        <p>© 2025 The Connect. Resource data is verified periodically - always call ahead to confirm.</p>
         <p><a href="contact.html">Suggest a resource</a> · <a href="data.html">Download data</a></p>
       </div>
     </div>

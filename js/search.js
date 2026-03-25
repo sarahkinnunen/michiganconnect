@@ -213,7 +213,7 @@
   function renderEmpty(query) {
     resultsGrid.innerHTML = `
       <div class="empty-state" role="status" aria-live="polite">
-        <div class="empty-icon" aria-hidden="true">🔍</div>
+        <div class="empty-icon" aria-hidden="true"><i class="bi bi-search" aria-hidden="true"></i></div>
         <h3>No resources found</h3>
         <p>
           ${query
@@ -241,7 +241,7 @@
   function renderError() {
     resultsGrid.innerHTML = `
       <div class="empty-state alert alert-warning" role="alert">
-        <div class="empty-icon" aria-hidden="true">⚠️</div>
+        <div class="empty-icon" aria-hidden="true"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i></div>
         <h3>Could not load resources</h3>
         <p>Please check your connection and try refreshing the page.</p>
       </div>`;
@@ -254,7 +254,7 @@
     }).join('');
 
     const websiteHTML = r.website
-      ? `<li><em class="meta-icon" aria-hidden="true">🌐</em>
+      ? `<li><em class="meta-icon" aria-hidden="true"><i class="bi bi-globe-americas" aria-hidden="true"></i></em>
            <a href="${escapeHTML(r.website)}" target="_blank" rel="noopener noreferrer">
              Visit website
            </a></li>`
@@ -270,11 +270,11 @@
       </div>
 
       <ul class="card-meta" aria-label="Resource details">
-        <li><em class="meta-icon" aria-hidden="true">📍</em>
+        <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></em>
           <span>${escapeHTML(r.city)}, ${escapeHTML(r.county)} County</span></li>
-        <li><em class="meta-icon" aria-hidden="true">📞</em>
+        <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-telephone-fill" aria-hidden="true"></i></em>
           <a href="tel:${sanitizePhone(r.phone)}">${escapeHTML(r.phone)}</a></li>
-        <li><em class="meta-icon" aria-hidden="true">🕒</em>
+        <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-clock-fill" aria-hidden="true"></i></em>
           <span>${escapeHTML(r.hours)}</span></li>
         ${websiteHTML}
       </ul>
@@ -300,12 +300,12 @@
           More Info
         </button>
         <a href="tel:${sanitizePhone(r.phone)}" class="btn btn-primary btn-sm">
-          📞 Call
+          <i class="bi bi-telephone-fill" aria-hidden="true"></i> Call
         </a>
       </div>
 
       <p class="card-verified" aria-label="Data last verified">
-        ✓ Verified ${formatDate(r.last_verified_date)}
+        <i class="bi bi-check-circle-fill" aria-hidden="true"></i> Verified ${formatDate(r.last_verified_date)}
       </p>
     </article>`;
   }

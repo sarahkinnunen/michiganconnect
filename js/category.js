@@ -56,7 +56,7 @@
 
       if (resources.length === 0) {
         grid.innerHTML = `<div class="empty-state">
-          <div class="empty-icon">📭</div>
+          <div class="empty-icon"><i class="bi bi-inbox-fill" aria-hidden="true"></i></div>
           <h3>No resources listed yet</h3>
           <p>We're still collecting data for this category. Check back soon or
              <a href="${getBasePath()}contact.html">suggest a resource</a>.</p>
@@ -75,13 +75,13 @@
             <h3 id="cat-card-${r.id}">${escapeHTML(r.name)}</h3>
           </div>
           <ul class="card-meta">
-            <li><em class="meta-icon" aria-hidden="true">📍</em>
+            <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></em>
               <span>${escapeHTML(r.city)}, ${escapeHTML(r.county)} County</span></li>
-            <li><em class="meta-icon" aria-hidden="true">📞</em>
+            <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-telephone-fill" aria-hidden="true"></i></em>
               <a href="tel:${sanitizePhone(r.phone)}">${escapeHTML(r.phone)}</a></li>
-            <li><em class="meta-icon" aria-hidden="true">🕒</em>
+            <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-clock-fill" aria-hidden="true"></i></em>
               <span>${escapeHTML(r.hours)}</span></li>
-            ${r.website ? `<li><em class="meta-icon" aria-hidden="true">🌐</em>
+            ${r.website ? `<li><em class="meta-icon" aria-hidden="true"><i class="bi bi-globe-americas" aria-hidden="true"></i></em>
               <a href="${escapeHTML(r.website)}" target="_blank" rel="noopener noreferrer">Visit website</a></li>` : ''}
           </ul>
           <div class="card-tags">${tagsHTML}</div>
@@ -102,10 +102,10 @@
               More Info
             </button>
             <a href="tel:${sanitizePhone(r.phone)}" class="btn btn-primary btn-sm">
-              📞 Call
+              <i class="bi bi-telephone-fill" aria-hidden="true"></i> Call
             </a>
           </div>
-          <p class="card-verified">✓ Verified ${formatDate(r.last_verified_date)}</p>
+          <p class="card-verified"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Verified ${formatDate(r.last_verified_date)}</p>
         </article>`;
       }).join('');
 
@@ -124,7 +124,7 @@
     .catch(function (err) {
       console.error(err);
       grid.innerHTML = `<div class="empty-state alert alert-warning" role="alert">
-        <div class="empty-icon">⚠️</div>
+        <div class="empty-icon"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i></div>
         <h3>Could not load resources</h3>
         <p>Please refresh the page or try again later.</p>
       </div>`;

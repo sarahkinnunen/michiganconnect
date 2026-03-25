@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Contact The Connect or suggest a resource for Wayne and Monroe County communities.">
   <title>Contact &amp; Suggest a Resource | The Connect</title>
+  
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%235b2c83'/><text x='50' y='64' text-anchor='middle' font-size='56' fill='white' font-family='Arial'>C</text></svg>">
   <style>
     @media (min-width: 768px) {
       #contact-layout { grid-template-columns: 1fr 300px; }
@@ -19,7 +21,7 @@
 
   <div class="announcement-bar" role="banner" aria-label="Site announcement">
     <div class="container">
-      <span aria-hidden="true">⚠️</span>
+      <span aria-hidden="true"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i></span>
       <span>If you are in immediate danger, call <strong>911</strong>.
         For crisis support, call or text <strong>988</strong>.</span>
     </div>
@@ -35,13 +37,13 @@
           <li><a href="about.html">About</a></li>
           <li><a href="data.html">Data &amp; Reports</a></li>
           <li><a href="contact.html" aria-current="page">Contact</a></li>
-          <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+          <li><a href="find-help.html" class="nav-emergency"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</a></li>
         </ul>
       </nav>
       <button class="nav-toggle" id="nav-toggle"
               aria-expanded="false" aria-controls="mobile-menu"
               aria-label="Toggle navigation menu">
-        <span aria-hidden="true">☰</span>
+        <i class="bi bi-list" aria-hidden="true"></i>
         <span class="toggle-label">Menu</span>
       </button>
     </div>
@@ -52,7 +54,7 @@
         <li><a href="about.html">About</a></li>
         <li><a href="data.html">Data &amp; Reports</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+        <li><a href="find-help.html" class="nav-emergency"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</a></li>
       </ul>
     </nav>
   </header>
@@ -233,7 +235,7 @@
           <!-- Sidebar info -->
           <aside style="align-self:start" aria-label="Contact information and notes">
             <div class="info-card" style="margin-bottom:1.5rem">
-              <h3>📬 What Happens Next</h3>
+              <h3><i class="bi bi-envelope-open-fill" aria-hidden="true"></i> What Happens Next</h3>
               <p style="margin-top:.75rem;font-size:var(--font-size-sm)">
                 We review all submissions within 5–7 business days. If you suggest a new resource,
                 our team will verify it before adding it to the directory.
@@ -241,7 +243,7 @@
             </div>
 
             <div class="info-card" style="margin-bottom:1.5rem">
-              <h3>⚡ Need Help Now?</h3>
+              <h3><i class="bi bi-lightning-charge-fill" aria-hidden="true"></i> Need Help Now?</h3>
               <p style="margin-top:.75rem;font-size:var(--font-size-sm)">
                 This form is not monitored for emergencies. If you need immediate help,
                 please use the resources on our
@@ -250,7 +252,7 @@
             </div>
 
             <div class="info-card">
-              <h3>🤝 Partnership</h3>
+              <h3><i class="bi bi-people-fill" aria-hidden="true"></i> Partnership</h3>
               <p style="margin-top:.75rem;font-size:var(--font-size-sm)">
                 Are you a social service organization or community partner?
                 We'd love to collaborate to ensure your programs are accurately listed.
@@ -302,7 +304,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 The Connect. Resource data is verified periodically — always call ahead to confirm.</p>
+        <p>© 2025 The Connect. Resource data is verified periodically - always call ahead to confirm.</p>
         <p><a href="contact.html">Suggest a resource</a> · <a href="data.html">Download data</a></p>
       </div>
     </div>

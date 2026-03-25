@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Emergency and crisis resources — hotlines, shelter, food, and immediate help in Wayne and Monroe Counties.">
+  <meta name="description" content="Emergency and crisis resources - hotlines, shelter, food, and immediate help in Wayne and Monroe Counties.">
   <title>Find Help Now | The Connect</title>
+  
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%235b2c83'/><text x='50' y='64' text-anchor='middle' font-size='56' fill='white' font-family='Arial'>C</text></svg>">
   <style>
-    /* Extra styles for the emergency page — high contrast, maximum readability */
+    /* Extra styles for the emergency page - high contrast, maximum readability */
     .crisis-hero {
       background: var(--color-crisis);
       color: #fff;
@@ -86,13 +88,13 @@
           <li><a href="about.html">About</a></li>
           <li><a href="data.html">Data &amp; Reports</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li><a href="find-help.html" class="nav-emergency" aria-current="page">🚨 Find Help Now</a></li>
+          <li><a href="find-help.html" class="nav-emergency" aria-current="page"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</a></li>
         </ul>
       </nav>
       <button class="nav-toggle" id="nav-toggle"
               aria-expanded="false" aria-controls="mobile-menu"
               aria-label="Toggle navigation menu">
-        <span aria-hidden="true">☰</span>
+        <i class="bi bi-list" aria-hidden="true"></i>
         <span class="toggle-label">Menu</span>
       </button>
     </div>
@@ -103,7 +105,7 @@
         <li><a href="about.html">About</a></li>
         <li><a href="data.html">Data &amp; Reports</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="find-help.html" class="nav-emergency">🚨 Find Help Now</a></li>
+        <li><a href="find-help.html" class="nav-emergency"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</a></li>
       </ul>
     </nav>
   </header>
@@ -113,10 +115,10 @@
     <!-- Crisis hero -->
     <div class="crisis-hero" role="banner" aria-label="Emergency information">
       <div class="container">
-        <h1>🚨 Find Help Now</h1>
+        <h1><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</h1>
         <p>You are not alone. Immediate help is available right now.</p>
         <a href="tel:988" class="btn btn-outline btn-lg" style="color:#fff;border-color:#fff;margin-top:1.5rem;">
-          Call or Text 988 — Free &amp; Confidential
+          Call or Text 988 - Free &amp; Confidential
         </a>
       </div>
     </div>
@@ -126,7 +128,7 @@
       <!-- National crisis hotlines -->
       <section class="emergency-section" aria-labelledby="hotlines-heading">
         <div class="section-label">
-          <span aria-hidden="true">📞</span> Crisis Hotlines
+          <span aria-hidden="true"><i class="bi bi-telephone-fill" aria-hidden="true"></i></span> Crisis Hotlines
         </div>
         <h2 id="hotlines-heading">Call or Text Right Now</h2>
         <p style="color:var(--color-text-muted);margin-bottom:var(--space-6)">
@@ -139,7 +141,7 @@
             <h3>988 Suicide &amp; Crisis Lifeline</h3>
             <p>Talk to a trained counselor. For anyone in emotional distress or suicidal crisis.</p>
             <a href="tel:988" class="hotline-number" aria-label="Call 988">988</a>
-            <p class="availability">✓ Available 24/7 · Call or Text</p>
+            <p class="availability"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Available 24/7 · Call or Text</p>
           </div>
 
           <div class="crisis-card" role="region" aria-label="Crisis Text Line">
@@ -148,7 +150,7 @@
             <a href="sms:741741&body=HOME" class="hotline-number" aria-label="Text HOME to 741741">
               Text HOME to 741741
             </a>
-            <p class="availability">✓ Available 24/7 · Text Only</p>
+            <p class="availability"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Available 24/7 · Text Only</p>
           </div>
 
           <div class="crisis-card" role="region" aria-label="Detroit Wayne Integrated Health Network">
@@ -157,7 +159,7 @@
             <a href="tel:18002414949" class="hotline-number" aria-label="Call 1-800-241-4949">
               1-800-241-4949
             </a>
-            <p class="availability">✓ Available 24/7 · Call</p>
+            <p class="availability"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Available 24/7 · Call</p>
           </div>
 
           <div class="crisis-card" role="region" aria-label="Ozone House Youth Crisis">
@@ -166,7 +168,7 @@
             <a href="tel:17346622222" class="hotline-number" aria-label="Call 734-662-2222">
               734-662-2222
             </a>
-            <p class="availability">✓ 24/7 Crisis Hotline · Drop-in Mon–Fri 10am–6pm</p>
+            <p class="availability"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> 24/7 Crisis Hotline · Drop-in Mon–Fri 10am–6pm</p>
           </div>
 
           <div class="crisis-card" role="region" aria-label="National Domestic Violence Hotline">
@@ -175,7 +177,7 @@
             <a href="tel:18007997233" class="hotline-number" aria-label="Call 1-800-799-7233">
               1-800-799-7233
             </a>
-            <p class="availability">✓ Available 24/7 · Call or Text</p>
+            <p class="availability"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Available 24/7 · Call or Text</p>
           </div>
 
           <div class="crisis-card" role="region" aria-label="Trevor Project LGBTQ+ crisis">
@@ -184,7 +186,7 @@
             <a href="tel:18664887386" class="hotline-number" aria-label="Call 1-866-488-7386">
               1-866-488-7386
             </a>
-            <p class="availability">✓ Available 24/7 · Call, Text, or Chat</p>
+            <p class="availability"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Available 24/7 · Call, Text, or Chat</p>
           </div>
 
         </div>
@@ -193,11 +195,11 @@
       <!-- Emergency shelter -->
       <section class="emergency-section" aria-labelledby="shelter-heading">
         <div class="section-label">
-          <span aria-hidden="true">🏠</span> Emergency Shelter
+          <span aria-hidden="true"><i class="bi bi-house-door-fill" aria-hidden="true"></i></span> Emergency Shelter
         </div>
         <h2 id="shelter-heading">Need a Place to Stay Tonight?</h2>
         <p style="color:var(--color-text-muted);margin-bottom:var(--space-6)">
-          Call ahead if possible — availability changes daily.
+          Call ahead if possible - availability changes daily.
         </p>
 
         <div class="crisis-card-grid">
@@ -228,7 +230,7 @@
       <!-- Immediate food access -->
       <section class="emergency-section" aria-labelledby="food-heading">
         <div class="section-label">
-          <span aria-hidden="true">🥗</span> Immediate Food Access
+          <span aria-hidden="true"><i class="bi bi-basket2-fill" aria-hidden="true"></i></span> Immediate Food Access
         </div>
         <h2 id="food-heading">Need Food Today?</h2>
         <p style="color:var(--color-text-muted);margin-bottom:var(--space-6)">
@@ -264,11 +266,11 @@
         <h2 id="expect-heading">What to Expect When You Call</h2>
         <div class="alert alert-info">
           <ul style="list-style:none;display:flex;flex-direction:column;gap:.75rem">
-            <li>✅ <strong>You don't need ID</strong> to call a crisis line or access most emergency services.</li>
-            <li>✅ <strong>Your call is confidential.</strong> What you share stays with the counselor.</li>
-            <li>✅ <strong>No judgment.</strong> Crisis counselors are trained to listen and help without judging.</li>
-            <li>✅ <strong>You can hang up</strong> at any time. There's no obligation.</li>
-            <li>✅ <strong>Language access</strong> is available on most hotlines — tell them your language.</li>
+            <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> <strong>You don't need ID</strong> to call a crisis line or access most emergency services.</li>
+            <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> <strong>Your call is confidential.</strong> What you share stays with the counselor.</li>
+            <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> <strong>No judgment.</strong> Crisis counselors are trained to listen and help without judging.</li>
+            <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> <strong>You can hang up</strong> at any time. There's no obligation.</li>
+            <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> <strong>Language access</strong> is available on most hotlines - tell them your language.</li>
           </ul>
         </div>
       </section>
@@ -327,7 +329,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 The Connect. Resource data is verified periodically — always call ahead to confirm.</p>
+        <p>© 2025 The Connect. Resource data is verified periodically - always call ahead to confirm.</p>
         <p><a href="contact.html">Suggest a resource</a> · <a href="data.html">Download data</a></p>
       </div>
     </div>

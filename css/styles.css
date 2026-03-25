@@ -6,10 +6,10 @@
 /* ── CSS Custom Properties ───────────────────────────────── */
 :root {
   /* Brand colors */
-  --color-primary:        #1a5276;   /* deep blue */
-  --color-primary-dark:   #154360;
-  --color-primary-light:  #2e86c1;
-  --color-accent:         #e67e22;   /* warm orange */
+  --color-primary:        #5b2c83;   /* same as home-page only */
+  --color-primary-dark:   #4a235a;   /* darker */
+  --color-primary-light:  #7d3c98;   /* lighter */
+  --color-accent:         #f6ce31;   /* warm yellow */
   --color-accent-dark:    #ca6f1e;
   --color-crisis:         #c0392b;   /* urgent red */
   --color-crisis-dark:    #a93226;
@@ -23,7 +23,7 @@
   --color-text-inverse:   #ffffff;
 
   /* Category colors */
-  --color-housing:        #1a5276;
+  --color-housing:        #5b2c83;
   --color-food:           #27ae60;
   --color-health:         #8e44ad;
   --color-legal:          #2c3e50;
@@ -65,6 +65,19 @@
   /* Layout */
   --max-width: 1140px;
   --nav-height: 64px;
+}
+
+/* Homepage-only brand shift to purple */
+body.landing-page {
+  --color-primary:        #5b2c83;
+  --color-primary-dark:   #4a235a;
+  --color-primary-light:  #7d3c98;
+  --focus-ring: 0 0 0 3px rgba(125,60,152,.45);
+}
+
+/* Shared icon spacing for inline icons replacing emoji glyphs */
+i.bi[aria-hidden="true"] {
+  margin-right: .35rem;
 }
 
 /* ── Reset & Base ─────────────────────────────────────────── */
