@@ -6,13 +6,13 @@
 /* ── CSS Custom Properties ───────────────────────────────── */
 :root {
   /* Brand colors */
-  --color-primary:        #5b2c83;   /* same as home-page only */
+  --color-primary:        #9371b0;   /* same as home-page only */
   --color-primary-dark:   #4a235a;   /* darker */
   --color-primary-light:  #7d3c98;   /* lighter */
-  --color-accent:         #f6ce31;   /* warm yellow */
+  --color-accent:         #f5e5a7;   /* warm yellow */
   --color-accent-dark:    #ca6f1e;
-  --color-crisis:         #c0392b;   /* urgent red */
-  --color-crisis-dark:    #a93226;
+  --color-crisis:         #6f1006;   /* urgent red */
+  --color-crisis-dark:    #300501;
 
   /* Neutrals */
   --color-bg:             #f5f7fa;
@@ -24,10 +24,10 @@
 
   /* Category colors */
   --color-housing:        #5b2c83;
-  --color-food:           #27ae60;
+  --color-food:           #6e9b77;
   --color-health:         #8e44ad;
   --color-legal:          #2c3e50;
-  --color-crisis-cat:     #c0392b;
+  --color-crisis-cat:     #6f1006;
 
   /* Typography */
   --font-body:  'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -69,7 +69,7 @@
 
 /* Homepage-only brand shift to purple */
 body.landing-page {
-  --color-primary:        #5b2c83;
+  --color-primary:        #9371b0;
   --color-primary-dark:   #4a235a;
   --color-primary-light:  #7d3c98;
   --focus-ring: 0 0 0 3px rgba(125,60,152,.45);
@@ -702,7 +702,7 @@ main { flex: 1; }
 
 /* ── Crisis / Emergency Banner ────────────────────────────── */
 .crisis-banner {
-  background: var(--color-crisis);
+  background: var(--color-crisis-dark);
   color: #fff;
   padding: var(--space-6) 0;
 }
@@ -914,10 +914,10 @@ main { flex: 1; }
 .category-header p { opacity: .92; font-size: var(--font-size-lg); }
 
 .category-header[data-category="housing"] { background: linear-gradient(135deg, var(--color-housing), #2e86c1); }
-.category-header[data-category="food"]    { background: linear-gradient(135deg, #1e8449, var(--color-food));    }
+.category-header[data-category="food"]    { background: linear-gradient(135deg, #0a2c18, var(--color-food));    }
 .category-header[data-category="health"]  { background: linear-gradient(135deg, #6c3483, var(--color-health));  }
 .category-header[data-category="legal"]   { background: linear-gradient(135deg, var(--color-legal), #566573);   }
-.category-header[data-category="crisis"]  { background: linear-gradient(135deg, var(--color-crisis-cat), #e74c3c); }
+.category-header[data-category="crisis"]  { background: linear-gradient(135deg, var(--color-crisis-cat), #6f1006); }
 
 /* ── Announcement Bar ─────────────────────────────────────── */
 .announcement-bar {
