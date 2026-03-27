@@ -71,4 +71,15 @@
     btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   });
 
+  /* ── Quick Exit Button ─────────────────────────────────── */
+  const exitBtn = document.createElement('button');
+  exitBtn.id = 'quick-exit';
+  exitBtn.className = 'quick-exit-btn';
+  exitBtn.setAttribute('aria-label', 'Quick exit – click to leave this site immediately');
+  exitBtn.textContent = '\u2715 Quick Exit';
+  exitBtn.addEventListener('click', function () {
+    window.location.replace('https://www.google.com');
+  });
+  document.body.insertBefore(exitBtn, document.body.firstChild);
+
 })();

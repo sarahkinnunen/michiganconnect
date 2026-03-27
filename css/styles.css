@@ -989,5 +989,38 @@ main { flex: 1; }
 }
 
 /* Dark mode (optional) */
+
 /* Quick exit button */
+.quick-exit-btn {
+  position: fixed;
+  top: 8px;
+  right: 16px;
+  z-index: 10000;
+  background: var(--color-crisis);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0,0,0,.4);
+  transition: background .15s ease;
+  white-space: nowrap;
+}
+@media (min-width: 768px) {
+  .quick-exit-btn {
+    padding: 6px 14px;
+    font-size: var(--font-size-sm);
+  }
+}
+.quick-exit-btn:hover {
+  background: var(--color-crisis-dark);
+}
+.quick-exit-btn:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 /* About us social medias section */
