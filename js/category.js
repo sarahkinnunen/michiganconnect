@@ -77,8 +77,8 @@
           <ul class="card-meta">
             <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></em>
               <span>${escapeHTML(r.city)}, ${escapeHTML(r.county)} County</span></li>
-            <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-telephone-fill" aria-hidden="true"></i></em>
-              <a href="tel:${sanitizePhone(r.phone)}">${escapeHTML(r.phone)}</a></li>
+            ${r.phone ? `<li><em class="meta-icon" aria-hidden="true"><i class="bi bi-telephone-fill" aria-hidden="true"></i></em>
+              <a href="tel:${sanitizePhone(r.phone)}">${escapeHTML(r.phone)}</a></li>` : ''}
             <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-clock-fill" aria-hidden="true"></i></em>
               <span>${escapeHTML(r.hours)}</span></li>
             ${r.website ? `<li><em class="meta-icon" aria-hidden="true"><i class="bi bi-globe-americas" aria-hidden="true"></i></em>
@@ -101,9 +101,9 @@
                     aria-controls="cat-details-${r.id}">
               More Info
             </button>
-            <a href="tel:${sanitizePhone(r.phone)}" class="btn btn-primary btn-sm">
+            ${r.phone ? `<a href="tel:${sanitizePhone(r.phone)}" class="btn btn-primary btn-sm">
               <i class="bi bi-telephone-fill" aria-hidden="true"></i> Call
-            </a>
+            </a>` : ''}
           </div>
           <p class="card-verified"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Verified ${formatDate(r.last_verified_date)}</p>
         </article>`;

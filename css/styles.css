@@ -28,6 +28,8 @@
   --color-health:         #8e44ad;
   --color-legal:          #2c3e50;
   --color-crisis-cat:     #6f1006;
+  --color-employment:     #b7500a;
+  --color-education:      #1a5276;
 
   /* Typography */
   --font-body:  'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -441,7 +443,9 @@ main { flex: 1; }
 .category-tile[data-category="food"]    { border-color: var(--color-food);    color: var(--color-food);    }
 .category-tile[data-category="health"]  { border-color: var(--color-health);  color: var(--color-health);  }
 .category-tile[data-category="legal"]   { border-color: var(--color-legal);   color: var(--color-legal);   }
-.category-tile[data-category="crisis"]  { border-color: var(--color-crisis-cat); color: var(--color-crisis-cat); background: #fdf2f2; }
+.category-tile[data-category="crisis"]      { border-color: var(--color-crisis-cat);   color: var(--color-crisis-cat);   background: #fdf2f2; }
+.category-tile[data-category="employment"]  { border-color: var(--color-employment);   color: var(--color-employment);   background: #fdf5ec; }
+.category-tile[data-category="education"]   { border-color: var(--color-education);    color: var(--color-education);    background: #eaf3fb; }
 
 /* ── Resource Cards ───────────────────────────────────────── */
 .resource-grid {
@@ -917,7 +921,9 @@ main { flex: 1; }
 .category-header[data-category="food"]    { background: linear-gradient(135deg, #0a2c18, var(--color-food));    }
 .category-header[data-category="health"]  { background: linear-gradient(135deg, #6c3483, var(--color-health));  }
 .category-header[data-category="legal"]   { background: linear-gradient(135deg, var(--color-legal), #566573);   }
-.category-header[data-category="crisis"]  { background: linear-gradient(135deg, var(--color-crisis-cat), #6f1006); }
+.category-header[data-category="crisis"]      { background: linear-gradient(135deg, var(--color-crisis-cat), #6f1006);       }
+.category-header[data-category="employment"] { background: linear-gradient(135deg, var(--color-employment), #e67e22);     }
+.category-header[data-category="education"]  { background: linear-gradient(135deg, var(--color-education),  #2e86c1);     }
 
 /* ── Announcement Bar ─────────────────────────────────────── */
 .announcement-bar {
