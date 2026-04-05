@@ -1071,7 +1071,7 @@ main { flex: 1; }
 .page-banner h1 { color: var(--color-ink); margin-bottom: var(--space-3); }
 .page-banner p { font-size: var(--font-size-lg); color: var(--color-text-muted); }
 
-/* Photo banner variant (e.g. About page) — image + lavender tint overlay */
+/* Photo banner variant (e.g. About page) - image + lavender tint overlay */
 .page-banner--photo {
   position: relative;
   background-color: #3d2f72;
@@ -1139,6 +1139,8 @@ main { flex: 1; }
 }
 
 /* Dark mode (optional) */
+
+/* Reading accessibility: increase font + high contrast */
 
 /* Quick exit button */
 .quick-exit-btn {
