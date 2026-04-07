@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Healthcare resources for youth and families in Southeast Michigan - free clinics, sliding scale fees, mental health, and dental care.">
-  <title>Healthcare Resources | The Connect</title>
+  <meta name="description" content="Human trafficking resources for survivors and those at risk in Southeast Michigan – hotlines, housing, legal aid, and supportive services.">
+  <title>Human Trafficking Resources | The Connect</title>
   
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -56,45 +56,48 @@
 
   <main id="main-content">
 
-    <div class="category-header" data-category="health">
+    <div class="category-header" data-category="human-trafficking">
       <div class="container">
-        <p style="font-size:3rem;margin-bottom:.5rem" aria-hidden="true"><i class="bi bi-hospital-fill" aria-hidden="true"></i></p>
-        <h1>Healthcare Resources</h1>
-        <p>Free and low-cost clinics, mental health services, dental care, and public health programs</p>
+        <p style="font-size:3rem;margin-bottom:.5rem" aria-hidden="true"><i class="bi bi-person-fill-lock" aria-hidden="true"></i></p>
+        <h1>Human Trafficking Resources</h1>
+        <p>Hotlines, safe housing, legal advocacy, and survivor support services</p>
       </div>
     </div>
 
     <section class="section" style="background:var(--color-surface);border-bottom:1px solid var(--color-border);"
-             aria-labelledby="health-access-heading">
+             aria-labelledby="ht-info-heading">
       <div class="container">
-        <h2 id="health-access-heading">How to Access Healthcare</h2>
+        <h2 id="ht-info-heading">Getting Help Safely</h2>
         <div class="info-grid" style="margin-top:1.5rem">
           <div class="info-card">
-            <h3><i class="bi bi-cash-coin" aria-hidden="true"></i> No Insurance? No Problem</h3>
-            <p>Many clinics offer sliding scale fees based on your income, including free care
-               for those who qualify. Always ask about uninsured patient programs when you call.</p>
+            <h3><i class="bi bi-telephone-fill" aria-hidden="true"></i> National Hotline</h3>
+            <p>Call or text the <strong>National Human Trafficking Hotline</strong> at
+               <a href="tel:18883737888">1-888-373-7888</a> or text 233733 (HELP or INFO).
+               Available 24/7, confidential, and available in 200+ languages.</p>
           </div>
           <div class="info-card">
-            <h3><i class="bi bi-card-checklist" aria-hidden="true"></i> What to Bring</h3>
-            <p>Bring any existing insurance cards, a photo ID if you have one, and a list of
-               current medications. Most clinics can assist you even if you lack documentation.</p>
+            <h3><i class="bi bi-shield-lock-fill" aria-hidden="true"></i> Your Safety Comes First</h3>
+            <p>If it is not safe to call, text or use the online chat options. Most services
+               are confidential. You do not need to have left your situation to ask for help.</p>
           </div>
           <div class="info-card">
-            <h3><i class="bi bi-heart-pulse-fill" aria-hidden="true"></i> Mental Health Counts</h3>
-            <p>Mental health is healthcare. Many clinics below offer counseling, therapy,
-               and psychiatric services. You don't need a crisis to ask for help.</p>
+            <h3><i class="bi bi-people-fill" aria-hidden="true"></i> Reporting Concerns</h3>
+            <p>If you suspect trafficking is happening, contact the National Hotline or local law
+               enforcement. You do not need proof — trained advocates will guide next steps.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="health-list-heading">
+    <section class="section" aria-labelledby="ht-list-heading">
       <div class="container">
         <div class="results-meta">
-          <h2 id="health-list-heading">Healthcare Organizations</h2>
-          <span class="results-count" id="category-count" role="status" aria-live="polite">Loading…</span>
+          <h2 id="ht-list-heading">Human Trafficking Organizations</h2>
+          <span class="results-count" id="category-count" role="status" aria-live="polite">
+            Loading…
+          </span>
         </div>
-        <div class="resource-grid" id="category-results" aria-label="Healthcare resources">
+        <div class="resource-grid" id="category-results" aria-label="Human trafficking resources">
           <!-- Populated by category.js -->
         </div>
       </div>
@@ -105,32 +108,23 @@
       <div class="container">
         <h2 id="other-cats-heading">Other Resource Categories</h2>
         <div class="category-grid" style="margin-top:1.5rem">
-          <a href="housing.html" class="category-tile" data-category="housing">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-house-door-fill" aria-hidden="true"></i></span><span>Housing</span>
-          </a>
-          <a href="food.html"    class="category-tile" data-category="food">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-basket2-fill" aria-hidden="true"></i></span><span>Food</span>
-          </a>
-          <a href="legal.html"   class="category-tile" data-category="legal">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-bank2" aria-hidden="true"></i></span><span>Legal Aid</span>
-          </a>
-          <a href="crisis.html"  class="category-tile" data-category="crisis">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-shield-fill-exclamation" aria-hidden="true"></i></span><span>Crisis</span>
-          </a>
-          <a href="employment.html" class="category-tile" data-category="employment">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-briefcase-fill" aria-hidden="true"></i></span><span>Employment</span>
-          </a>
-          <a href="education.html" class="category-tile" data-category="education">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-mortarboard-fill" aria-hidden="true"></i></span><span>Education</span>
-          </a>
-          <a href="human-trafficking.html" class="category-tile" data-category="human-trafficking">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-person-fill-lock" aria-hidden="true"></i></span><span>Human Trafficking</span>
-          </a>
           <a href="domestic-violence.html" class="category-tile" data-category="domestic-violence">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-heart-pulse-fill" aria-hidden="true"></i></span><span>Domestic Violence</span>
           </a>
           <a href="immigration.html" class="category-tile" data-category="immigration">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-globe-americas" aria-hidden="true"></i></span><span>Immigration</span>
+          </a>
+          <a href="crisis.html" class="category-tile" data-category="crisis">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-shield-fill-exclamation" aria-hidden="true"></i></span><span>Crisis Services</span>
+          </a>
+          <a href="housing.html" class="category-tile" data-category="housing">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-house-door-fill" aria-hidden="true"></i></span><span>Housing</span>
+          </a>
+          <a href="legal.html" class="category-tile" data-category="legal">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-bank2" aria-hidden="true"></i></span><span>Legal Aid</span>
+          </a>
+          <a href="health.html" class="category-tile" data-category="health">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-hospital-fill" aria-hidden="true"></i></span><span>Healthcare</span>
           </a>
         </div>
       </div>
@@ -153,8 +147,6 @@
             <li><a href="health.html">Healthcare</a></li>
             <li><a href="legal.html">Legal Aid</a></li>
             <li><a href="crisis.html">Crisis Services</a></li>
-            <li><a href="employment.html">Employment</a></li>
-            <li><a href="education.html">Education</a></li>
             <li><a href="human-trafficking.html">Human Trafficking</a></li>
             <li><a href="domestic-violence.html">Domestic Violence</a></li>
             <li><a href="immigration.html">Immigration</a></li>
@@ -175,7 +167,8 @@
           <ul>
             <li><a href="tel:911">911 – Emergency</a></li>
             <li><a href="tel:988">988 – Crisis Lifeline</a></li>
-            <li><a href="tel:18002414949">DWIHN Crisis Line</a></li>
+            <li><a href="tel:18883737888">1-888-373-7888 – Trafficking Hotline</a></li>
+            <li><a href="tel:18668642338">866-864-2338 – VOICES4</a></li>
           </ul>
         </div>
       </div>
@@ -186,8 +179,8 @@
     </div>
   </footer>
 
-  <script src="../js/main.js"></script>
-  <script>window.CONNECT_CATEGORY = 'health';</script>
+  <script>window.CONNECT_CATEGORY = 'human-trafficking';</script>
   <script src="../js/category.js"></script>
+  <script src="../js/main.js"></script>
 </body>
 </html>
