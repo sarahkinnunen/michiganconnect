@@ -66,34 +66,37 @@
       </div>
     </div>
 
-    <!-- Sticky search + filter bar -->
-    <section class="search-section" aria-label="Search and filter resources">
-      <div class="container">
-
-        <!-- Search bar -->
-        <div class="search-bar" role="search">
-          <div class="search-input-wrapper">
-            <em class="search-icon" aria-hidden="true"><i class="bi bi-search" aria-hidden="true"></i></em>
-            <label for="search-input" class="sr-only">Search resources</label>
-            <input
-              type="search"
-              id="search-input"
-              name="q"
-              placeholder="Search by name, keyword, or need (e.g. "shelter", "food", "mental health")…"
-              autocomplete="off"
-              aria-label="Search resources"
-              aria-describedby="search-hint"
-            >
-                <button class="search-clear" id="search-clear"
-                  aria-label="Clear search" title="Clear search"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
-          </div>
+        <!-- Sticky search bar (input stays fixed) -->
+    <div class="search-sticky-bar" role="search" aria-label="Search resources">
+      <div class="container search-sticky-inner">
+        <div class="search-input-wrapper">
+          <em class="search-icon" aria-hidden="true"><i class="bi bi-search" aria-hidden="true"></i></em>
+          <label for="search-input" class="sr-only">Search resources</label>
+          <input
+            type="search"
+            id="search-input"
+            name="q"
+            placeholder="Search by name, keyword, or need (e.g. shelter, food, mental health)..."
+            autocomplete="off"
+            aria-label="Search resources"
+            aria-describedby="search-hint"
+          >
+          <button class="search-clear" id="search-clear"
+            aria-label="Clear search" title="Clear search"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
         </div>
+        <button class="filter-toggle-btn" id="filter-toggle"
+                aria-expanded="false" aria-controls="filter-panel"
+                type="button">
+          <i class="bi bi-sliders" aria-hidden="true"></i>
+          <span>Filters</span>
+        </button>
+      </div>
+      <p id="search-hint" class="sr-only">Type to filter resources. Results update in real time.</p>
+    </div>
 
-        <p id="search-hint" class="sr-only">
-          Type to filter resources. Results update in real time.
-        </p>
-
-        <!-- Dropdown filters -->
+    <!-- Collapsible filters panel (not sticky; hidden on mobile by default) -->
+    <div class="search-filters-bar" id="filter-panel" hidden>
+      <div class="container">
         <div class="filters" role="group" aria-label="Filter options">
           <div class="filter-group">
             <label for="filter-category">Category</label>
@@ -101,35 +104,29 @@
               <option value="">All Categories</option>
             </select>
           </div>
-
           <div class="filter-group">
             <label for="filter-county">County</label>
             <select id="filter-county" aria-label="Filter by county">
               <option value="">All Counties</option>
             </select>
           </div>
-
           <div class="filter-group">
             <label for="filter-city">City</label>
             <select id="filter-city" aria-label="Filter by city">
               <option value="">All Cities</option>
             </select>
           </div>
-
           <div class="filter-group">
             <label for="filter-tag">Tag</label>
             <select id="filter-tag" aria-label="Filter by tag">
               <option value="">All Tags</option>
             </select>
           </div>
-
           <button class="filter-reset" id="filter-reset" type="button"
-                  aria-label="Reset all filters and search">
-            Reset Filters
-          </button>
+                  aria-label="Reset all filters and search">Reset Filters</button>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- Results -->
     <section class="section" aria-label="Search results">
@@ -164,6 +161,17 @@
             <li><a href="category/crisis.html">Crisis Services</a></li>
             <li><a href="category/employment.html">Employment</a></li>
             <li><a href="category/education.html">Education</a></li>
+            <li><a href="category/human-trafficking.html">Human Trafficking</a></li>
+            <li><a href="category/domestic-violence.html">Domestic Violence</a></li>
+            <li><a href="category/immigration.html">Immigration</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
+          <ul>
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About Us</a></li>
             <li><a href="data.html">Data &amp; Reports</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
@@ -173,7 +181,8 @@
           <ul>
             <li><a href="tel:911">911 – Emergency</a></li>
             <li><a href="tel:988">988 – Crisis Lifeline</a></li>
-            <li><a href="tel:18002414949">DWIHN Crisis Line</a></li>
+            <li><a href="tel:18002414949">DWIHN Substance Use and Disability Support</a></li>
+            <li><a href="tel:18002738255">Crisis Text Line – text HOME to 741741</a></li>
           </ul>
         </div>
       </div>
@@ -186,5 +195,45 @@
 
   <script src="js/main.js"></script>
   <script src="js/search.js"></script>
+  <script>
+    (function () {
+      var btn    = document.getElementById('filter-toggle');
+      var panel  = document.getElementById('filter-panel');
+      var reset  = document.getElementById('filter-reset');
+      if (!btn || !panel) return;
+
+      // On desktop always show filters
+      function isDesktop() { return window.matchMedia('(min-width: 768px)').matches; }
+
+      function setPanel(open) {
+        if (open) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', '');
+        }
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.querySelector('span').textContent = open ? 'Hide Filters' : 'Filters';
+      }
+
+      // Show on desktop by default
+      if (isDesktop()) setPanel(true);
+
+      btn.addEventListener('click', function () {
+        setPanel(panel.hasAttribute('hidden'));
+      });
+
+      // When a filter is changed on mobile, keep panel open
+      window.addEventListener('resize', function () {
+        if (isDesktop()) setPanel(true);
+      });
+
+      // When reset is clicked, close on mobile
+      if (reset) {
+        reset.addEventListener('click', function () {
+          if (!isDesktop()) setPanel(false);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

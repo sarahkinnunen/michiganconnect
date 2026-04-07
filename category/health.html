@@ -94,6 +94,24 @@
           <h2 id="health-list-heading">Healthcare Organizations</h2>
           <span class="results-count" id="category-count" role="status" aria-live="polite">Loading…</span>
         </div>
+
+        <!-- Subcategory filter pills -->
+        <div id="health-pills" class="subcategory-pills" role="group" aria-label="Filter by health service type">
+          <button class="pill active" data-match="">All</button>
+          <button class="pill" data-match="dental">Dental</button>
+          <button class="pill" data-match="reproductive">Reproductive Health</button>
+          <button class="pill" data-match="vision">Vision</button>
+          <button class="pill" data-match="mental health">Mental Health</button>
+          <button class="pill" data-match="spiritual">Spiritual</button>
+          <button class="pill" data-match="primary care">Primary Care</button>
+          <button class="pill" data-match="urgent care">Urgent Care</button>
+          <button class="pill" data-match="substance">Substance Use</button>
+          <button class="pill" data-match="addiction">Addiction</button>
+          <button class="pill" data-match="pharmacy">Pharmacy</button>
+          <button class="pill" data-match="chronic">Chronic Illness</button>
+          <button class="pill" data-match="screen">Preventative Screenings</button>
+        </div>
+
         <div class="resource-grid" id="category-results" aria-label="Healthcare resources">
           <!-- Populated by category.js -->
         </div>
@@ -175,7 +193,8 @@
           <ul>
             <li><a href="tel:911">911 – Emergency</a></li>
             <li><a href="tel:988">988 – Crisis Lifeline</a></li>
-            <li><a href="tel:18002414949">DWIHN Crisis Line</a></li>
+            <li><a href="tel:18002414949">DWIHN Substance Use and Disability Support</a></li>
+            <li><a href="tel:18002738255">Crisis Text Line – text HOME to 741741</a></li>
           </ul>
         </div>
       </div>
@@ -189,5 +208,57 @@
   <script src="../js/main.js"></script>
   <script>window.CONNECT_CATEGORY = 'health';</script>
   <script src="../js/category.js"></script>
+  <script>
+    (function () {
+      var pills = document.querySelectorAll('#health-pills .pill');
+      var grid  = document.getElementById('category-results');
+      var noMatchMsg = null;
+
+      function applyFilter(match) {
+        var cards = grid.querySelectorAll('.resource-card');
+        var visible = 0;
+        cards.forEach(function (card) {
+          if (!match) {
+            card.style.display = '';
+            visible++;
+            return;
+          }
+          var tagText  = Array.from(card.querySelectorAll('.tag'))
+                              .map(function (t) { return t.textContent.toLowerCase(); }).join(' ');
+          var titleText = ((card.querySelector('h3') || {}).textContent || '').toLowerCase();
+          var bodyText  = (card.textContent || '').toLowerCase();
+          var hit = tagText.includes(match) || titleText.includes(match) || bodyText.includes(match);
+          card.style.display = hit ? '' : 'none';
+          if (hit) visible++;
+        });
+        if (noMatchMsg) noMatchMsg.remove();
+        if (visible === 0 && match) {
+          noMatchMsg = document.createElement('p');
+          noMatchMsg.style.cssText = 'color:var(--color-text-muted);margin-top:1rem';
+          noMatchMsg.textContent = 'No resources listed yet for this subcategory. Check back soon or suggest one via the contact form.';
+          grid.after(noMatchMsg);
+        }
+      }
+
+      function initPills() {
+        pills.forEach(function (pill) {
+          pill.addEventListener('click', function () {
+            pills.forEach(function (p) { p.classList.remove('active'); });
+            pill.classList.add('active');
+            applyFilter(pill.dataset.match);
+          });
+        });
+      }
+
+      // Wait for category.js to render cards
+      var observer = new MutationObserver(function () {
+        if (grid.querySelector('.resource-card')) {
+          observer.disconnect();
+          initPills();
+        }
+      });
+      if (grid) observer.observe(grid, { childList: true });
+    })();
+  </script>
 </body>
 </html>

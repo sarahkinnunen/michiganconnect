@@ -8,6 +8,7 @@
   
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%235b2c83'/><text x='50' y='64' text-anchor='middle' font-size='56' fill='white' font-family='Arial'>C</text></svg>">
 </head>
 <body>
@@ -133,27 +134,20 @@
     <!-- Coverage area -->
     <section class="section" aria-labelledby="coverage-heading">
       <div class="container">
-        <div style="max-width:800px">
-          <h2 id="coverage-heading">Coverage Area</h2>
-          <p style="margin-top:1rem">
-            The Connect currently covers resources in <strong>Wayne County</strong> and
-            <strong>Monroe County</strong>, Michigan. This includes communities such as:
-          </p>
-          <ul style="margin-top:1rem;margin-left:1.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.5rem 2rem;list-style:disc">
-            <li>Detroit</li>
-            <li>Dearborn</li>
-            <li>Westland</li>
-            <li>Livonia</li>
-            <li>Ypsilanti</li>
-            <li>Monroe</li>
-            <li>Downriver communities</li>
-            <li>And more…</li>
-          </ul>
-          <p style="margin-top:1.5rem">
-            We plan to expand our geographic coverage over time. If you represent an organization
-            in a neighboring county, <a href="contact.html">reach out</a> to discuss partnership.
-          </p>
-        </div>
+        <h2 id="coverage-heading">Coverage Area</h2>
+        <p style="margin-top:.75rem;max-width:680px">
+          The Connect currently covers resources in <strong>Wayne County</strong> and
+          <strong>Monroe County</strong>, Michigan — including Detroit, Dearborn, Westland,
+          Livonia, Downriver communities, Monroe, and more. Click a marker to explore.
+        </p>
+        <div id="coverage-map"
+             style="height:420px;margin-top:1.5rem;border-radius:.5rem;border:1px solid var(--color-border);box-shadow:0 2px 8px rgba(0,0,0,.08)"
+             role="img"
+             aria-label="Interactive map of Southeast Michigan showing Wayne and Monroe county coverage area"></div>
+        <p style="margin-top:1.25rem;max-width:680px">
+          We plan to expand our geographic coverage over time. If you represent an organization
+          in a neighboring county, <a href="contact.html">reach out</a> to discuss partnership.
+        </p>
       </div>
     </section>
 
@@ -349,6 +343,17 @@
             <li><a href="category/crisis.html">Crisis Services</a></li>
             <li><a href="category/employment.html">Employment</a></li>
             <li><a href="category/education.html">Education</a></li>
+            <li><a href="category/human-trafficking.html">Human Trafficking</a></li>
+            <li><a href="category/domestic-violence.html">Domestic Violence</a></li>
+            <li><a href="category/immigration.html">Immigration</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
+          <ul>
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="find-help.html">Find Help Now</a></li>
+            <li><a href="about.html">About Us</a></li>
             <li><a href="data.html">Data &amp; Reports</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
@@ -358,7 +363,8 @@
           <ul>
             <li><a href="tel:911">911 – Emergency</a></li>
             <li><a href="tel:988">988 – Crisis Lifeline</a></li>
-            <li><a href="tel:18002414949">DWIHN Crisis Line</a></li>
+            <li><a href="tel:18002414949">DWIHN Substance Use and Disability Support</a></li>
+            <li><a href="tel:18002738255">Crisis Text Line – text HOME to 741741</a></li>
           </ul>
         </div>
       </div>
@@ -370,5 +376,66 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script>
+    (function () {
+      var mapEl = document.getElementById('coverage-map');
+      if (!mapEl) return;
+
+      var map = L.map('coverage-map', {
+        center: [42.18, -83.28],
+        zoom: 9,
+        scrollWheelZoom: false,
+        zoomControl: true
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18
+      }).addTo(map);
+
+      // County shading
+      L.circle([42.3314, -83.0476], {
+        radius: 38000,
+        color: '#6d5fad', weight: 2,
+        fillColor: '#6d5fad', fillOpacity: 0.12
+      }).addTo(map).bindPopup('<strong>Wayne County</strong><br>Detroit, Dearborn, Westland, Livonia &amp; Downriver communities');
+
+      L.circle([41.916, -83.398], {
+        radius: 25000,
+        color: '#6d5fad', weight: 2,
+        fillColor: '#6d5fad', fillOpacity: 0.12
+      }).addTo(map).bindPopup('<strong>Monroe County</strong><br>Monroe &amp; surrounding communities');
+
+      // City markers
+      var icon = L.divIcon({
+        className: '',
+        html: '<div style="width:12px;height:12px;border-radius:50%;background:#6d5fad;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>',
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
+      });
+
+      var cities = [
+        { name: 'Detroit',    lat: 42.3314, lng: -83.0458 },
+        { name: 'Dearborn',   lat: 42.3223, lng: -83.1763 },
+        { name: 'Westland',   lat: 42.3242, lng: -83.4002 },
+        { name: 'Livonia',    lat: 42.3684, lng: -83.3527 },
+        { name: 'Wyandotte',  lat: 42.2139, lng: -83.1499 },
+        { name: 'Taylor',     lat: 42.2406, lng: -83.2696 },
+        { name: 'Inkster',    lat: 42.2942, lng: -83.3132 },
+        { name: 'Monroe',     lat: 41.9161, lng: -83.3977 },
+        { name: 'Trenton',    lat: 42.1395, lng: -83.1785 }
+      ];
+
+      cities.forEach(function (c) {
+        L.marker([c.lat, c.lng], { icon: icon })
+          .addTo(map)
+          .bindPopup('<strong>' + c.name + '</strong>');
+      });
+
+      // Force tile redraw in case container wasn't fully painted yet
+      setTimeout(function () { map.invalidateSize(); }, 200);
+    })();
+  </script>
 </body>
 </html>
