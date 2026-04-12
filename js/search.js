@@ -3,8 +3,9 @@
  *
  * Strategy:
  *  1. Fetch resources.json once
- *  2. Index searchable fields (name, category, city, county, tags, eligibility)
+ *  2. Build a pre-computed lowercase search index per resource
  *  3. On each keystroke / filter change, run lightweight scoring and re-render
+ *     (search input is debounced; filter dropdowns fire immediately)
  *
  * No third-party dependencies – pure vanilla JS.
  */
@@ -13,8 +14,9 @@
   'use strict';
 
   /* ── State ──────────────────────────────────────────────── */
-  let allResources = [];  // raw data from JSON
+  let allResources = [];  // raw data from JSON, augmented with ._idx
   let filteredResources = [];  // current filtered/searched subset
+  let debounceTimer = null;
 
   /* ── DOM refs ───────────────────────────────────────────── */
   const searchInput   = document.getElementById('search-input');
@@ -46,7 +48,18 @@
         return res.json();
       })
       .then(function (data) {
-        allResources = data;
+        // Pre-build a lowercase search index on each resource so
+        // scoreAndSort never has to re-join the fields on every keystroke.
+        allResources = data.map(function (r) {
+          r._idx = [
+            r.name, r.category, ...(r.categories || []),
+            r.county, r.city,
+            r.eligibility, r.intake_process,
+            ...(r.tags || [])
+          ].join(' ').toLowerCase();
+          r._nameLower = r.name.toLowerCase();
+          return r;
+        });
         populateFilterOptions(data);
         applyFilters();
         bindEvents();
@@ -117,7 +130,10 @@
     if (clearBtn) {
       clearBtn.classList.toggle('visible', searchInput.value.length > 0);
     }
-    applyFilters();
+    // Debounce: wait 200 ms after the user stops typing before filtering.
+    // Filter dropdowns (applyFilters directly) still respond instantly.
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(applyFilters, 200);
   }
 
   function clearSearch() {
@@ -163,26 +179,43 @@
   }
 
   /**
-   * Simple scoring: count how many query tokens appear in searchable text.
-   * Returns resources sorted by score descending (zero-score items excluded).
+   * Score and sort resources against a query.
+   *
+   * Scoring weights:
+   *  +10  exact phrase in name
+   *  + 5  exact phrase anywhere
+   *  + 3  token match in name  (per token)
+   *  + 1  token match elsewhere (per token)
+   *  + 5  bonus when ALL tokens match (promotes full-match results to top)
+   *
+   * Uses pre-built _idx / _nameLower strings so no per-call field joining.
    */
   function scoreAndSort(resources, query) {
-    const tokens = query.split(/\s+/).filter(Boolean);
+    const phrase = query.toLowerCase();
+    const tokens = phrase.split(/\s+/).filter(Boolean);
 
     const scored = resources.map(function (r) {
-      const haystack = [
-        r.name, r.category, ...(r.categories || []), r.county, r.city,
-        r.eligibility, r.intake_process,
-        ...(r.tags || [])
-      ].join(' ').toLowerCase();
-
       let score = 0;
+
+      // Phrase-level bonuses
+      if (r._nameLower.includes(phrase)) score += 10;
+      else if (r._idx.includes(phrase))  score += 5;
+
+      // Token-level scoring
+      let allMatch = true;
       tokens.forEach(function (token) {
-        if (haystack.includes(token)) {
-          // Boost name matches
-          score += r.name.toLowerCase().includes(token) ? 3 : 1;
+        const inName = r._nameLower.includes(token);
+        const inIdx  = inName || r._idx.includes(token);
+        if (inIdx) {
+          score += inName ? 3 : 1;
+        } else {
+          allMatch = false;
         }
       });
+
+      // Bonus if every token matched
+      if (allMatch && tokens.length > 1) score += 5;
+
       return { resource: r, score: score };
     });
 
@@ -321,10 +354,10 @@
               .replace(/\b\w/g, function (c) { return c.toUpperCase(); });
   }
 
+  // Faster than the DOM-node approach: no element allocation per call.
+  const HTML_ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
   function escapeHTML(str) {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode(String(str || '')));
-    return div.innerHTML;
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) { return HTML_ESCAPES[c]; });
   }
 
   function sanitizePhone(phone) {
@@ -333,29 +366,38 @@
 
   function formatDate(dateStr) {
     if (!dateStr) return 'Unknown';
-    try {
-      const d = new Date(dateStr + 'T00:00:00');
-      return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    } catch (e) {
-      return dateStr;
-    }
+    const d = new Date(dateStr + 'T00:00:00');
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
   /**
-   * Wrap query matches in <mark> for visual highlighting.
-   * Only highlights plain text – safe from XSS because we escape first.
+   * Wrap each query token in <mark> for visual highlighting.
+   * Highlights individual tokens so multi-word searches like "food detroit"
+   * highlight "food" and "detroit" independently (matches how scoring works).
    */
   function highlightMatch(text, query) {
     const safe = escapeHTML(text);
     if (!query) return safe;
-    const token = escapeHTML(query.trim());
-    if (!token) return safe;
+    const tokens = query.trim().split(/\s+/).filter(Boolean);
+    if (!tokens.length) return safe;
+
+    // Build a single regex alternating all tokens, longest first to avoid
+    // partial overlaps (e.g. "food" before "ood").
+    const pattern = tokens
+      .map(function (t) { return escapeRegExp(escapeHTML(t)); })
+      .sort(function (a, b) { return b.length - a.length; })
+      .join('|');
+
     try {
-      const re = new RegExp('(' + token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-      return safe.replace(re, '<mark>$1</mark>');
+      return safe.replace(new RegExp('(' + pattern + ')', 'gi'), '<mark>$1</mark>');
     } catch (e) {
       return safe;
     }
+  }
+
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
 })();

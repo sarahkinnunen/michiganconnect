@@ -750,13 +750,63 @@
     const text = rawText.trim().toLowerCase();
     if (!text) return null;
 
-    const categoryScores = {};  // slug → highest weight seen
+    // Full-text scoring collects all signals across the entire input.
+    const { categoryScores, hotline, isCrisis } = runRules(text);
+    if (Object.keys(categoryScores).length === 0) return null;
+
+    // Clause-level pass: split multi-sentence input into individual need-clauses
+    // to count distinct needs and order the tiles by relevance per-need.
+    const clauses = splitIntoClauses(text);
+    const needSlugs = [];            // ordered list of per-clause primary slugs
+    const seenSlugs = new Set();
+
+    if (clauses.length > 1) {
+      for (const clause of clauses) {
+        const { categoryScores: cScores } = runRules(clause);
+        // Pick the top-scoring category for this clause that hasn't appeared yet.
+        const top = Object.entries(cScores)
+          .sort((a, b) => b[1] - a[1])
+          .map(([s]) => s)
+          .find(s => !seenSlugs.has(s));
+        if (top) {
+          seenSlugs.add(top);
+          needSlugs.push(top);
+        }
+      }
+    }
+
+    // Show up to 6 tiles for multi-need inputs, 3 for single-need.
+    const isMultiNeed = needSlugs.length > 1;
+    const cap = isMultiNeed ? 6 : 3;
+
+    // Sort by full-text score, but surface per-clause primaries first.
+    const sortedCats = Object.entries(categoryScores)
+      .sort(function (a, b) {
+        const aIdx = needSlugs.indexOf(a[0]);
+        const bIdx = needSlugs.indexOf(b[0]);
+        // Known-need slugs float to front in clause order; then by score.
+        if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+        if (aIdx !== -1) return -1;
+        if (bIdx !== -1) return  1;
+        return b[1] - a[1];
+      })
+      .slice(0, cap)
+      .map(function ([slug]) { return Object.assign({ slug }, CATEGORY_META[slug]); });
+
+    return { categories: sortedCats, hotline, isCrisis, isMultiNeed, needCount: needSlugs.length || 1 };
+  }
+
+  /**
+   * Run every rule against a text string and return aggregated scores.
+   * Extracted so it can be called on both the full text and individual clauses.
+   */
+  function runRules(text) {
+    const categoryScores = {};
     let hotline = null;
     let isCrisis = false;
 
     for (const rule of RULES) {
       let matched = false;
-
       for (const pat of rule.patterns) {
         if (pat instanceof RegExp) {
           if (pat.test(text)) { matched = true; break; }
@@ -764,7 +814,6 @@
           if (text.includes(pat.toLowerCase())) { matched = true; break; }
         }
       }
-
       if (matched) {
         for (const cat of rule.categories) {
           categoryScores[cat] = Math.max(categoryScores[cat] || 0, rule.weight);
@@ -775,15 +824,31 @@
         if (rule.categories.includes('crisis')) isCrisis = true;
       }
     }
+    return { categoryScores, hotline, isCrisis };
+  }
 
-    const sortedCats = Object.entries(categoryScores)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)                          // show at most 3 category tiles
-      .map(([slug]) => ({ slug, ...CATEGORY_META[slug] }));
+  /**
+   * Split a natural-language input into individual need-clauses.
+   *
+   * Stage 1 — sentence boundaries: split on  . ! ? ;
+   * Stage 2 — conjunctions: further split on "and / but / also / plus / as well as"
+   *           when followed by a first-person reference ("i", "my", "we", "our")
+   *           so that "food and shelter" stays together but
+   *           "I need food and I'm behind on rent" splits into two clauses.
+   */
+  function splitIntoClauses(text) {
+    const byPunct = text.split(/[.!?;]+/).map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 3; });
 
-    if (sortedCats.length === 0) return null;
+    const clauses = [];
+    for (const segment of byPunct) {
+      const parts = segment
+        .split(/\s+(?:and|but|also|plus|as well as)\s+(?=i\b|i'm|i've|i need|i am|i don|my\b|we\b|our\b)/i)
+        .map(function (s) { return s.trim(); })
+        .filter(function (s) { return s.length > 3; });
+      clauses.push(...(parts.length ? parts : [segment]));
+    }
 
-    return { categories: sortedCats, hotline, isCrisis };
+    return clauses.length > 0 ? clauses : [text];
   }
 
   /* ------------------------------------------------------------------ */
@@ -814,8 +879,13 @@
         </div>`;
     }
 
-    // Suggested category tiles
-    html += '<p class="smart-results-label">Based on what you shared, these resources may help:</p>';
+    // Label adapts to single vs. multi-need input
+    if (result.isMultiNeed) {
+      html += `<p class="smart-results-label">We found help for <strong>${result.needCount} needs</strong> you mentioned:</p>`;
+    } else {
+      html += '<p class="smart-results-label">Based on what you shared, these resources may help:</p>';
+    }
+
     html += '<div class="smart-tiles">';
     for (const cat of result.categories) {
       html += `
