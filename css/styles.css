@@ -576,8 +576,8 @@ body { top: 0 !important; position: static !important; }
 .category-tile[data-category="crisis"]:hover { border-color: var(--color-crisis); background: #fef2f2; }
 
 /* Learning Center tile */
-.category-tile[data-category="learning"] .tile-icon { color: #0891b2; }
-.category-tile[data-category="learning"]:hover { border-color: #0891b2; background: #f0f9ff; }
+.category-tile[data-category="learning"] .tile-icon { color: #7a9e7e; }
+.category-tile[data-category="learning"]:hover { border-color: #eef4ee; background: #f0f9ff; }
 
 /* ── Resource Cards ───────────────────────────────────────── */
 .resource-grid {
@@ -1177,7 +1177,7 @@ body { top: 0 !important; position: static !important; }
 .category-header[data-category="crisis"] p { color: #fff; opacity: 1; }
 
 .category-header[data-category="learning"] {
-  background: linear-gradient(135deg, #0891b2, #0e7490);
+  background: linear-gradient(135deg, #7a9e7e, #59745c);
   border-bottom-color: #0e7490;
   color: #fff;
 }
@@ -1349,6 +1349,74 @@ body { top: 0 !important; position: static !important; }
 }
 
 /* =========================================================
+   How-to Flow
+   ========================================================= */
+.how-flow {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.how-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  max-width: 130px;
+}
+.how-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #eef4ee;
+  border: 2px solid var(--color-brand, #7a9e7e);
+  color: var(--color-brand, #7a9e7e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.how-icon--final {
+  background: var(--color-brand, #7a9e7e);
+  color: #fff;
+}
+.how-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.how-text strong {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text, #111827);
+  line-height: 1.3;
+}
+.how-text span {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #6b7280);
+  line-height: 1.3;
+}
+.how-arrow {
+  list-style: none;
+  color: var(--color-text-muted, #9ca3af);
+  font-size: 1.25rem;
+  padding-bottom: 1.5rem; /* align with icon centre */
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .how-flow { flex-direction: column; gap: 0; }
+  .how-step { flex-direction: row; max-width: none; text-align: left; gap: var(--space-3); }
+  .how-text { align-items: flex-start; }
+  .how-arrow { transform: rotate(90deg); padding-bottom: 0; padding-inline: 1rem; }
+}
+
+/* =========================================================
    Smart Situation Routing Prompt
    ========================================================= */
 .smart-prompt-section {
@@ -1403,8 +1471,8 @@ body { top: 0 !important; position: static !important; }
 }
 .smart-textarea:focus {
   outline: none;
-  border-color: var(--color-brand, #16a34a);
-  box-shadow: 0 0 0 3px rgba(22,163,74,.15);
+  border-color: var(--color-brand, #7a9e7e);
+  box-shadow: 0 0 0 3px rgba(122,158,126,.15);
 }
 .smart-submit-btn {
   flex-shrink: 0;
@@ -1510,8 +1578,8 @@ body { top: 0 !important; position: static !important; }
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
 }
 .smart-tile:hover {
-  border-color: var(--color-brand, #16a34a);
-  background: #f0fdf4;
+  border-color: var(--color-brand, #7a9e7e);
+  background: #eef4ee;
   transform: translateY(-2px);
 }
 .smart-tile:focus-visible {
@@ -1520,7 +1588,7 @@ body { top: 0 !important; position: static !important; }
 }
 .smart-tile-icon {
   font-size: 1.6rem;
-  color: var(--color-brand, #16a34a);
+  color: var(--color-brand, #7a9e7e);
 }
 
 @media (max-width: 540px) {
