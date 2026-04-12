@@ -159,6 +159,76 @@
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-globe-americas" aria-hidden="true"></i></span>
             <span>Immigration</span>
           </a>
+          <a href="category/clothing.html" class="category-tile" data-category="clothing"
+             role="listitem" aria-label="Clothing resources">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-bag-fill" aria-hidden="true"></i></span>
+            <span>Clothing</span>
+          </a>
+          <a href="category/hygiene.html" class="category-tile" data-category="hygiene"
+             role="listitem" aria-label="Hygiene resources">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-droplet-fill" aria-hidden="true"></i></span>
+            <span>Hygiene</span>
+          </a>
+          <a href="category/parenting.html" class="category-tile" data-category="parenting"
+             role="listitem" aria-label="Parenting support resources">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
+            <span>Parenting</span>
+          </a>
+          <a href="category/transportation.html" class="category-tile" data-category="transportation"
+             role="listitem" aria-label="Transportation resources">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-bus-front-fill" aria-hidden="true"></i></span>
+            <span>Transportation</span>
+          </a>
+          <a href="category/rehabilitation.html" class="category-tile" data-category="rehabilitation"
+             role="listitem" aria-label="Rehab and recovery resources">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-bandaid-fill" aria-hidden="true"></i></span>
+            <span>Rehab &amp; Recovery</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Smart situation routing prompt -->
+    <section class="section smart-prompt-section" aria-labelledby="smart-prompt-heading">
+      <div class="container">
+        <div class="smart-prompt-inner">
+          <p class="smart-prompt-or" aria-hidden="true">or</p>
+          <h2 id="smart-prompt-heading" class="smart-prompt-heading">
+            Tell us what's going on, we'll point you in the right direction
+          </h2>
+          <p class="smart-prompt-sub">
+            Type your situation in your own words. For example: <em>"I don't have any food"</em>, <em>"I was just sexually assaulted"</em>, or <em>"I'm thinking about harming myself"</em>.
+          </p>
+          <form id="smart-search-form" class="smart-prompt-form" autocomplete="off" novalidate>
+            <label for="smart-search-input" class="sr-only">Describe your situation</label>
+            <div class="smart-input-row">
+              <textarea
+                id="smart-search-input"
+                class="smart-textarea"
+                rows="3"
+                placeholder="Describe what's going on…"
+                aria-describedby="smart-prompt-hint"
+                maxlength="500"
+              ></textarea>
+              <button type="submit" class="btn btn-primary smart-submit-btn" aria-label="Find resources">
+                <i class="bi bi-arrow-right-circle-fill" aria-hidden="true"></i>
+                <span>Find Help</span>
+              </button>
+            </div>
+            <p id="smart-prompt-hint" class="smart-prompt-hint">Your message is never stored or shared.</p>
+            <button type="button" id="smart-search-clear" class="smart-clear-btn" hidden aria-label="Clear and start over">
+              <i class="bi bi-x-circle" aria-hidden="true"></i> Clear
+            </button>
+          </form>
+          <div
+            id="smart-search-results"
+            class="smart-results"
+            hidden
+            tabindex="-1"
+            aria-live="polite"
+            aria-atomic="true"
+            aria-label="Resource suggestions based on your situation"
+          ></div>
         </div>
       </div>
     </section>
@@ -262,6 +332,11 @@
             <li><a href="category/human-trafficking.html">Human Trafficking</a></li>
             <li><a href="category/domestic-violence.html">Domestic Violence</a></li>
             <li><a href="category/immigration.html">Immigration</a></li>
+            <li><a href="category/clothing.html">Clothing</a></li>
+            <li><a href="category/hygiene.html">Hygiene</a></li>
+            <li><a href="category/parenting.html">Parenting</a></li>
+            <li><a href="category/transportation.html">Transportation</a></li>
+            <li><a href="category/rehabilitation.html">Rehab &amp; Recovery</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -293,6 +368,7 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/smart-search.js"></script>
 
   <div id="google_translate_element" hidden></div>
   <script src="js/translate.js"></script>

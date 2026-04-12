@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Food access resources for youth and families across Southeast Michigan - food pantries, free meals, and distribution sites.">
-  <title>Food Resources | The Connect</title>
+  <meta name="description" content="Parenting programs, family support services, diapers, childcare assistance, and resources for parents and caregivers across Southeast Michigan.">
+  <title>Parenting Support | The Connect</title>
   
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -70,65 +70,72 @@
 
   <main id="main-content">
 
-    <div class="category-header" data-category="food">
+    <!-- Category hero -->
+    <div class="category-header" data-category="parenting">
       <div class="container">
-        <p style="font-size:3rem;margin-bottom:.5rem" aria-hidden="true"><i class="bi bi-basket2-fill" aria-hidden="true"></i></p>
-        <h1>Food Resources</h1>
-        <p>Food pantries, community meals, distribution sites, and emergency food access - no or low barriers</p>
+        <p style="font-size:3rem;margin-bottom:.5rem" aria-hidden="true"><i class="bi bi-people-fill" aria-hidden="true"></i></p>
+        <h1>Parenting Support</h1>
+        <p>Family support programs, diaper banks, parenting classes, and early childhood services for parents and caregivers</p>
       </div>
     </div>
 
-    <!-- How to access food services -->
+    <!-- How to access parenting resources -->
     <section class="section" style="background:var(--color-surface);border-bottom:1px solid var(--color-border);"
-             aria-labelledby="food-access-heading">
+             aria-labelledby="parenting-access-heading">
       <div class="container">
-        <h2 id="food-access-heading">How to Access Food Services</h2>
+        <h2 id="parenting-access-heading">Getting Started with Parenting Support Programs</h2>
         <div class="info-grid" style="margin-top:1.5rem">
           <div class="info-card">
-            <h3><i class="bi bi-person-walking" aria-hidden="true"></i> Walk Right In</h3>
-            <p>Most food pantries allow walk-in access during posted hours.
-               No appointment is needed at the majority of distribution sites listed here.</p>
+            <h3><i class="bi bi-list-check" aria-hidden="true"></i> Know What You Need</h3>
+            <p>Parenting support ranges from diaper banks and parenting classes to intensive
+               in-home family support. Knowing what type of help you are looking for will
+               help you connect with the right program faster.</p>
           </div>
           <div class="info-card">
-            <h3><i class="bi bi-person-vcard-fill" aria-hidden="true"></i> ID Not Required</h3>
-            <p>Most food programs do not require ID or proof of income.
-               Some may ask for a zip code to track service area impact - this is optional.</p>
+            <h3><i class="bi bi-file-earmark-person-fill" aria-hidden="true"></i> Bring Your Child's Info</h3>
+            <p>Many programs ask for your child's age, school enrollment status, and
+               medical information. Having a copy of your child's birth certificate and
+               immunization records can also speed up enrollment in some services.</p>
           </div>
           <div class="info-card">
-            <h3><i class="bi bi-calendar3" aria-hidden="true"></i> Check Hours</h3>
-            <p>Distribution hours can change seasonally or due to holidays.
-               Call ahead or check the organization's website before visiting for the first time.</p>
+            <h3><i class="bi bi-currency-dollar" aria-hidden="true"></i> Income Requirements Vary</h3>
+            <p>Some programs are open to all parents and caregivers. Others are income-based
+               or require a referral. Always ask when you call – many organizations can
+               connect you to other help if they cannot serve you directly.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);" aria-labelledby="food-lc-heading">
+    <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);" aria-labelledby="parenting-lc-heading">
       <div class="container">
-        <h2 id="food-lc-heading"><i class="bi bi-journal-text" aria-hidden="true"></i> Learning Center – Step-by-Step Guides</h2>
-        <p>Need help applying for ongoing food benefits? Here are step-by-step guides:</p>
+        <h2 id="parenting-lc-heading"><i class="bi bi-journal-text" aria-hidden="true"></i> Learning Center – Step-by-Step Guides</h2>
+        <p>Our Learning Center walks you through navigating healthcare, benefits, and family services:</p>
         <ul style="margin-top:.75rem;list-style:none;padding:0;display:flex;flex-direction:column;gap:.35rem;font-size:var(--font-size-sm)">
-          <li>→ <a href="../learning-center.html#snap">How to apply for SNAP (food stamps)</a></li>
-          <li>→ <a href="../learning-center.html#wic">How to apply for WIC (families with young children)</a></li>
-          <li>→ <a href="../learning-center.html#tanf">How to apply for TANF (cash assistance)</a></li>
-          <li>→ <a href="../learning-center.html#medicaid">How to apply for Medicaid</a></li>
+          <li>→ <a href="../learning-center.html#medicaid">How to Apply for Medicaid</a></li>
+          <li>→ <a href="../learning-center.html#snap">How to Apply for Food Assistance (SNAP)</a></li>
+          <li>→ <a href="../learning-center.html#housing">How to Apply for Emergency Housing</a></li>
         </ul>
         <p style="margin-top:1.25rem"><a href="../learning-center.html" class="btn btn-primary">Explore All Guides <i class="bi bi-arrow-right" aria-hidden="true"></i></a></p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="food-list-heading">
+    <!-- Resource count + grid -->
+    <section class="section" aria-labelledby="parenting-list-heading">
       <div class="container">
         <div class="results-meta">
-          <h2 id="food-list-heading">Food Organizations</h2>
-          <span class="results-count" id="category-count" role="status" aria-live="polite">Loading…</span>
+          <h2 id="parenting-list-heading">Parenting &amp; Family Organizations</h2>
+          <span class="results-count" id="category-count" role="status" aria-live="polite">
+            Loading…
+          </span>
         </div>
-        <div class="resource-grid" id="category-results" aria-label="Food resources">
+        <div class="resource-grid" id="category-results" aria-label="Parenting resources">
           <!-- Populated by category.js -->
         </div>
       </div>
     </section>
 
+    <!-- Other categories -->
     <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);"
              aria-labelledby="other-cats-heading">
       <div class="container">
@@ -137,13 +144,16 @@
           <a href="housing.html" class="category-tile" data-category="housing">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-house-door-fill" aria-hidden="true"></i></span><span>Housing</span>
           </a>
-          <a href="health.html"  class="category-tile" data-category="health">
+          <a href="food.html" class="category-tile" data-category="food">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-basket2-fill" aria-hidden="true"></i></span><span>Food</span>
+          </a>
+          <a href="health.html" class="category-tile" data-category="health">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-hospital-fill" aria-hidden="true"></i></span><span>Healthcare</span>
           </a>
-          <a href="legal.html"   class="category-tile" data-category="legal">
+          <a href="legal.html" class="category-tile" data-category="legal">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-bank2" aria-hidden="true"></i></span><span>Legal Aid</span>
           </a>
-          <a href="crisis.html"  class="category-tile" data-category="crisis">
+          <a href="crisis.html" class="category-tile" data-category="crisis">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-shield-fill-exclamation" aria-hidden="true"></i></span><span>Crisis</span>
           </a>
           <a href="employment.html" class="category-tile" data-category="employment">
@@ -166,9 +176,6 @@
           </a>
           <a href="hygiene.html" class="category-tile" data-category="hygiene">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-droplet-fill" aria-hidden="true"></i></span><span>Hygiene</span>
-          </a>
-          <a href="parenting.html" class="category-tile" data-category="parenting">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span>Parenting</span>
           </a>
           <a href="transportation.html" class="category-tile" data-category="transportation">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-bus-front-fill" aria-hidden="true"></i></span><span>Transportation</span>
@@ -211,6 +218,9 @@
             <li><a href="transportation.html">Transportation</a></li>
             <li><a href="rehabilitation.html">Rehab &amp; Recovery</a></li>
           </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
           <ul>
             <li><a href="../directory.html">Resource Directory</a></li>
             <li><a href="../learning-center.html">Learning Center</a></li>
@@ -238,7 +248,7 @@
   </footer>
 
   <script src="../js/main.js"></script>
-  <script>window.CONNECT_CATEGORY = 'food';</script>
+  <script>window.CONNECT_CATEGORY = 'parenting';</script>
   <script src="../js/category.js"></script>
 
   <div id="google_translate_element" hidden></div>

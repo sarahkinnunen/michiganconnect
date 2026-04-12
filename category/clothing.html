@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Food access resources for youth and families across Southeast Michigan - food pantries, free meals, and distribution sites.">
-  <title>Food Resources | The Connect</title>
+  <meta name="description" content="Free and low-cost clothing, uniforms, household items, and essential supplies for individuals and families across Southeast Michigan.">
+  <title>Clothing Resources | The Connect</title>
   
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -70,65 +70,73 @@
 
   <main id="main-content">
 
-    <div class="category-header" data-category="food">
+    <!-- Category hero -->
+    <div class="category-header" data-category="clothing">
       <div class="container">
-        <p style="font-size:3rem;margin-bottom:.5rem" aria-hidden="true"><i class="bi bi-basket2-fill" aria-hidden="true"></i></p>
-        <h1>Food Resources</h1>
-        <p>Food pantries, community meals, distribution sites, and emergency food access - no or low barriers</p>
+        <p style="font-size:3rem;margin-bottom:.5rem" aria-hidden="true"><i class="bi bi-bag-fill" aria-hidden="true"></i></p>
+        <h1>Clothing &amp; Supplies</h1>
+        <p>Free and low-cost clothing, professional attire, household items, and essential supplies for individuals and families</p>
       </div>
     </div>
 
-    <!-- How to access food services -->
+    <!-- How to access clothing resources -->
     <section class="section" style="background:var(--color-surface);border-bottom:1px solid var(--color-border);"
-             aria-labelledby="food-access-heading">
+             aria-labelledby="clothing-access-heading">
       <div class="container">
-        <h2 id="food-access-heading">How to Access Food Services</h2>
+        <h2 id="clothing-access-heading">How to Access Clothing &amp; Supply Programs</h2>
         <div class="info-grid" style="margin-top:1.5rem">
           <div class="info-card">
-            <h3><i class="bi bi-person-walking" aria-hidden="true"></i> Walk Right In</h3>
-            <p>Most food pantries allow walk-in access during posted hours.
-               No appointment is needed at the majority of distribution sites listed here.</p>
+            <h3><i class="bi bi-telephone-fill" aria-hidden="true"></i> Call Ahead First</h3>
+            <p>Many clothing programs require an appointment or have limited stock on hand.
+               Call before visiting to confirm availability, hours, and any eligibility
+               requirements specific to your situation.</p>
           </div>
           <div class="info-card">
-            <h3><i class="bi bi-person-vcard-fill" aria-hidden="true"></i> ID Not Required</h3>
-            <p>Most food programs do not require ID or proof of income.
-               Some may ask for a zip code to track service area impact - this is optional.</p>
+            <h3><i class="bi bi-card-checklist" aria-hidden="true"></i> What to Bring</h3>
+            <p>A photo ID is often helpful and sometimes required. Some programs are
+               income-based and may ask for proof of address or a referral. Always call
+               ahead to confirm what documentation is needed.</p>
           </div>
           <div class="info-card">
-            <h3><i class="bi bi-calendar3" aria-hidden="true"></i> Check Hours</h3>
-            <p>Distribution hours can change seasonally or due to holidays.
-               Call ahead or check the organization's website before visiting for the first time.</p>
+            <h3><i class="bi bi-briefcase-fill" aria-hidden="true"></i> Professional Attire</h3>
+            <p>Programs like Jackets for Jobs specialize in interview-ready professional
+               clothing at no cost. If you are preparing for a job interview, check both
+               this page and the <a href="employment.html">Employment</a> category for
+               additional support.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);" aria-labelledby="food-lc-heading">
+    <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);" aria-labelledby="clothing-lc-heading">
       <div class="container">
-        <h2 id="food-lc-heading"><i class="bi bi-journal-text" aria-hidden="true"></i> Learning Center – Step-by-Step Guides</h2>
-        <p>Need help applying for ongoing food benefits? Here are step-by-step guides:</p>
+        <h2 id="clothing-lc-heading"><i class="bi bi-journal-text" aria-hidden="true"></i> Learning Center – Step-by-Step Guides</h2>
+        <p>Our Learning Center has guides to help you navigate everyday needs and services:</p>
         <ul style="margin-top:.75rem;list-style:none;padding:0;display:flex;flex-direction:column;gap:.35rem;font-size:var(--font-size-sm)">
-          <li>→ <a href="../learning-center.html#snap">How to apply for SNAP (food stamps)</a></li>
-          <li>→ <a href="../learning-center.html#wic">How to apply for WIC (families with young children)</a></li>
-          <li>→ <a href="../learning-center.html#tanf">How to apply for TANF (cash assistance)</a></li>
-          <li>→ <a href="../learning-center.html#medicaid">How to apply for Medicaid</a></li>
+          <li>→ <a href="../learning-center.html#housing">How to Apply for Emergency Housing</a></li>
+          <li>→ <a href="../learning-center.html#snap">How to Apply for Food Assistance (SNAP)</a></li>
+          <li>→ <a href="../learning-center.html#job-corps">How to Enroll in Detroit Job Corps</a></li>
         </ul>
         <p style="margin-top:1.25rem"><a href="../learning-center.html" class="btn btn-primary">Explore All Guides <i class="bi bi-arrow-right" aria-hidden="true"></i></a></p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="food-list-heading">
+    <!-- Resource count + grid -->
+    <section class="section" aria-labelledby="clothing-list-heading">
       <div class="container">
         <div class="results-meta">
-          <h2 id="food-list-heading">Food Organizations</h2>
-          <span class="results-count" id="category-count" role="status" aria-live="polite">Loading…</span>
+          <h2 id="clothing-list-heading">Clothing Organizations</h2>
+          <span class="results-count" id="category-count" role="status" aria-live="polite">
+            Loading…
+          </span>
         </div>
-        <div class="resource-grid" id="category-results" aria-label="Food resources">
+        <div class="resource-grid" id="category-results" aria-label="Clothing resources">
           <!-- Populated by category.js -->
         </div>
       </div>
     </section>
 
+    <!-- Other categories -->
     <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);"
              aria-labelledby="other-cats-heading">
       <div class="container">
@@ -137,13 +145,16 @@
           <a href="housing.html" class="category-tile" data-category="housing">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-house-door-fill" aria-hidden="true"></i></span><span>Housing</span>
           </a>
-          <a href="health.html"  class="category-tile" data-category="health">
+          <a href="food.html" class="category-tile" data-category="food">
+            <span class="tile-icon" aria-hidden="true"><i class="bi bi-basket2-fill" aria-hidden="true"></i></span><span>Food</span>
+          </a>
+          <a href="health.html" class="category-tile" data-category="health">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-hospital-fill" aria-hidden="true"></i></span><span>Healthcare</span>
           </a>
-          <a href="legal.html"   class="category-tile" data-category="legal">
+          <a href="legal.html" class="category-tile" data-category="legal">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-bank2" aria-hidden="true"></i></span><span>Legal Aid</span>
           </a>
-          <a href="crisis.html"  class="category-tile" data-category="crisis">
+          <a href="crisis.html" class="category-tile" data-category="crisis">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-shield-fill-exclamation" aria-hidden="true"></i></span><span>Crisis</span>
           </a>
           <a href="employment.html" class="category-tile" data-category="employment">
@@ -160,9 +171,6 @@
           </a>
           <a href="immigration.html" class="category-tile" data-category="immigration">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-globe-americas" aria-hidden="true"></i></span><span>Immigration</span>
-          </a>
-          <a href="clothing.html" class="category-tile" data-category="clothing">
-            <span class="tile-icon" aria-hidden="true"><i class="bi bi-bag-fill" aria-hidden="true"></i></span><span>Clothing</span>
           </a>
           <a href="hygiene.html" class="category-tile" data-category="hygiene">
             <span class="tile-icon" aria-hidden="true"><i class="bi bi-droplet-fill" aria-hidden="true"></i></span><span>Hygiene</span>
@@ -211,6 +219,9 @@
             <li><a href="transportation.html">Transportation</a></li>
             <li><a href="rehabilitation.html">Rehab &amp; Recovery</a></li>
           </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
           <ul>
             <li><a href="../directory.html">Resource Directory</a></li>
             <li><a href="../learning-center.html">Learning Center</a></li>
@@ -238,7 +249,7 @@
   </footer>
 
   <script src="../js/main.js"></script>
-  <script>window.CONNECT_CATEGORY = 'food';</script>
+  <script>window.CONNECT_CATEGORY = 'clothing';</script>
   <script src="../js/category.js"></script>
 
   <div id="google_translate_element" hidden></div>
