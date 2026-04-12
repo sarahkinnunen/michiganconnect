@@ -48,7 +48,9 @@
       return res.json();
     })
     .then(function (data) {
-      const resources = data.filter(function (r) { return r.category === CATEGORY; });
+      const resources = data.filter(function (r) {
+        return (r.categories || [r.category]).includes(CATEGORY);
+      });
 
       if (count) {
         count.textContent = resources.length + ' resource' + (resources.length !== 1 ? 's' : '') + ' available';

@@ -148,7 +148,7 @@
     let results = allResources;
 
     // Dropdown filters (exact match)
-    if (cat)    results = results.filter(r => r.category === cat);
+    if (cat)    results = results.filter(r => (r.categories || [r.category]).includes(cat));
     if (county) results = results.filter(r => r.county   === county);
     if (city)   results = results.filter(r => r.city     === city);
     if (tag)    results = results.filter(r => r.tags.includes(tag));
@@ -171,7 +171,7 @@
 
     const scored = resources.map(function (r) {
       const haystack = [
-        r.name, r.category, r.county, r.city,
+        r.name, r.category, ...(r.categories || []), r.county, r.city,
         r.eligibility, r.intake_process,
         ...(r.tags || [])
       ].join(' ').toLowerCase();
