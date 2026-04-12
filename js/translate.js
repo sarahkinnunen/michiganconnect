@@ -25,7 +25,7 @@ function googleTranslateElementInit() {
       } else if (tries++ < 30) {
         setTimeout(applyOnLoad, 150);
       } else {
-        revealPage(); // Combo never appeared — show page anyway
+        revealPage(); // Combo never appeared— show page anyway
       }
     })();
   }
