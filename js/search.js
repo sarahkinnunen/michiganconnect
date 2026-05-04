@@ -18,6 +18,121 @@
   let filteredResources = [];  // current filtered/searched subset
   let debounceTimer = null;
 
+  const QUERY_SYNONYMS = {
+    shelter: ['housing', 'emergency shelter', 'sleep', 'sleeping', 'camp'],
+    housing: ['shelter', 'emergency shelter', 'housing support'],
+    clothes: ['clothing', 'apparel', 'outfit', 'wardrobe', 'shoes'],
+    clothing: ['clothes', 'apparel', 'outfit', 'wardrobe', 'shoes'],
+    toothpaste: ['hygiene', 'oral', 'dental', 'toothbrush', 'tooth brush'],
+    toothbrush: ['toothpaste', 'hygiene', 'oral', 'dental'],
+    dentist: ['dental', 'oral health', 'tooth', 'tooth care'],
+    dental: ['dentist', 'oral health', 'tooth', 'tooth care'],
+    advocate: ['advocacy', 'legal', 'immigration', 'immigrant'],
+    advocates: ['advocacy', 'legal', 'immigration', 'immigrant'],
+    advocacy: ['advocate', 'legal aid', 'immigration', 'immigrant'],
+    baby: ['formula', 'infant', 'feeding', 'parenting'],
+    formula: ['baby', 'infant', 'feeding', 'parenting'],
+    soap: ['hygiene', 'shower', 'bath'],
+    shampoo: ['hygiene', 'hair care'],
+    diapers: ['baby', 'parenting', 'infant', 'hygiene', 'formula', 'cloth'],
+    wic: ['nutrition', 'baby', 'pregnancy', 'parenting', 'food'],
+    pregnancy: ['prenatal', 'baby', 'parenting', 'maternal', 'WIC'],
+    maternal: ['pregnancy', 'prenatal', 'baby', 'parenting', 'home visiting'],
+    doula: ['birth support', 'labor support', 'postpartum', 'pregnancy', 'parenting'],
+    'women': ['health', 'reproductive', 'family planning', 'OB-GYN', 'abortion'],
+    'women\'s': ['health', 'reproductive', 'family planning', 'OB-GYN', 'abortion'],
+    'ob-gyn': ['women', 'health', 'reproductive', 'pregnancy', 'pap smear'],
+    obgyn: ['women', 'health', 'reproductive', 'pregnancy', 'pap smear'],
+    family: ['planning', 'support', 'health', 'parenting'],
+    'family planning': ['contraception', 'reproductive', 'pregnancy', 'health'],
+    abortion: ['reproductive', 'women', 'pregnancy', 'health'],
+    hiv: ['aids', 'HIV/AIDS', 'testing', 'prevention', 'sexual health'],
+    aids: ['hiv', 'HIV/AIDS', 'testing', 'prevention', 'sexual health'],
+    'HIV/AIDS': ['hiv', 'aids', 'testing', 'prevention', 'sexual health'],
+    veterans: ['VA', 'women veterans', 'health care', 'military'],
+    veteran: ['VA', 'women veterans', 'health care', 'military'],
+    telehealth: ['virtual care', 'online care', 'remote care', 'telemedicine'],
+    medicaid: ['health insurance', 'WIC', 'sliding scale', 'care'],
+    clinic: ['health', 'medical', 'primary care', 'specialty'],
+    childcare: ['child care', 'preschool', 'early childhood', 'parenting', 'education'],
+    preschool: ['childcare', 'child care', 'early childhood', 'education'],
+    'child care': ['childcare', 'preschool', 'early childhood', 'parenting'],
+    'home visiting': ['parenting', 'pregnancy', 'maternal', 'health'],
+    rent: ['housing', 'eviction', 'shelter'],
+    eviction: ['housing', 'rent', 'homelessness'],
+    rehab: ['recovery', 'detox', 'treatment', 'substance use', 'addiction'],
+    detox: ['withdrawal', 'rehab', 'detoxification', 'recovery', 'treatment'],
+    outpatient: ['treatment', 'therapy', 'rehab', 'recovery'],
+    inpatient: ['residential', 'rehab', 'treatment', 'detox'],
+    mat: ['medication-assisted treatment', 'suboxone', 'methadone', 'buprenorphine', 'opioid treatment'],
+    addiction: ['substance use', 'rehab', 'detox', 'recovery', 'treatment'],
+    substance: ['addiction', 'rehab', 'detox', 'treatment'],
+    directory: ['legal', 'immigration', 'advocacy', 'resources'],
+    nonprofit: ['legal', 'immigration', 'advocacy', 'directory', 'resources'],
+    financial: ['money', 'cash', 'aid', 'assistance', 'benefits'],
+    childcare: ['child care', 'preschool', 'early childhood', 'daycare'],
+    parenting: ['family', 'children', 'kids', 'baby'],
+    transportation_assistance: ['transportation', 'bus', 'fare', 'rides'],
+    disability: ['disabled', 'handicap', 'accessibility'],
+    senior_services: ['seniors', 'elderly', 'aging', 'older adults']
+  };
+
+  /* ── Intent Detection Rules ─────────────────────────────────────── */
+  const INTENT_RULES = [
+    {
+      patterns: [
+        /\b(crisis|emergency|help|urgent|immediately?|now|please|dying|emergency|911)/i,
+        /\b(suicid|kill\s+myself|end\s+my\s+life|self\s+harm|overdose|cannot\s+cope|no\s+way\s+out)/i,
+        /\b(domestic\s+violence|being\s+abused|being\s+hit|assault|rape|trafficking)/i,
+        /\b(homeless|no\s+place|evict|lost\s+my\s+home|on\s+street)/i,
+      ],
+      categories: ['crisis', 'housing', 'domestic-violence'],
+      weight: 100,
+    },
+    {
+      patterns: [
+        /\b(hungry|no\s+food|starving|food\s+bank|food\s+stamp|snap|wic)/i,
+      ],
+      categories: ['food', 'financial'],
+      weight: 90,
+    },
+    {
+      patterns: [
+        /\b(job|employment|work|laid\s+off|fired|unemploy|income|career)/i,
+      ],
+      categories: ['employment', 'financial'],
+      weight: 80,
+    },
+    {
+      patterns: [
+        /\b(health|doctor|hospital|medical|clinic|insurance|medicaid|medication|prescription)/i,
+      ],
+      categories: ['health'],
+      weight: 75,
+    },
+    {
+      patterns: [
+        /\b(housing|rent|mortgage|shelter|apartment|house|homeless|eviction)/i,
+      ],
+      categories: ['housing', 'financial'],
+      weight: 75,
+    },
+  ];
+
+  /* ── Common Misspellings ─────────────────────────────────────────── */
+  const COMMON_MISSPELLINGS = [
+    { typo: 'denist', correct: 'dentist' },
+    { typo: 'houzing', correct: 'housing' },
+    { typo: 'emergancy', correct: 'emergency' },
+    { typo: 'assitance', correct: 'assistance' },
+    { typo: 'familiy', correct: 'family' },
+    { typo: 'pregnent', correct: 'pregnant' },
+    { typo: 'chlidcare', correct: 'childcare' },
+    { typo: 'helth', correct: 'health' },
+    { typo: 'medicaid', correct: 'medicaid' },
+    { typo: 'transportaion', correct: 'transportation' },
+  ];
+
   /* ── DOM refs ───────────────────────────────────────────── */
   const searchInput   = document.getElementById('search-input');
   const clearBtn      = document.getElementById('search-clear');
@@ -54,8 +169,9 @@
           r._idx = [
             r.name, r.category, ...(r.categories || []),
             r.county, r.city,
-            r.eligibility, r.intake_process,
-            ...(r.tags || [])
+            r.description, r.eligibility, r.intake_process,
+            ...(r.tags || []),
+            r.website || ''
           ].join(' ').toLowerCase();
           r._nameLower = r.name.toLowerCase();
           return r;
@@ -171,7 +287,18 @@
 
     // Text search (multi-token, scored)
     if (query) {
-      results = scoreAndSort(results, query);
+      const intentScores = detectIntent(query);
+      // Crisis override: prioritize crisis resources if crisis intent is detected
+      if (intentScores.has('crisis')) {
+        const crisisResources = results.filter(r => (r.categories || [r.category]).includes('crisis'));
+        if (crisisResources.length > 0) {
+          results = crisisResources.slice(0, 5);
+          filteredResources = results;
+          render(results, query);
+          return;
+        }
+      }
+      results = scoreAndSort(results, query, intentScores);
     }
 
     filteredResources = results;
@@ -179,41 +306,66 @@
   }
 
   /**
-   * Score and sort resources against a query.
+   * Score and sort resources against a query with field-weighted scoring.
    *
    * Scoring weights:
+   *  +20  category matches detected intent
    *  +10  exact phrase in name
    *  + 5  exact phrase anywhere
-   *  + 3  token match in name  (per token)
+   *  + 5  token found in tags
+   *  + 3  token match in name (per token)
+   *  + 2  token found in description
    *  + 1  token match elsewhere (per token)
    *  + 5  bonus when ALL tokens match (promotes full-match results to top)
    *
    * Uses pre-built _idx / _nameLower strings so no per-call field joining.
    */
-  function scoreAndSort(resources, query) {
+  function scoreAndSort(resources, query, intentScores) {
     const phrase = query.toLowerCase();
     const tokens = phrase.split(/\s+/).filter(Boolean);
+    const expandedTokens = expandQueryTokens(tokens);
 
     const scored = resources.map(function (r) {
       let score = 0;
+
+      // Intent matching: boost if resource category matches detected intent
+      if (intentScores) {
+        const resCategory = r.categories ? r.categories[0] : r.category;
+        if (intentScores.has(resCategory)) {
+          score += 20;
+        }
+      }
 
       // Phrase-level bonuses
       if (r._nameLower.includes(phrase)) score += 10;
       else if (r._idx.includes(phrase))  score += 5;
 
-      // Token-level scoring
+      // Token-level scoring with field weighting
       let allMatch = true;
-      tokens.forEach(function (token) {
+      expandedTokens.forEach(function (token) {
         const inName = r._nameLower.includes(token);
-        const inIdx  = inName || r._idx.includes(token);
+        const inTags = r.tags && r.tags.some(function (tag) {
+          return tag.toLowerCase().includes(token);
+        });
+        const inDescription = r.description && r.description.toLowerCase().includes(token);
+        const inIdx = inName || inTags || inDescription || r._idx.includes(token);
+
         if (inIdx) {
-          score += inName ? 3 : 1;
-        } else {
+          if (inName) score += 3;
+          else if (inTags) score += 5;
+          else if (inDescription) score += 2;
+          else score += 1;
+        }
+      });
+
+      // Check if all original tokens matched (not expanded ones)
+      tokens.forEach(function (token) {
+        if (!r._idx.includes(token) && !r._nameLower.includes(token)) {
           allMatch = false;
         }
       });
 
-      // Bonus if every token matched
+      // Bonus if every original query token matched
       if (allMatch && tokens.length > 1) score += 5;
 
       return { resource: r, score: score };
@@ -223,6 +375,120 @@
       .filter(function (s) { return s.score > 0; })
       .sort(function (a, b) { return b.score - a.score; })
       .map(function (s) { return s.resource; });
+  }
+
+  function expandQueryTokens(tokens) {
+    const expanded = [];
+    const seen = new Set();
+
+    tokens.forEach(function (token) {
+      if (!seen.has(token)) {
+        expanded.push(token);
+        seen.add(token);
+      }
+      const aliases = QUERY_SYNONYMS[token];
+      if (aliases) {
+        aliases.forEach(function (alias) {
+          if (!seen.has(alias)) {
+            expanded.push(alias);
+            seen.add(alias);
+          }
+        });
+      }
+    });
+
+    return expanded;
+  }
+
+  /* ── Intent Detection & Advanced Scoring ────────────────────────── */
+  function detectIntent(query) {
+    const lowerQuery = query.toLowerCase();
+    let matchedCategories = new Map();
+
+    INTENT_RULES.forEach(function (rule) {
+      rule.patterns.forEach(function (pattern) {
+        const matches = (pattern instanceof RegExp && pattern.test(lowerQuery)) ||
+                        (typeof pattern === 'string' && lowerQuery.includes(pattern));
+        if (matches) {
+          rule.categories.forEach(function (cat) {
+            matchedCategories.set(cat, (matchedCategories.get(cat) || 0) + rule.weight);
+          });
+        }
+      });
+    });
+
+    return matchedCategories;
+  }
+
+  /**
+   * Levenshtein distance (edit distance) for fuzzy matching.
+   * Returns the number of single-character edits needed to change a into b.
+   */
+  function levenshtein(a, b) {
+    const aLen = a.length;
+    const bLen = b.length;
+    const dp = Array.from({ length: aLen + 1 }, function () {
+      return Array(bLen + 1);
+    });
+
+    for (let i = 0; i <= aLen; i++) dp[i][0] = i;
+    for (let j = 0; j <= bLen; j++) dp[0][j] = j;
+
+    for (let i = 1; i <= aLen; i++) {
+      for (let j = 1; j <= bLen; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        dp[i][j] = Math.min(
+          dp[i - 1][j] + 1,      // deletion
+          dp[i][j - 1] + 1,      // insertion
+          dp[i - 1][j - 1] + cost // substitution
+        );
+      }
+    }
+
+    return dp[aLen][bLen];
+  }
+
+  function fuzzyMatch(text, term) {
+    const termLower = term.toLowerCase();
+    const textLower = text.toLowerCase();
+    return textLower.includes(termLower) || levenshtein(textLower, termLower) <= 2;
+  }
+
+  function suggestClosestQuery(query) {
+    if (!query || query.length < 2) return null;
+
+    // Check common misspellings first
+    for (let i = 0; i < COMMON_MISSPELLINGS.length; i++) {
+      const entry = COMMON_MISSPELLINGS[i];
+      if (levenshtein(query.toLowerCase(), entry.typo) <= 1) {
+        return entry.correct;
+      }
+    }
+
+    // Check all resource names and tags for fuzzy matches
+    const lowerQuery = query.toLowerCase();
+    let bestMatch = null;
+    let bestDistance = 3; // threshold
+
+    allResources.forEach(function (r) {
+      // Check name
+      const nameDist = levenshtein(lowerQuery, r._nameLower);
+      if (nameDist < bestDistance) {
+        bestDistance = nameDist;
+        bestMatch = r._nameLower;
+      }
+
+      // Check tags
+      (r.tags || []).forEach(function (tag) {
+        const tagDist = levenshtein(lowerQuery, tag.toLowerCase());
+        if (tagDist < bestDistance) {
+          bestDistance = tagDist;
+          bestMatch = tag;
+        }
+      });
+    });
+
+    return bestMatch;
   }
 
   /* ── Rendering ──────────────────────────────────────────── */
@@ -244,6 +510,23 @@
   }
 
   function renderEmpty(query) {
+    let suggestionHTML = '';
+    if (query) {
+      const suggestion = suggestClosestQuery(query);
+      if (suggestion) {
+        suggestionHTML = `
+          <p style="margin-top: 0.75rem;">
+            <strong>Did you mean:</strong> <button class="btn btn-sm btn-outline" 
+              style="padding: 0.25rem 0.75rem; margin-left: 0.5rem;" 
+              onclick="document.getElementById('search-input').value = '${escapeHTML(suggestion)}'; 
+                       document.getElementById('search-input').dispatchEvent(new Event('input'));">
+              ${escapeHTML(suggestion)}
+            </button>
+          </p>
+        `;
+      }
+    }
+
     resultsGrid.innerHTML = `
       <div class="empty-state" role="status" aria-live="polite">
         <div class="empty-icon" aria-hidden="true"><i class="bi bi-search" aria-hidden="true"></i></div>
@@ -253,6 +536,7 @@
             ? 'No results for <strong>"' + escapeHTML(query) + '"</strong>. Try different keywords or clear the search.'
             : 'No resources match the selected filters.'}
         </p>
+        ${suggestionHTML}
         <button class="btn btn-outline" style="margin-top:1rem" data-action="reset-filters">
           Clear Filters
         </button>
