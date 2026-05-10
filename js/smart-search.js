@@ -744,12 +744,56 @@
     },
   ];
 
+  const TRANSLATED_SEARCH_PATTERNS = [
+    { pattern: /\b(no\s+tengo\s+comida|no\s+hay\s+comida|sin\s+comida|sin\s+alimentos|no\s+tengo\s+alimentos)\b/g, replacement: 'no food' },
+    { pattern: /\b(comida|alimentos|hambre|hambriento|hambrienta)\b/g, replacement: 'food' },
+    { pattern: /\b(vivienda|casa|hogar|alojamiento|alquiler|alquilar|sin\s+hogar|sin\s+casa|sin\s+vivienda)\b/g, replacement: 'housing' },
+    { pattern: /\b(dinero|efectivo|crédito|credito|banco|ayuda\s+financiera|asistencia\s+financiera|subsidio|beneficios|pago|pagos|cuentas)\b/g, replacement: 'financial' },
+    { pattern: /\b(transporte|autobús|autobus|bus|taxi|vehículo|vehiculo|uber|lyft|tren|metro)\b/g, replacement: 'transportation' },
+    { pattern: /\b(discapacidad|discapacitado|discapacitada|accesibilidad)\b/g, replacement: 'disability' },
+    { pattern: /\b(anciano|anciana|mayor|mayores|adultos\s+mayores|senior|jubilado|jubilar)\b/g, replacement: 'senior_services' },
+    { pattern: /(食物|食品|饥饿|饿|没有食物|没吃)/g, replacement: 'food' },
+    { pattern: /(住房|房子|家|无家可归|没有家)/g, replacement: 'housing' },
+    { pattern: /(钱|金钱|资金|经济|贫困|财务|补助|没有钱|没钱)/g, replacement: 'financial' },
+    { pattern: /(交通|公交|出租车|火车|地铁|巴士|车辆)/g, replacement: 'transportation' },
+    { pattern: /(残疾|残障|无障碍)/g, replacement: 'disability' },
+    { pattern: /(老人|老年|退休|老年人)/g, replacement: 'senior_services' },
+    { pattern: /(孩子|儿童|父母|养育|家庭)/g, replacement: 'parenting' },
+    { pattern: /(计划生育|避孕|怀孕|产前)/g, replacement: 'family planning' },
+    { pattern: /(远程|远程医疗|线上医疗)/g, replacement: 'telehealth' },
+    { pattern: /(健康|医生|医院|诊所|医疗|医药)/g, replacement: 'health' },
+    { pattern: /(家暴|暴力|虐待)/g, replacement: 'domestic-violence' },
+    { pattern: /(没有钱|没钱|没有资金)/g, replacement: 'no money' },
+    { pattern: /\b(طعام|جوع|جائع)\b/g, replacement: 'food' },
+    { pattern: /\b(سكن|منزل|بيت|مأوى|بلا مأوى)\b/g, replacement: 'housing' },
+    { pattern: /\b(مال|نقود|مالية|مساعدة مالية|دعم مالي)\b/g, replacement: 'financial' },
+    { pattern: /\b(مواصلات|تاكسي|حافلة|قطار|مترو)\b/g, replacement: 'transportation' },
+    { pattern: /\b(إعاقة|معاق|وصول)\b/g, replacement: 'disability' },
+    { pattern: /\b(كبار السن|مسن|شيخوخة)\b/g, replacement: 'senior_services' },
+    { pattern: /\b(أسرة|أطفال|طفل|أم|أب|رعاية أطفال|تربية)\b/g, replacement: 'parenting' },
+    { pattern: /\b(تنظيم الأسرة|منع الحمل|حمل)\b/g, replacement: 'family planning' },
+    { pattern: /\b(الطب عن بعد|استشارة عن بعد|الرعاية عن بعد)\b/g, replacement: 'telehealth' },
+    { pattern: /\b(الإيدز|فيروس نقص المناعة|hiv)\b/g, replacement: 'hiv' },
+    { pattern: /\b(صحة|طبيب|مستشفى|عيادة)\b/g, replacement: 'health' },
+    { pattern: /\b(عنف منزلي|عنف أسري|اعتداء)\b/g, replacement: 'domestic-violence' },
+    { pattern: /\b(ليس لدي نقود|لا يوجد مال|لا مال|ما عندي فلوس)\b/g, replacement: 'no money' },
+    { pattern: /\b(y|pero|también|tambien|además|mas)\b/g, replacement: 'and' },
+  ];
+
+  function normalizeSearchText(rawText) {
+    let normalized = String(rawText || '').toLowerCase();
+    TRANSLATED_SEARCH_PATTERNS.forEach(function (entry) {
+      normalized = normalized.replace(entry.pattern, entry.replacement);
+    });
+    return normalized;
+  }
+
   /* ------------------------------------------------------------------ */
   /* 2. Matching logic                                                    */
   /* ------------------------------------------------------------------ */
 
   function matchSituation(rawText) {
-    const text = rawText.trim().toLowerCase();
+    const text = normalizeSearchText(rawText.trim());
     if (!text) return null;
 
     // Full-text scoring collects all signals across the entire input.
