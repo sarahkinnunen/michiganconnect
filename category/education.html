@@ -8,6 +8,7 @@
   
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%235b2c83'/><text x='50' y='64' text-anchor='middle' font-size='56' fill='white' font-family='Arial'>C</text></svg>">
   <script src="../js/translate-early.js"></script>
 </head>
@@ -123,7 +124,7 @@
 
     <!-- Resource count + grid -->
     <section class="section" aria-labelledby="education-list-heading">
-      <div class="container">
+      <div class="container category-layout">
         <div class="results-meta">
           <h2 id="education-list-heading">Education Organizations</h2>
           <span class="results-count" id="category-count" role="status" aria-live="polite">
@@ -251,6 +252,7 @@
 
   <script src="../js/main.js"></script>
   <script>window.CONNECT_CATEGORY = 'education';</script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../js/category.js"></script>
 
   <div id="google_translate_element" hidden></div>
