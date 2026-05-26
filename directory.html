@@ -143,6 +143,69 @@
       </div>
     </div>
 
+    <!-- Resource Planner -->
+    <section class="planner-section" id="resource-planner" aria-labelledby="planner-heading">
+      <div class="container">
+        <div class="planner-intro">
+          <h2 id="planner-heading"><i class="bi bi-map-fill" aria-hidden="true"></i> Build Your Resource Plan</h2>
+          <p>Tell us about yourself and what you need — we'll create a personalized list of resources for you.</p>
+        </div>
+
+        <form class="planner-form" id="planner-form" novalidate>
+
+          <!-- Step 1: About you -->
+          <div class="planner-step">
+            <div class="planner-step-header">
+              <span class="planner-step-num">1</span>
+              <h3>About You</h3>
+            </div>
+            <div class="planner-about-row">
+              <div class="planner-field">
+                <label for="planner-age">Age Range</label>
+                <select id="planner-age">
+                  <option value="">Any age</option>
+                  <option value="teen">Teen (13–17)</option>
+                  <option value="young-adult">Young Adult (18–24)</option>
+                  <option value="adult">Adult (25–54)</option>
+                  <option value="senior">Senior (55+)</option>
+                </select>
+              </div>
+              <div class="planner-field">
+                <label for="planner-city">City / Location</label>
+                <select id="planner-city">
+                  <option value="">Any location</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Needs -->
+          <div class="planner-step">
+            <div class="planner-step-header">
+              <span class="planner-step-num">2</span>
+              <h3>What do you need? <span class="planner-step-hint">Check all that apply</span></h3>
+            </div>
+            <div class="planner-needs-grid" id="planner-needs-grid">
+              <!-- populated by resource-planner.js -->
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="planner-submit-row">
+            <button type="submit" class="btn btn-primary planner-submit-btn">
+              <i class="bi bi-map-fill" aria-hidden="true"></i> Build My Resource Plan
+            </button>
+            <button type="button" class="btn btn-outline" id="planner-clear-btn">Clear</button>
+          </div>
+
+        </form>
+
+        <!-- Output (populated by JS after submit) -->
+        <div class="planner-output" id="planner-output" hidden aria-live="polite"></div>
+
+      </div>
+    </section>
+
     <!-- Results -->
     <section class="section" aria-label="Search results">
       <div class="container">
@@ -217,6 +280,7 @@
 
   <script src="js/main.js"></script>
   <script src="js/search.js"></script>
+  <script src="js/resource-planner.js"></script>
   <script>
     (function () {
       var btn    = document.getElementById('filter-toggle');
