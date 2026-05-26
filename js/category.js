@@ -128,8 +128,55 @@
     return Array.from(new Set(arr));
   }
 
+  const TRANSLATED_QUERY_PATTERNS = [
+    { pattern: /\b(no\s+tengo\s+comida|no\s+hay\s+comida|sin\s+comida|sin\s+alimentos|no\s+tengo\s+alimentos)\b/g, replacement: 'no food' },
+    { pattern: /\b(comida|alimentos|hambre|hambriento|hambrienta)\b/g, replacement: 'food' },
+    { pattern: /\b(vivienda|casa|hogar|alojamiento|alquiler|alquilar|sin\s+hogar|sin\s+casa|sin\s+vivienda)\b/g, replacement: 'housing' },
+    { pattern: /\b(dinero|efectivo|crédito|credito|banco|ayuda\s+financiera|asistencia\s+financiera|subsidio|beneficios|pago|pagos|cuentas)\b/g, replacement: 'financial' },
+    { pattern: /\b(transporte|autobús|autobus|taxi|vehículo|vehiculo|uber|lyft|tren|metro)\b/g, replacement: 'transportation' },
+    { pattern: /\b(discapacidad|discapacitado|discapacitada|accesibilidad)\b/g, replacement: 'disability' },
+    { pattern: /\b(salud|médico|medico|doctor|hospital|clínica|clinica|enfermedad)\b/g, replacement: 'health' },
+    { pattern: /\b(ropa|vestimenta|zapatos|calzado|uniforme)\b/g, replacement: 'clothing' },
+    { pattern: /\b(trabajo|empleo|trabajar|desempleado|desempleo|busco\s+trabajo)\b/g, replacement: 'employment' },
+    { pattern: /\b(educación|educacion|escuela|estudiar|clases|universidad)\b/g, replacement: 'education' },
+    { pattern: /\b(legal|abogado|leyes|derechos|inmigracion|inmigración|deportación|deportacion|visa|ciudadanía|ciudadania)\b/g, replacement: 'legal' },
+    { pattern: /\b(higiene|jabón|jabon|ducha|baño|bano|higienico)\b/g, replacement: 'hygiene' },
+    { pattern: /\b(violencia\s+doméstica|violencia\s+domestica|abuso|maltrato)\b/g, replacement: 'domestic-violence' },
+    { pattern: /\b(crisis|emergencia|urgente|peligro|ayuda\s+inmediata)\b/g, replacement: 'crisis' },
+    { pattern: /(食物|食品|饥饿|饿|没有食物|没吃)/g, replacement: 'food' },
+    { pattern: /(住房|房子|家|无家可归|没有家)/g, replacement: 'housing' },
+    { pattern: /(钱|金钱|资金|经济|贫困|财务|补助|没有钱|没钱)/g, replacement: 'financial' },
+    { pattern: /(交通|公交|出租车|火车|地铁|巴士|车辆)/g, replacement: 'transportation' },
+    { pattern: /(残疾|残障|无障碍)/g, replacement: 'disability' },
+    { pattern: /(老人|老年|退休|老年人)/g, replacement: 'senior services' },
+    { pattern: /(孩子|儿童|父母|养育|家庭)/g, replacement: 'parenting' },
+    { pattern: /(健康|医生|医院|诊所|医疗|医药)/g, replacement: 'health' },
+    { pattern: /(衣服|服装|鞋子)/g, replacement: 'clothing' },
+    { pattern: /(工作|就业|失业|找工作)/g, replacement: 'employment' },
+    { pattern: /(教育|学校|学习|大学)/g, replacement: 'education' },
+    { pattern: /(法律|律师|移民|签证|公民)/g, replacement: 'legal' },
+    { pattern: /(家暴|暴力|虐待)/g, replacement: 'domestic-violence' },
+    { pattern: /(طعام|جوع|جائع)/g, replacement: 'food' },
+    { pattern: /(سكن|منزل|بيت|مأوى|بلا مأوى)/g, replacement: 'housing' },
+    { pattern: /(مال|نقود|مالية|مساعدة مالية|دعم مالي)/g, replacement: 'financial' },
+    { pattern: /(مواصلات|تاكسي|حافلة|قطار|مترو)/g, replacement: 'transportation' },
+    { pattern: /(إعاقة|معاق|وصول)/g, replacement: 'disability' },
+    { pattern: /(أسرة|أطفال|طفل|أم|أب|رعاية أطفال|تربية)/g, replacement: 'parenting' },
+    { pattern: /(صحة|طبيب|مستشفى|عيادة)/g, replacement: 'health' },
+    { pattern: /(ملابس|ثياب|أحذية)/g, replacement: 'clothing' },
+    { pattern: /(عمل|توظيف|وظيفة|بطالة)/g, replacement: 'employment' },
+    { pattern: /(تعليم|مدرسة|دراسة|جامعة)/g, replacement: 'education' },
+    { pattern: /(قانون|محامي|هجرة|تأشيرة|جنسية)/g, replacement: 'legal' },
+    { pattern: /(عنف منزلي|عنف أسري|اعتداء)/g, replacement: 'domestic-violence' },
+    { pattern: /(أزمة|طوارئ|خطر)/g, replacement: 'crisis' },
+  ];
+
   function normalizeQuery(rawQuery) {
-    return String(rawQuery || '').trim().toLowerCase();
+    let normalized = String(rawQuery || '').trim().toLowerCase();
+    TRANSLATED_QUERY_PATTERNS.forEach(function (entry) {
+      normalized = normalized.replace(entry.pattern, entry.replacement);
+    });
+    return normalized;
   }
 
   function escapeRegExp(str) {

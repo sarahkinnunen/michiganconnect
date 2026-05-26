@@ -1603,7 +1603,10 @@
     "id": 71,
     "name": "Michigan United",
     "category": "immigration",
-    "categories": ["immigration", "legal"],
+    "categories": [
+      "immigration",
+      "legal"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "N/A",
@@ -1674,7 +1677,10 @@
     "id": 74,
     "name": "Lighthouse Immigrant Advocates",
     "category": "immigration",
-    "categories": ["immigration", "legal"],
+    "categories": [
+      "immigration",
+      "legal"
+    ],
     "county": "Ottawa",
     "city": "Holland",
     "address": "735 Paw Paw Drive, Holland, MI 49423",
@@ -1696,7 +1702,10 @@
     "id": 75,
     "name": "Justice for Our Neighbors",
     "category": "immigration",
-    "categories": ["immigration", "legal"],
+    "categories": [
+      "immigration",
+      "legal"
+    ],
     "county": "Kent",
     "city": "Grand Rapids",
     "address": "207 Fulton St E, Grand Rapids, MI 49503",
@@ -1718,7 +1727,10 @@
     "id": 76,
     "name": "Immigration Legal Services",
     "category": "immigration",
-    "categories": ["immigration", "legal"],
+    "categories": [
+      "immigration",
+      "legal"
+    ],
     "county": "Kent",
     "city": "Grand Rapids",
     "address": "123 Wealthy St SE, Grand Rapids, MI 49503",
@@ -1740,7 +1752,9 @@
     "id": 77,
     "name": "Heart of West Michigan United Way",
     "category": "immigration",
-    "categories": ["immigration"],
+    "categories": [
+      "immigration"
+    ],
     "county": "Kent",
     "city": "Grand Rapids",
     "address": "118 Commerce Ave SW, Grand Rapids, MI 49503",
@@ -1761,7 +1775,9 @@
     "id": 78,
     "name": "Migrant Resource Councils – Michigan",
     "category": "immigration",
-    "categories": ["immigration"],
+    "categories": [
+      "immigration"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "N/A",
@@ -1783,7 +1799,9 @@
     "id": 79,
     "name": "Michigan Interagency Migrant Service Committee",
     "category": "immigration",
-    "categories": ["immigration"],
+    "categories": [
+      "immigration"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "N/A",
@@ -1805,7 +1823,9 @@
     "id": 80,
     "name": "North Kent Connect",
     "category": "immigration",
-    "categories": ["immigration"],
+    "categories": [
+      "immigration"
+    ],
     "county": "Kent",
     "city": "Rockford",
     "address": "1005 Northland Drive NE, Rockford, MI 49341",
@@ -1826,7 +1846,10 @@
     "id": 81,
     "name": "Hispanic Center of West Michigan",
     "category": "immigration",
-    "categories": ["immigration", "legal"],
+    "categories": [
+      "immigration",
+      "legal"
+    ],
     "county": "Kent",
     "city": "Grand Rapids",
     "address": "1204 Cesar E Chavez Ave SW, Grand Rapids, MI 49503",
@@ -1848,7 +1871,10 @@
     "id": 82,
     "name": "Refugee Education Center",
     "category": "immigration",
-    "categories": ["immigration", "education"],
+    "categories": [
+      "immigration",
+      "education"
+    ],
     "county": "Kent",
     "city": "Kentwood",
     "address": "2130 Enterprise St SE, Kentwood, MI 49508",
@@ -1870,7 +1896,10 @@
     "id": 83,
     "name": "Michigan Coalition for Immigrant and Refugee Rights",
     "category": "immigration",
-    "categories": ["immigration", "legal"],
+    "categories": [
+      "immigration",
+      "legal"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "N/A",
@@ -1893,7 +1922,10 @@
     "id": 4028,
     "name": "Immigration Advocates Network Legal Directory",
     "category": "immigration",
-    "categories": ["immigration", "legal"],
+    "categories": [
+      "immigration",
+      "legal"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -2665,7 +2697,10 @@
     "id": 4029,
     "name": "Henry Ford Maplegrove Center",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Oakland",
     "city": "West Bloomfield",
     "address": "6773 W Maple Rd, West Bloomfield, MI 48322",
@@ -2693,7 +2728,10 @@
     "id": 4030,
     "name": "Meridian Health Services – Detox & Men's Residential",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Oakland",
     "city": "Waterford Township",
     "address": "1255 N Oakland Blvd, Waterford Township, MI 48327",
@@ -2719,7 +2757,10 @@
     "id": 4031,
     "name": "Meridian Health Services – Women's Residential",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Oakland",
     "city": "Waterford Township",
     "address": "1435 N Oakland Blvd, Waterford Township, MI 48327",
@@ -2744,7 +2785,10 @@
     "id": 4032,
     "name": "Meridian Health Services – Outpatient & MAT",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Oakland",
     "city": "Waterford Township",
     "address": "269 Summit Dr, Waterford Township, MI 48327",
@@ -2771,7 +2815,10 @@
     "id": 4033,
     "name": "Sacred Heart Rehabilitation Center",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Macomb",
     "city": "Richmond",
     "address": "400 Stoddard Rd, Richmond, MI 48062",
@@ -2800,7 +2847,10 @@
     "id": 4034,
     "name": "Oakland Community Health Network (OCHN)",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Oakland",
     "city": "Troy",
     "address": "5505 Corporate Dr, Troy, MI 48098",
@@ -2827,7 +2877,10 @@
     "id": 4035,
     "name": "Macomb County Community Mental Health (MCCMH)",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Macomb",
     "city": "Clinton Township",
     "address": "43740 N Groesbeck Hwy, Clinton Township, MI 48036",
@@ -2853,7 +2906,10 @@
     "id": 4036,
     "name": "University of Michigan Addiction Center",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Washtenaw",
     "city": "Ann Arbor",
     "address": "750 N University Ave, Ann Arbor, MI 48104",
@@ -2879,7 +2935,10 @@
     "id": 4037,
     "name": "Michigan Department of Health & Human Services (MDHHS) Treatment Directory",
     "category": "rehabilitation",
-    "categories": ["rehabilitation", "health"],
+    "categories": [
+      "rehabilitation",
+      "health"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -2905,7 +2964,11 @@
     "id": 4038,
     "name": "WHEAT Organization",
     "category": "parenting",
-    "categories": ["parenting", "health", "education"],
+    "categories": [
+      "parenting",
+      "health",
+      "education"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -2930,7 +2993,10 @@
     "id": 4039,
     "name": "Great Start to Quality",
     "category": "parenting",
-    "categories": ["parenting", "education"],
+    "categories": [
+      "parenting",
+      "education"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -2955,7 +3021,11 @@
     "id": 4040,
     "name": "Early On Michigan",
     "category": "parenting",
-    "categories": ["parenting", "health", "education"],
+    "categories": [
+      "parenting",
+      "health",
+      "education"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -2981,7 +3051,10 @@
     "id": 4041,
     "name": "Healthy Start",
     "category": "parenting",
-    "categories": ["parenting", "health"],
+    "categories": [
+      "parenting",
+      "health"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -3007,7 +3080,10 @@
     "id": 4042,
     "name": "Diaper Bank of Southeastern Michigan",
     "category": "parenting",
-    "categories": ["parenting", "hygiene"],
+    "categories": [
+      "parenting",
+      "hygiene"
+    ],
     "county": "Oakland",
     "city": "Pontiac",
     "address": "Pontiac, MI",
@@ -3032,7 +3108,10 @@
     "id": 4043,
     "name": "Detroit Diaper Bank",
     "category": "parenting",
-    "categories": ["parenting", "hygiene"],
+    "categories": [
+      "parenting",
+      "hygiene"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3056,7 +3135,10 @@
     "id": 4044,
     "name": "Maternal Infant Health Program (MIHP)",
     "category": "parenting",
-    "categories": ["parenting", "health"],
+    "categories": [
+      "parenting",
+      "health"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -3081,7 +3163,10 @@
     "id": 4045,
     "name": "Judson Center",
     "category": "parenting",
-    "categories": ["parenting", "health"],
+    "categories": [
+      "parenting",
+      "health"
+    ],
     "county": "Wayne",
     "city": "Multiple locations",
     "address": "Royal Oak, Detroit, Warren, MI",
@@ -3106,7 +3191,11 @@
     "id": 4046,
     "name": "Pregnancy Resource Center Lincoln Park",
     "category": "parenting",
-    "categories": ["parenting", "health", "food"],
+    "categories": [
+      "parenting",
+      "health",
+      "food"
+    ],
     "county": "Wayne",
     "city": "Lincoln Park",
     "address": "Lincoln Park, MI",
@@ -3133,7 +3222,10 @@
     "id": 4047,
     "name": "The Cloth Option",
     "category": "parenting",
-    "categories": ["parenting", "hygiene"],
+    "categories": [
+      "parenting",
+      "hygiene"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -3157,7 +3249,10 @@
     "id": 4048,
     "name": "Gianna House Community Outreach Center",
     "category": "parenting",
-    "categories": ["parenting", "health"],
+    "categories": [
+      "parenting",
+      "health"
+    ],
     "county": "Macomb",
     "city": "Eastpointe",
     "address": "21357 Redmond Avenue, Eastpointe, MI 48021",
@@ -3182,7 +3277,10 @@
     "id": 4049,
     "name": "MedSource",
     "category": "parenting",
-    "categories": ["parenting", "health"],
+    "categories": [
+      "parenting",
+      "health"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -3208,7 +3306,9 @@
     "id": 4050,
     "name": "LAHC MIH Community Clinic",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Dearborn",
     "address": "5275 Kenilworth Street, Dearborn, MI 48126",
@@ -3232,7 +3332,9 @@
     "id": 4051,
     "name": "Say Detroit Clinic",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Highland Park",
     "address": "211 Glendale Avenue, Highland Park, MI 48203",
@@ -3256,7 +3358,9 @@
     "id": 4052,
     "name": "The Luke Clinic",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "7354 Whittaker Street, Detroit, MI 48209",
@@ -3279,7 +3383,9 @@
     "id": 4053,
     "name": "Detroit Association Of Black Organizations (DABO)",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3303,7 +3409,9 @@
     "id": 4054,
     "name": "Western Wayne Family Health Centers",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Westland",
     "address": "Online resource; multiple Michigan clinic locations",
@@ -3327,7 +3435,9 @@
     "id": 4055,
     "name": "Summit Medical Centers",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3350,7 +3460,9 @@
     "id": 4056,
     "name": "DCHC HIV/AIDS Program",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3375,7 +3487,9 @@
     "id": 4057,
     "name": "Women Veterans Health Care",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "4646 John R Street, Detroit, MI 48201",
@@ -3398,7 +3512,9 @@
     "id": 4058,
     "name": "Vivent Health Medical Care",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Highland Park",
     "address": "64 Victor Street, Highland Park, MI 48203",
@@ -3421,7 +3537,10 @@
     "id": 4059,
     "name": "Authentic Birth Doula Support",
     "category": "parenting",
-    "categories": ["parenting", "health"],
+    "categories": [
+      "parenting",
+      "health"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3445,7 +3564,9 @@
     "id": 4060,
     "name": "Planned Choices Health Services",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Allen Park",
     "address": "4517 Allen Road, Allen Park, MI 48101",
@@ -3468,7 +3589,9 @@
     "id": 4061,
     "name": "Trinity Health Michigan Virtual Care",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online virtual care service",
@@ -3491,7 +3614,9 @@
     "id": 4062,
     "name": "CHASS Center Family Planning",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3515,7 +3640,10 @@
     "id": 4063,
     "name": "Christie Donn Medicaid Doula Services",
     "category": "parenting",
-    "categories": ["parenting", "health"],
+    "categories": [
+      "parenting",
+      "health"
+    ],
     "county": "Wayne",
     "city": "N/A",
     "address": "Online resource",
@@ -3539,7 +3667,9 @@
     "id": 4064,
     "name": "AAA Pregnancy Information Services",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Wayne",
     "city": "Livonia",
     "address": "32080 Schoolcraft Road, Livonia, MI 48154",
@@ -3563,7 +3693,10 @@
     "id": 4065,
     "name": "Michigan Department of Health & Human Services (MDHHS) – Cash & Food Assistance",
     "category": "financial",
-    "categories": ["financial", "food"],
+    "categories": [
+      "financial",
+      "food"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -3590,7 +3723,10 @@
     "id": 4066,
     "name": "WIC – Wayne County",
     "category": "parenting",
-    "categories": ["parenting", "food"],
+    "categories": [
+      "parenting",
+      "food"
+    ],
     "county": "Wayne",
     "city": "N/A",
     "address": "Local offices in Wayne County",
@@ -3615,7 +3751,10 @@
     "id": 4067,
     "name": "Michigan Child Development & Care (CDC) Subsidy",
     "category": "childcare",
-    "categories": ["childcare", "financial"],
+    "categories": [
+      "childcare",
+      "financial"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -3639,7 +3778,10 @@
     "id": 4068,
     "name": "Head Start (Wayne County)",
     "category": "childcare",
-    "categories": ["childcare", "education"],
+    "categories": [
+      "childcare",
+      "education"
+    ],
     "county": "Wayne",
     "city": "N/A",
     "address": "Various locations in Wayne County",
@@ -3663,7 +3805,10 @@
     "id": 4069,
     "name": "SMART ADA / Reduced Fare Programs",
     "category": "transportation_assistance",
-    "categories": ["transportation_assistance"],
+    "categories": [
+      "transportation_assistance",
+      "transportation"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3688,7 +3833,9 @@
     "id": 4070,
     "name": "Michigan Works! Reentry Programs",
     "category": "employment",
-    "categories": ["employment"],
+    "categories": [
+      "employment"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit Reentry Center",
@@ -3712,7 +3859,9 @@
     "id": 4071,
     "name": "AgeWays",
     "category": "senior_services",
-    "categories": ["senior_services"],
+    "categories": [
+      "senior_services"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3735,7 +3884,10 @@
     "id": 4072,
     "name": "Michigan Rehabilitation Services (MRS)",
     "category": "disability",
-    "categories": ["disability", "employment"],
+    "categories": [
+      "disability",
+      "employment"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -3758,7 +3910,9 @@
     "id": 4073,
     "name": "Disability Network Wayne County Detroit",
     "category": "disability",
-    "categories": ["disability"],
+    "categories": [
+      "disability"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3782,7 +3936,9 @@
     "id": 4074,
     "name": "St. Vincent de Paul – Clothing Assistance",
     "category": "clothing",
-    "categories": ["clothing"],
+    "categories": [
+      "clothing"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "Detroit, MI",
@@ -3804,7 +3960,9 @@
     "id": 4075,
     "name": "Salvation Army",
     "category": "clothing",
-    "categories": ["clothing"],
+    "categories": [
+      "clothing"
+    ],
     "county": "Wayne",
     "city": "Detroit/Dearborn",
     "address": "Multiple locations in Detroit and Dearborn, MI",
@@ -3827,7 +3985,9 @@
     "id": 4076,
     "name": "ACCESS Domestic Violence Program",
     "category": "domestic-violence",
-    "categories": ["domestic-violence"],
+    "categories": [
+      "domestic-violence"
+    ],
     "county": "Wayne",
     "city": "Dearborn",
     "address": "Dearborn, MI",
@@ -3850,7 +4010,11 @@
     "id": 4077,
     "name": "Charity Motors",
     "category": "transportation",
-    "categories": ["transportation_assistance", "financial"],
+    "categories": [
+      "transportation_assistance",
+      "financial",
+      "transportation"
+    ],
     "county": "Wayne",
     "city": "Detroit",
     "address": "10431 Grand River Avenue, Detroit, MI 48204",
@@ -3873,7 +4037,9 @@
     "id": 4078,
     "name": "The Last Mission Project",
     "category": "health",
-    "categories": ["health"],
+    "categories": [
+      "health"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
@@ -3896,7 +4062,9 @@
     "id": 4079,
     "name": "CORE Gives",
     "category": "financial",
-    "categories": ["financial"],
+    "categories": [
+      "financial"
+    ],
     "county": "Statewide",
     "city": "N/A",
     "address": "Online resource",
