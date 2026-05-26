@@ -192,6 +192,11 @@ main { flex: 1; }
   top: 0;
   z-index: 100;
   box-shadow: 0 1px 0 var(--color-border);
+  overflow: visible;
+}
+
+.site-header .container {
+  overflow: visible;
 }
 
 .nav-inner {
@@ -282,6 +287,7 @@ main { flex: 1; }
 .translate-wrapper {
   position: relative;
   flex-shrink: 0;
+  z-index: 300;
 }
 .translate-toggle {
   background: none;
@@ -314,7 +320,7 @@ main { flex: 1; }
   border-radius: var(--radius);
   box-shadow: 0 4px 16px rgba(0,0,0,.1);
   min-width: 160px;
-  z-index: 200;
+  z-index: 300;
   overflow: hidden;
 }
 .translate-menu.is-open { display: block; }
@@ -1456,6 +1462,8 @@ body { top: 0 !important; position: static !important; }
   background: var(--color-accent-bg);
   border-bottom: 1px solid var(--color-border);
   padding: var(--space-2) 0;
+  position: relative;
+  z-index: 99;
 }
 .announcement-bar .container {
   display: flex;

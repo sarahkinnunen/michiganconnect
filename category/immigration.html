@@ -8,10 +8,24 @@
   
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%235b2c83'/><text x='50' y='64' text-anchor='middle' font-size='56' fill='white' font-family='Arial'>C</text></svg>">
   <script src="../js/translate-early.js"></script>
 </head>
 <body>
+
+  <!-- SVG symbol sprite (hidden) — tooth icon variants: filled / outline / stroke -->
+  <svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <symbol id="tooth-filled" viewBox="0 0 24 24">
+      <path d="M12 2c-1.1 0-2 .9-2 2 0 1.4-.8 2.6-1.8 3.2C7 8 6 9.6 6.3 11.2c.6 2.6 2.6 4.8 5.7 4.8s5.1-2.2 5.7-4.8c.3-1.6-.7-3.2-1.9-4C16.8 6.6 16 5.4 16 4c0-1.1-.9-2-1-2h-3z"/>
+    </symbol>
+    <symbol id="tooth-outline" viewBox="0 0 24 24">
+      <path d="M12 3c-.9 0-1.6.7-1.9 1.5-.3.7-1 1.3-1.8 1.4-.6.1-1.1.6-1.2 1.2C6.8 9.8 7.6 11.6 9 12.8c1.7 1.5 3.9 1.9 5.9 1.1 1.3-.5 2.3-1.5 2.7-2.8.2-.6.1-1.2-.2-1.7-.4-.6-1-1-1.7-1.1-.8-.1-1.5-.7-1.8-1.4C13.6 3.7 12.9 3 12 3z"/>
+    </symbol>
+    <symbol id="tooth-stroke" viewBox="0 0 24 24">
+      <path d="M7.5 9.2c-.2.6-.3 1.2-.1 1.8.4 1.6 1.8 3 3.4 3.6 1.6.6 3.4.5 4.8-.3 1.3-.7 2.1-2 2.2-3.5.1-1.1-.4-2.1-1.2-2.8-.9-.8-2.1-1.1-3.3-.9-.9.2-1.7-.2-2.3-.8C11.2 5.1 11 4 10 3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
 
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
@@ -60,6 +74,7 @@
       <ul role="list">
         <li><a href="../index.html">Home</a></li>
         <li><a href="../directory.html">Find Resources</a></li>
+        <li><a href="../learning-center.html">Learning Center</a></li>
         <li><a href="../about.html">About</a></li>
         <li><a href="../data.html">Data &amp; Reports</a></li>
         <li><a href="../contact.html">Contact</a></li>
@@ -188,17 +203,63 @@
     </section>
 
     <section class="section" aria-labelledby="imm-list-heading">
-      <div class="container category-layout">
-        <div class="results-meta">
-          <h2 id="imm-list-heading">Immigration Organizations</h2>
-          <span class="results-count" id="category-count" role="status" aria-live="polite">
-            Loading…
-          </span>
+      <div class="container category-page">
+        <div class="results-header">
+          <div class="title-block">
+            <h2 id="imm-list-heading">Immigration Resources</h2>
+            <p class="subtitle">Legal aid, documentation help, and support services for newcomers and immigrants.</p>
+          </div>
+          <div class="stat-card" id="category-stat" aria-hidden="true">
+            <div class="stat-number" id="category-count">Loading…</div>
+            <div class="stat-label">resources available</div>
+          </div>
         </div>
-        <div class="resource-grid" id="category-results" aria-label="Immigration resources">
-          <!-- Populated by category.js -->
+        <div id="search-anchor"></div>
+        <div class="results-layout">
+          <aside id="sidebar-filters" class="sidebar-filters" aria-label="Filter by service type">
+            <ul class="filter-list" role="list">
+              <li data-match="" class="filter-item active"><span class="filter-icon" aria-hidden="true"><i class="bi bi-grid-fill"></i></span><span class="filter-label">All Categories</span><span class="filter-count">0</span></li>
+              <li data-match="legal" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-bank2"></i></span><span class="filter-label">Legal Services</span><span class="filter-count">0</span></li>
+              <li data-match="asylum" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-shield-fill"></i></span><span class="filter-label">Asylum Support</span><span class="filter-count">0</span></li>
+              <li data-match="daca" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-file-earmark-check"></i></span><span class="filter-label">DACA Assistance</span><span class="filter-count">0</span></li>
+              <li data-match="documentation" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-file-earmark-text"></i></span><span class="filter-label">Documentation</span><span class="filter-count">0</span></li>
+              <li data-match="english" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-chat-fill"></i></span><span class="filter-label">English Classes</span><span class="filter-count">0</span></li>
+            </ul>
+          </aside>
+          <div class="main-results">
+            <div class="controls-row">
+              <div class="controls-left">
+                <label for="sort-select" class="sr-only">Sort by</label>
+                <select id="sort-select" class="sort-select" aria-label="Sort options">
+                  <option value="relevance">Sort: Relevance</option>
+                  <option value="name-asc">Sort: A–Z</option>
+                  <option value="name-desc">Sort: Z–A</option>
+                </select>
+              </div>
+              <div class="view-toggle" role="tablist" aria-label="View options">
+                <button class="view-btn active" data-view="list" role="tab" aria-selected="true" aria-controls="results-list">
+                  <i class="bi bi-list-ul" aria-hidden="true"></i><span class="sr-only">List view</span>
+                </button>
+                <button class="view-btn" data-view="map" role="tab" aria-selected="false" aria-controls="results-map">
+                  <i class="bi bi-map" aria-hidden="true"></i><span class="sr-only">Map view</span>
+                </button>
+              </div>
+            </div>
+            <div id="results-list" role="tabpanel" class="resource-grid" aria-label="Resource list">
+              <div id="category-results" aria-label="Immigration resources">
+              </div>
+            </div>
+            <div id="results-map" role="tabpanel" class="category-map" style="display: none;"></div>
+            <div id="pagination-controls" class="pagination-controls" style="margin-top: 2rem; display: none;"></div>
+          </div>
+          <aside id="detail-panel" class="detail-panel">
+            <div id="detail-content" class="detail-content">
+              <p style="color: var(--color-text-secondary); text-align: center; padding: 2rem 1rem;">Select a resource to view details</p>
+            </div>
+          </aside>
         </div>
       </div>
+    </section>
     </section>
 
     <section class="section" style="background:var(--color-surface);border-top:1px solid var(--color-border);"
@@ -314,8 +375,9 @@
   <script>window.CONNECT_CATEGORY = 'immigration';</script>
   <script src="../js/category.js"></script>
   <script src="../js/main.js"></script>
-
-  <div id="google_translate_element" hidden></div>
+  <script>window.CONNECT_CATEGORY = 'immigration';</script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../js/category.js"></script>
   <script src="../js/translate.js"></script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>

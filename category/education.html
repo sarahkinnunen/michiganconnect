@@ -124,15 +124,75 @@
 
     <!-- Resource count + grid -->
     <section class="section" aria-labelledby="education-list-heading">
-      <div class="container category-layout">
-        <div class="results-meta">
-          <h2 id="education-list-heading">Education Organizations</h2>
-          <span class="results-count" id="category-count" role="status" aria-live="polite">
-            Loading…
-          </span>
+      <div class="container category-page">
+        <div class="results-header">
+          <div class="title-block">
+            <h2 id="education-list-heading">Education Organizations</h2>
+            <p class="subtitle">Tutoring, mentoring, GED programs, and educational support for students of all ages.</p>
+          </div>
+          <div class="stat-card" id="category-stat" aria-hidden="true">
+            <div class="stat-number" id="category-count">Loading…</div>
+            <div class="stat-label">resources available</div>
+          </div>
         </div>
-        <div class="resource-grid" id="category-results" aria-label="Education resources">
-          <!-- Populated by category.js -->
+
+        <!-- Search anchor (search panel inserted by JS will appear here) -->
+        <div id="search-anchor"></div>
+
+        <div class="results-layout">
+          <aside id="sidebar-filters" class="sidebar-filters" aria-label="Filter by service type">
+            <ul class="filter-list" role="list">
+              <li data-match="" class="filter-item active"><span class="filter-icon" aria-hidden="true"><i class="bi bi-grid-fill"></i></span><span class="filter-label">All Categories</span><span class="filter-count">0</span></li>
+              <li data-match="tutoring" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-book-fill"></i></span><span class="filter-label">Tutoring</span><span class="filter-count">0</span></li>
+              <li data-match="ged" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-mortarboard-fill"></i></span><span class="filter-label">GED Programs</span><span class="filter-count">0</span></li>
+              <li data-match="mentoring" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-people-fill"></i></span><span class="filter-label">Mentoring</span><span class="filter-count">0</span></li>
+              <li data-match="scholarship" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-gift-fill"></i></span><span class="filter-label">Scholarships</span><span class="filter-count">0</span></li>
+              <li data-match="after-school" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-sun-fill"></i></span><span class="filter-label">After-School Programs</span><span class="filter-count">0</span></li>
+            </ul>
+          </aside>
+
+          <div class="main-results">
+            <div class="controls-row">
+              <div class="controls-left">
+                <label for="sort-select" class="sr-only">Sort by</label>
+                <select id="sort-select" class="sort-select" aria-label="Sort options">
+                  <option value="relevance">Sort: Relevance</option>
+                  <option value="name-asc">Sort: A–Z</option>
+                  <option value="name-desc">Sort: Z–A</option>
+                </select>
+              </div>
+              <div class="view-toggle" role="tablist" aria-label="View options">
+                <button class="view-btn active" data-view="list" role="tab" aria-selected="true" aria-controls="results-list">
+                  <i class="bi bi-list-ul" aria-hidden="true"></i><span class="sr-only">List view</span>
+                </button>
+                <button class="view-btn" data-view="map" role="tab" aria-selected="false" aria-controls="results-map">
+                  <i class="bi bi-map" aria-hidden="true"></i><span class="sr-only">Map view</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="results-list" role="tabpanel" aria-labelledby="list-tab" class="resource-grid" aria-label="Resource list">
+              <div id="category-results" aria-label="Education resources">
+                <!-- Populated by category.js -->
+              </div>
+            </div>
+            <div id="results-map" role="tabpanel" aria-labelledby="map-tab" class="category-map" style="display: none;">
+              <!-- Populated by category.js for map view -->
+            </div>
+
+            <div id="pagination-controls" class="pagination-controls" style="margin-top: 2rem; display: none;">
+              <!-- Populated by category.js -->
+            </div>
+          </div>
+
+          <aside id="detail-panel" class="detail-panel">
+            <div id="detail-content" class="detail-content">
+              <p style="color: var(--color-text-secondary); text-align: center; padding: 2rem 1rem;">Select a resource to view details</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
         </div>
       </div>
     </section>

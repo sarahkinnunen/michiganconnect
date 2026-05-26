@@ -52,7 +52,7 @@
   const searchPanelId = 'category-search-panel';
   let categoryResources = [];
   let selectedTag = '';
-  let selectedExpandedId = '';
+  let selectedExpandedId = null;
   let searchInput = null;
   let clearBtn = null;
   let tagFilters = null;
@@ -194,13 +194,28 @@
         const match = li.getAttribute('data-match') || '';
         const count = resources.filter(function (r) {
           if (!match) return true;
-          const hay = (r.tags || []).join(' ').toLowerCase() + ' ' + (r.category || '') + ' ' + (r.name || '').toLowerCase();
-          return hay.indexOf(match.toLowerCase()) !== -1;
+          const hay = ((r.tags || []).join(' ') + ' ' + (r.categories || r.category || '') + ' ' + (r.name || '') + ' ' + (r.description || '')).toLowerCase();
+          const tags = (r.tags || []).map(function (t) { return String(t || '').toLowerCase(); });
+          const m = match.toLowerCase().trim();
+          // If the exact phrase exists in the combined haystack, count it
+          if (hay.indexOf(m) !== -1) return true;
+          // Otherwise, split the match into tokens and ensure all tokens appear somewhere (handles 'emergency shelter')
+          const tokens = m.split(/\s+/).filter(Boolean);
+          if (tokens.length && tokens.every(function (tok) { return hay.indexOf(tok) !== -1; })) return true;
+          // Finally, check if any individual tag includes the match or vice-versa
+          for (var ti = 0; ti < tags.length; ti++) {
+            var tag = tags[ti] || '';
+            if (!tag) continue;
+            if (tag.indexOf(m) !== -1) return true;
+            if (m.indexOf(tag) !== -1) return true;
+          }
+          return false;
         }).length;
         const countEl = li.querySelector('.filter-count');
         if (countEl) countEl.textContent = count;
         li.classList.toggle('has-items', count > 0);
       });
+      if (tagFilters) { tagFilters.style.display = 'none'; tagFilters.innerHTML = ''; }
       return;
     }
 
@@ -303,7 +318,11 @@
   }
 
   function renderMapMarkers(resources) {
-    if (!mapWrapper || typeof L === 'undefined') return;
+    if (!mapWrapper) return;
+    if (typeof L === 'undefined') {
+      mapWrapper.innerHTML = '<div class="map-placeholder" role="status">Map view could not load. The list view still includes all resources.</div>';
+      return;
+    }
     if (!mapInstance) initMap();
     if (!mapInstance) return;
 
@@ -454,7 +473,7 @@
     results = sortResources(results, sortOption);
 
     if (count) {
-      const isStatNumber = count.classList && count.classList.contains('stat-number') || (count.closest && count.closest('.stat-card'));
+      const isStatNumber = (count.classList && count.classList.contains('stat-number')) || (count.closest && count.closest('.stat-card'));
       if (isStatNumber) {
         count.textContent = String(results.length);
       } else {
@@ -481,7 +500,7 @@
       return;
     }
 
-    const expandedId = selectedExpandedId || (results.length ? String(results[0].id) : '');
+    const expandedId = selectedExpandedId === null ? (results.length ? String(results[0].id) : '') : String(selectedExpandedId);
 
     if (viewMode === 'map') {
       grid.innerHTML = '';
@@ -548,7 +567,7 @@
             </div>
             <div class="compact-right">
               ${r.phone ? `<a href="tel:${sanitizePhone(r.phone)}" class="btn btn-icon" aria-label="Call ${escapeHTML(r.name)}"><i class="bi bi-telephone-fill"></i></a>` : ''}
-              <button class="btn btn-outline" data-toggle-details="${r.id}">More Info</button>
+              <button class="btn btn-outline" data-toggle-details="${r.id}" aria-expanded="false">View Details</button>
             </div>
           </article>`;
     }).join('');
@@ -596,6 +615,7 @@
         if (!button) return;
         const tag = button.getAttribute('data-tag');
         selectedTag = (selectedTag === tag ? '' : tag);
+        selectedExpandedId = null;
         updateTagSelection();
         currentPage = 1;
         applyFilters();
@@ -610,6 +630,8 @@
         if (!item) return;
         const match = item.getAttribute('data-match') || '';
         selectedTag = match || '';
+        selectedExpandedId = null;
+        currentPage = 1;
         // toggle active class
         Array.from(sidebar.querySelectorAll('[data-match]')).forEach(function (it) { it.classList.remove('active'); });
         item.classList.add('active');
@@ -665,6 +687,14 @@
 
   function resetFilters() {
     selectedTag = '';
+    selectedExpandedId = null;
+    currentPage = 1;
+    const sidebar = document.getElementById('sidebar-filters');
+    if (sidebar) {
+      Array.from(sidebar.querySelectorAll('[data-match]')).forEach(function (it) { it.classList.remove('active'); });
+      const all = sidebar.querySelector('[data-match=""]');
+      if (all) all.classList.add('active');
+    }
     if (searchInput) searchInput.value = '';
     if (clearBtn) clearBtn.classList.remove('visible');
     updateTagSelection();

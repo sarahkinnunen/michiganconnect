@@ -120,13 +120,72 @@
     </section>
 
     <section class="section" aria-labelledby="legal-list-heading">
-      <div class="container category-layout">
-        <div class="results-meta">
-          <h2 id="legal-list-heading">Legal Aid Organizations</h2>
-          <span class="results-count" id="category-count" role="status" aria-live="polite">Loading…</span>
+      <div class="container category-page">
+        <div class="results-header">
+          <div class="title-block">
+            <h2 id="legal-list-heading">Legal Aid Organizations</h2>
+            <p class="subtitle">Find free and low-cost legal assistance for tenant rights, family law, immigration, and more.</p>
+          </div>
+          <div class="stat-card" id="category-stat" aria-hidden="true">
+            <div class="stat-number" id="category-count">Loading…</div>
+            <div class="stat-label">resources available</div>
+          </div>
         </div>
-        <div class="resource-grid" id="category-results" aria-label="Legal aid resources">
-          <!-- Populated by category.js -->
+
+        <!-- Search anchor (search panel inserted by JS will appear here) -->
+        <div id="search-anchor"></div>
+
+        <div class="results-layout">
+          <aside id="sidebar-filters" class="sidebar-filters" aria-label="Filter by service type">
+            <ul class="filter-list" role="list">
+              <li data-match="" class="filter-item active"><span class="filter-icon" aria-hidden="true"><i class="bi bi-grid-fill"></i></span><span class="filter-label">All Categories</span><span class="filter-count">0</span></li>
+              <li data-match="tenant" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-door-closed"></i></span><span class="filter-label">Tenant Rights</span><span class="filter-count">0</span></li>
+              <li data-match="family law" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-people-fill"></i></span><span class="filter-label">Family Law</span><span class="filter-count">0</span></li>
+              <li data-match="immigration" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-globe-americas"></i></span><span class="filter-label">Immigration</span><span class="filter-count">0</span></li>
+              <li data-match="free legal" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-bank2"></i></span><span class="filter-label">Free Legal Services</span><span class="filter-count">0</span></li>
+              <li data-match="criminal" class="filter-item"><span class="filter-icon" aria-hidden="true"><i class="bi bi-shield-lock"></i></span><span class="filter-label">Criminal Defense</span><span class="filter-count">0</span></li>
+            </ul>
+          </aside>
+
+          <div class="main-results">
+            <div class="controls-row">
+              <div class="controls-left">
+                <label for="sort-select" class="sr-only">Sort by</label>
+                <select id="sort-select" class="sort-select" aria-label="Sort options">
+                  <option value="relevance">Sort: Relevance</option>
+                  <option value="name-asc">Sort: A–Z</option>
+                  <option value="name-desc">Sort: Z–A</option>
+                </select>
+              </div>
+              <div class="view-toggle" role="tablist" aria-label="View options">
+                <button class="view-btn active" data-view="list" role="tab" aria-selected="true" aria-controls="results-list">
+                  <i class="bi bi-list-ul" aria-hidden="true"></i><span class="sr-only">List view</span>
+                </button>
+                <button class="view-btn" data-view="map" role="tab" aria-selected="false" aria-controls="results-map">
+                  <i class="bi bi-map" aria-hidden="true"></i><span class="sr-only">Map view</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="results-list" role="tabpanel" aria-labelledby="list-tab" class="resource-grid" aria-label="Resource list">
+              <div id="category-results">
+                <!-- Populated by category.js -->
+              </div>
+            </div>
+            <div id="results-map" role="tabpanel" aria-labelledby="map-tab" class="category-map" style="display: none;">
+              <!-- Populated by category.js for map view -->
+            </div>
+
+            <div id="pagination-controls" class="pagination-controls" style="margin-top: 2rem; display: none;">
+              <!-- Populated by category.js -->
+            </div>
+          </div>
+
+          <aside id="detail-panel" class="detail-panel">
+            <div id="detail-content" class="detail-content">
+              <p style="color: var(--color-text-secondary); text-align: center; padding: 2rem 1rem;">Select a resource to view details</p>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
