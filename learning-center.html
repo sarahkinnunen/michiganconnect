@@ -71,23 +71,34 @@
   <main id="main-content">
 
     <!-- Hero -->
-    <section class="section" style="background:var(--color-accent);color:#fff;padding-top:3rem;padding-bottom:3rem" aria-labelledby="lc-hero-heading">
+    <section class="lc-hero" aria-labelledby="lc-hero-heading">
       <div class="container">
-        <p style="font-size:3rem;margin-bottom:.5rem" aria-hidden="true"><i class="bi bi-journal-text" aria-hidden="true"></i></p>
-        <h1 id="lc-hero-heading" style="color:#fff;margin-bottom:.75rem">Learning Center</h1>
-        <p style="font-size:var(--font-size-lg);opacity:.9;max-width:640px">
-          Plain-language, step-by-step guides for navigating benefits, documents, and systems.
-          Click on a category to navigate to any of the following sections:
-        </p>
-        <!-- Jump links -->
-        <nav aria-label="Jump to section" style="margin-top:2rem">
-          <ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem">
-            <li><a href="#benefits" style="background:rgba(255,255,255,.15);color:#fff;padding:.35rem .85rem;border-radius:var(--radius-full);font-size:var(--font-size-sm);text-decoration:none;border:1px solid rgba(255,255,255,.3)">Benefits &amp; Assistance</a></li>
-            <li><a href="#housing-guides" style="background:rgba(255,255,255,.15);color:#fff;padding:.35rem .85rem;border-radius:var(--radius-full);font-size:var(--font-size-sm);text-decoration:none;border:1px solid rgba(255,255,255,.3)">Housing</a></li>
-            <li><a href="#identity" style="background:rgba(255,255,255,.15);color:#fff;padding:.35rem .85rem;border-radius:var(--radius-full);font-size:var(--font-size-sm);text-decoration:none;border:1px solid rgba(255,255,255,.3)">Identity &amp; Legal Docs</a></li>
-            <li><a href="#work-education" style="background:rgba(255,255,255,.15);color:#fff;padding:.35rem .85rem;border-radius:var(--radius-full);font-size:var(--font-size-sm);text-decoration:none;border:1px solid rgba(255,255,255,.3)">Employment &amp; Education</a></li>
-            <li><a href="#healthcare-guides" style="background:rgba(255,255,255,.15);color:#fff;padding:.35rem .85rem;border-radius:var(--radius-full);font-size:var(--font-size-sm);text-decoration:none;border:1px solid rgba(255,255,255,.3)">Healthcare</a></li>
-          </ul>
+        <div class="lc-hero-text">
+          <p class="lc-hero-icon" aria-hidden="true"><i class="bi bi-journal-text"></i></p>
+          <h1 id="lc-hero-heading">Learning Center</h1>
+          <p>Plain-language, step-by-step guides for navigating benefits, documents, and systems.</p>
+        </div>
+        <nav aria-label="Jump to section" class="lc-nav">
+          <a href="#benefits" class="lc-nav-item">
+            <i class="bi bi-cash-stack" aria-hidden="true"></i>
+            <span>Benefits &amp; Assistance</span>
+          </a>
+          <a href="#housing-guides" class="lc-nav-item">
+            <i class="bi bi-house-door-fill" aria-hidden="true"></i>
+            <span>Housing</span>
+          </a>
+          <a href="#identity" class="lc-nav-item">
+            <i class="bi bi-person-badge-fill" aria-hidden="true"></i>
+            <span>Identity &amp; Legal Docs</span>
+          </a>
+          <a href="#work-education" class="lc-nav-item">
+            <i class="bi bi-briefcase-fill" aria-hidden="true"></i>
+            <span>Employment &amp; Education</span>
+          </a>
+          <a href="#healthcare-guides" class="lc-nav-item">
+            <i class="bi bi-hospital-fill" aria-hidden="true"></i>
+            <span>Healthcare</span>
+          </a>
         </nav>
       </div>
     </section>

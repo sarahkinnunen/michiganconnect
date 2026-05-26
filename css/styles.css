@@ -1843,4 +1843,77 @@ body { top: 0 !important; position: static !important; }
   .smart-tile { flex-direction: row; min-width: 0; }
 }
 
+/* ── Learning Center hero ────────────────────────────────── */
+.lc-hero {
+  background: var(--color-accent);
+  color: #fff;
+  padding: 3.5rem 0 4.5rem;
+}
+
+.lc-hero-text {
+  max-width: 600px;
+  margin-bottom: 2.5rem;
+}
+
+.lc-hero-icon {
+  font-size: 2.75rem;
+  margin: 0 0 .75rem;
+  line-height: 1;
+}
+
+.lc-hero h1 {
+  color: #fff;
+  font-size: clamp(1.9rem, 4.5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: .75rem;
+}
+
+.lc-hero p {
+  font-size: var(--font-size-lg);
+  opacity: .88;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.lc-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: .75rem;
+}
+
+.lc-nav-item {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  padding: .8rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,.28);
+  transition: background .15s ease, transform .12s ease, box-shadow .12s ease;
+}
+
+.lc-nav-item:hover {
+  background: rgba(255,255,255,.26);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  text-decoration: none;
+  color: #fff;
+}
+
+.lc-nav-item i {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  opacity: .9;
+}
+
+@media (max-width: 480px) {
+  .lc-hero { padding: 2.5rem 0 3.5rem; }
+  .lc-nav { grid-template-columns: 1fr 1fr; }
+}
+
 /* About us social medias section */
