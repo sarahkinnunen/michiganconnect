@@ -241,22 +241,9 @@
         const match = li.getAttribute('data-match') || '';
         const count = resources.filter(function (r) {
           if (!match) return true;
-          const hay = ((r.tags || []).join(' ') + ' ' + (r.categories || r.category || '') + ' ' + (r.name || '') + ' ' + (r.description || '')).toLowerCase();
-          const tags = (r.tags || []).map(function (t) { return String(t || '').toLowerCase(); });
-          const m = match.toLowerCase().trim();
-          // If the exact phrase exists in the combined haystack, count it
-          if (hay.indexOf(m) !== -1) return true;
-          // Otherwise, split the match into tokens and ensure all tokens appear somewhere (handles 'emergency shelter')
-          const tokens = m.split(/\s+/).filter(Boolean);
-          if (tokens.length && tokens.every(function (tok) { return hay.indexOf(tok) !== -1; })) return true;
-          // Finally, check if any individual tag includes the match or vice-versa
-          for (var ti = 0; ti < tags.length; ti++) {
-            var tag = tags[ti] || '';
-            if (!tag) continue;
-            if (tag.indexOf(m) !== -1) return true;
-            if (m.indexOf(tag) !== -1) return true;
-          }
-          return false;
+          var tagsStr = (r.tags || []).join(' ').toLowerCase();
+          var hay = [tagsStr, r.category || '', r.name || '', r.description || '', r.address || '', r.city || '', r.county || '', r.eligibility || ''].join(' ').toLowerCase();
+          return hay.indexOf(match.toLowerCase().trim()) !== -1;
         }).length;
         const countEl = li.querySelector('.filter-count');
         if (countEl) countEl.textContent = count;
@@ -529,6 +516,8 @@
           : results.length + ' of ' + categoryResources.length + ' resources shown';
       }
     }
+    var statCard = document.getElementById('resource-count');
+    if (statCard) statCard.textContent = String(results.length);
 
     if (!results.length) {
       grid.innerHTML = `<div class="empty-state" role="status" aria-live="polite">

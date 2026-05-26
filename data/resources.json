@@ -1,35 +1,36 @@
 [
   {
     "id": 1,
-    "name": "COTS Detroit – Youth Housing",
+    "name": "COTS Detroit \u2013 Youth Housing",
     "category": "housing",
     "county": "Wayne",
     "city": "Detroit",
     "address": "26 Peterboro St, Detroit, MI 48201",
     "phone": "(313) 831-3777",
     "website": "https://www.cotsdetroit.org",
-    "hours": "Mon–Fri: 8am–5pm; Crisis line 24/7",
-    "eligibility": "Youth ages 16–24 experiencing homelessness or housing instability",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; Crisis line 24/7",
+    "eligibility": "Youth ages 16\u201324 experiencing homelessness or housing instability",
     "intake_process": "Call ahead or walk in during business hours. ID preferred but not required.",
     "tags": [
       "youth",
       "shelter",
       "transitional housing",
       "homeless",
-      "emergency"
+      "emergency",
+      "emergency shelter"
     ],
     "last_verified_date": "2025-11-01"
   },
   {
     "id": 2,
-    "name": "Gleaners Community Food Bank – Wayne County",
+    "name": "Gleaners Community Food Bank \u2013 Wayne County",
     "category": "food",
     "county": "Wayne",
     "city": "Detroit",
     "address": "2131 Beaufait St, Detroit, MI 48207",
     "phone": "(313) 923-3535",
     "website": "https://www.gcfb.org",
-    "hours": "Mon–Fri: 8am–4pm; Distribution sites vary",
+    "hours": "Mon\u2013Fri: 8am\u20134pm; Distribution sites vary",
     "eligibility": "Open to all Wayne County residents in need",
     "intake_process": "Visit the website to find the nearest distribution site. No appointment needed at most locations.",
     "tags": [
@@ -42,7 +43,7 @@
   },
   {
     "id": 3,
-    "name": "Detroit Wayne Integrated Health Network – Mental Health Crisis Line",
+    "name": "Detroit Wayne Integrated Health Network \u2013 Mental Health Crisis Line",
     "category": "crisis",
     "county": "Wayne",
     "city": "Detroit",
@@ -63,7 +64,7 @@
   },
   {
     "id": 4,
-    "name": "Michigan Legal Help – Wayne County Clinic",
+    "name": "Michigan Legal Help \u2013 Wayne County Clinic",
     "category": "legal",
     "categories": [
       "legal",
@@ -74,7 +75,7 @@
     "address": "645 Griswold St, Suite 3300, Detroit, MI 48226",
     "phone": "(313) 964-4130",
     "website": "https://michiganlegalhelp.org",
-    "hours": "Mon–Fri: 9am–4pm",
+    "hours": "Mon\u2013Fri: 9am\u20134pm",
     "eligibility": "Low-income residents; income eligibility based on household size",
     "intake_process": "Call or visit the website to schedule a free legal consultation or access self-help resources.",
     "tags": [
@@ -88,14 +89,14 @@
   },
   {
     "id": 5,
-    "name": "Covenant Community Care – Detroit Health Clinic",
+    "name": "Covenant Community Care \u2013 Detroit Health Clinic",
     "category": "health",
     "county": "Wayne",
     "city": "Detroit",
     "address": "6700 W Outer Dr, Detroit, MI 48235",
     "phone": "(313) 879-7627",
     "website": "https://www.covenantcommunitycare.org",
-    "hours": "Mon–Fri: 8am–5pm; Sat: 9am–1pm",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; Sat: 9am\u20131pm",
     "eligibility": "All patients accepted regardless of ability to pay; sliding fee scale available",
     "intake_process": "Walk-in or call for an appointment. Sliding scale fees based on income. Uninsured patients welcome.",
     "tags": [
@@ -117,14 +118,16 @@
     "address": "1600 S. Raisinville Rd, Monroe, MI 48161",
     "phone": "(734) 241-2775",
     "website": "https://www.monroecountyCAA.org",
-    "hours": "Mon–Fri: 8:30am–4:30pm",
+    "hours": "Mon\u2013Fri: 8:30am\u20134:30pm",
     "eligibility": "Monroe County residents experiencing housing insecurity or homelessness",
     "intake_process": "Call during business hours to schedule an intake appointment. Documentation of need is helpful.",
     "tags": [
       "housing assistance",
       "rental help",
       "utility assistance",
-      "homeless prevention"
+      "homeless prevention",
+      "rental assistance",
+      "homelessness prevention"
     ],
     "last_verified_date": "2025-11-01"
   },
@@ -137,7 +140,7 @@
     "address": "Various locations across Monroe County",
     "phone": "(734) 242-0804",
     "website": "https://www.monroecountyfoodpantry.org",
-    "hours": "Varies by location; most open Tue and Thu: 10am–2pm",
+    "hours": "Varies by location; most open Tue and Thu: 10am\u20132pm",
     "eligibility": "Monroe County residents; identification helpful but not always required",
     "intake_process": "Find the nearest pantry on the website. Most allow walk-in access during posted hours.",
     "tags": [
@@ -151,15 +154,15 @@
   },
   {
     "id": 8,
-    "name": "Ozone House – Youth Drop-In Center",
+    "name": "Ozone House \u2013 Youth Drop-In Center",
     "category": "crisis",
     "county": "Wayne",
     "city": "Ypsilanti",
     "address": "117 W Cross St, Ypsilanti, MI 48197",
     "phone": "(734) 662-2222",
     "website": "https://www.ozonehouse.org",
-    "hours": "Mon–Fri: 10am–6pm; 24/7 crisis hotline",
-    "eligibility": "Youth ages 14–24 in crisis or at risk",
+    "hours": "Mon\u2013Fri: 10am\u20136pm; 24/7 crisis hotline",
+    "eligibility": "Youth ages 14\u201324 in crisis or at risk",
     "intake_process": "Walk in during drop-in hours. No appointment needed. Crisis line available 24/7.",
     "tags": [
       "youth",
@@ -173,14 +176,14 @@
   },
   {
     "id": 9,
-    "name": "Wayne Metro Community Action Agency – Emergency Utility Assistance",
+    "name": "Wayne Metro Community Action Agency \u2013 Emergency Utility Assistance",
     "category": "housing",
     "county": "Wayne",
     "city": "Detroit",
     "address": "8300 Kercheval Ave, Detroit, MI 48214",
     "phone": "(313) 388-9799",
     "website": "https://www.waynemetro.org",
-    "hours": "Mon–Fri: 8:30am–4:30pm",
+    "hours": "Mon\u2013Fri: 8:30am\u20134:30pm",
     "eligibility": "Wayne County residents with household income at or below 200% of federal poverty level",
     "intake_process": "Call to schedule intake. Bring proof of income, ID, and recent utility bills.",
     "tags": [
@@ -194,14 +197,14 @@
   },
   {
     "id": 10,
-    "name": "Monroe County Health Department – Youth Clinic",
+    "name": "Monroe County Health Department \u2013 Youth Clinic",
     "category": "health",
     "county": "Monroe",
     "city": "Monroe",
     "address": "2353 S Custer Rd, Monroe, MI 48161",
     "phone": "(734) 240-7800",
     "website": "https://health.co.monroe.mi.us",
-    "hours": "Mon–Fri: 8am–4:30pm",
+    "hours": "Mon\u2013Fri: 8am\u20134:30pm",
     "eligibility": "Monroe County youth and residents; some services income-based",
     "intake_process": "Call for an appointment. Immunizations and some services available as walk-in.",
     "tags": [
@@ -219,7 +222,7 @@
     "category": "crisis",
     "county": "Wayne",
     "city": "Detroit",
-    "address": "National hotline – no walk-in required",
+    "address": "National hotline \u2013 no walk-in required",
     "phone": "(800) 786-2929",
     "website": "https://www.1800runaway.org",
     "hours": "24/7, 365 days a year",
@@ -247,7 +250,7 @@
     "phone": "(313) 463-2000",
     "website": "https://www.covenantmi.org",
     "hours": "24/7 crisis intake",
-    "eligibility": "Youth ages 17–24 experiencing homelessness or housing instability in the Detroit area",
+    "eligibility": "Youth ages 17\u201324 experiencing homelessness or housing instability in the Detroit area",
     "intake_process": "Walk in or call 24/7 for crisis intake. Programs include emergency shelter, transitional housing, street outreach, and physical and mental health services.",
     "tags": [
       "youth",
@@ -256,7 +259,11 @@
       "crisis",
       "LGBTQ+ friendly",
       "emergency",
-      "street outreach"
+      "street outreach",
+      "emergency shelter",
+      "clothing",
+      "hygiene kits",
+      "free clothing"
     ],
     "last_verified_date": "2026-02-19",
     "categories": [
@@ -272,7 +279,7 @@
     "category": "health",
     "county": "Wayne",
     "city": "Ypsilanti",
-    "address": "Multiple locations – visit website for nearest site",
+    "address": "Multiple locations \u2013 visit website for nearest site",
     "phone": "(734) 484-3600",
     "website": "https://www.thehopeclinic.org",
     "hours": "Varies by location; call or visit website for current hours",
@@ -298,8 +305,8 @@
     "address": "Visit website for current location",
     "phone": "(313) 252-4808",
     "website": "https://www.ruthelliscenter.org",
-    "hours": "Mon–Fri: 9am–5pm; call for drop-in hours",
-    "eligibility": "LGBTQ+ youth and young adults ages 13–30 in the Detroit metro area",
+    "hours": "Mon\u2013Fri: 9am\u20135pm; call for drop-in hours",
+    "eligibility": "LGBTQ+ youth and young adults ages 13\u201330 in the Detroit metro area",
     "intake_process": "Call or visit the website. Services include housing, outreach, health and wellness, art therapy, family preservation, positive youth development, and juvenile justice support.",
     "tags": [
       "LGBTQ+",
@@ -322,7 +329,7 @@
     "address": "Visit website for current location",
     "phone": "Visit website for contact",
     "website": "https://www.detroitphoenixcenter.org",
-    "hours": "Mon–Fri: 9am–5pm; drop-in by appointment",
+    "hours": "Mon\u2013Fri: 9am\u20135pm; drop-in by appointment",
     "eligibility": "Detroit youth and young adults; education, employment, and housing support available",
     "intake_process": "Visit website or call. Services include education and employment resources, emergency housing support, youth leadership action board, and a drop-in center. Also offers laundry, showers, computer lab, food pantry, case management, and mental health support.",
     "tags": [
@@ -334,7 +341,10 @@
       "emergency services",
       "mental health",
       "food pantry",
-      "basic needs"
+      "basic needs",
+      "crisis",
+      "clothing",
+      "free clothing"
     ],
     "last_verified_date": "2026-02-13",
     "categories": [
@@ -353,7 +363,7 @@
     "address": "1820 Mt Elliott St, Detroit, MI 48207",
     "phone": "(313) 579-2100",
     "website": "https://www.cskdetroit.org",
-    "hours": "Mon–Sat: 7am–9am and 11am–1pm (meals); pantry and service center hours vary",
+    "hours": "Mon\u2013Sat: 7am\u20139am and 11am\u20131pm (meals); pantry and service center hours vary",
     "eligibility": "Open to all Detroit residents in need; no ID required for meals",
     "intake_process": "Walk in during meal service hours. The Shoppers' Choice food and clothing pantry lets guests select items free of charge. Furniture referrals available through the service center.",
     "tags": [
@@ -362,7 +372,8 @@
       "clothing",
       "furniture referral",
       "Detroit",
-      "soup kitchen"
+      "soup kitchen",
+      "free clothing"
     ],
     "last_verified_date": "2026-03-05",
     "categories": [
@@ -380,7 +391,7 @@
     "address": "90 Selden St, Detroit, MI 48201",
     "phone": "(313) 831-5535",
     "website": "https://thechildrenscenter.com",
-    "hours": "Mon–Fri: 8am–5pm",
+    "hours": "Mon\u2013Fri: 8am\u20135pm",
     "eligibility": "Children, youth, and families in the Detroit metro area; sliding scale fees; Medicaid accepted",
     "intake_process": "Call to schedule an intake appointment. Provides clinical, behavioral, and academic support as well as emergency crisis care for Detroit's most vulnerable children.",
     "tags": [
@@ -403,7 +414,7 @@
     "address": "5555 Conner St, Detroit, MI 48213",
     "phone": "(313) 921-0001",
     "website": "https://saydetroit.org/clinic/",
-    "hours": "Mon–Fri: 8:30am–4:30pm",
+    "hours": "Mon\u2013Fri: 8:30am\u20134:30pm",
     "eligibility": "All adults and families regardless of ability to pay; sliding scale available; on-site pharmacy",
     "intake_process": "Call to schedule an appointment or walk in. Provides high-quality examinations, preventive healthcare, and maintenance care with an on-site pharmacy.",
     "tags": [
@@ -422,10 +433,10 @@
     "category": "health",
     "county": "Wayne",
     "city": "Pontiac",
-    "address": "Multiple Southeast Michigan locations – see website",
+    "address": "Multiple Southeast Michigan locations \u2013 see website",
     "phone": "(248) 332-1173",
     "website": "https://newoakland.org",
-    "hours": "Mon–Fri: 9am–5pm; some evening hours available",
+    "hours": "Mon\u2013Fri: 9am\u20135pm; some evening hours available",
     "eligibility": "Children, teens, and families in Southeast Michigan; specializes in youth mental health; accepts most insurance and Medicaid",
     "intake_process": "Call to schedule an intake evaluation. Mental health services for children, teens, and families with specialty programs available at multiple locations.",
     "tags": [
@@ -447,9 +458,9 @@
     "address": "46 University Dr, Pontiac, MI 48342",
     "phone": "(248) 920-6000",
     "website": "https://lighthousemi.org",
-    "hours": "Mon–Fri: 8:30am–4:30pm",
-    "eligibility": "Youth ages 10–17 (shelter program), adults and families in Oakland and surrounding counties; housing assistance, emergency shelter, and homelessness prevention",
-    "intake_process": "Call or visit during business hours. Shelter program available for runaways and unaccompanied youth ages 10–17. Also offers affordable housing units when available and drop-in programs.",
+    "hours": "Mon\u2013Fri: 8:30am\u20134:30pm",
+    "eligibility": "Youth ages 10\u201317 (shelter program), adults and families in Oakland and surrounding counties; housing assistance, emergency shelter, and homelessness prevention",
+    "intake_process": "Call or visit during business hours. Shelter program available for runaways and unaccompanied youth ages 10\u201317. Also offers affordable housing units when available and drop-in programs.",
     "tags": [
       "youth",
       "shelter",
@@ -457,7 +468,9 @@
       "runaway",
       "homelessness prevention",
       "affordable housing",
-      "Oakland County"
+      "Oakland County",
+      "clothing",
+      "free clothing"
     ],
     "last_verified_date": "2026-02-13",
     "categories": [
@@ -572,7 +585,7 @@
     "phone": "",
     "website": "https://www.gdyt.org",
     "hours": "Program runs summer months; applications open in early spring",
-    "eligibility": "Detroit youth ages 14–24; must live, work, or attend school in Detroit",
+    "eligibility": "Detroit youth ages 14\u201324; must live, work, or attend school in Detroit",
     "intake_process": "Apply online at gdyt.org during the application window. Provides meaningful paid summer employment opportunities and connects youth to local employers.",
     "tags": [
       "employment",
@@ -595,10 +608,10 @@
     ],
     "county": "Wayne",
     "city": "Detroit",
-    "address": "Multiple locations statewide – visit website for nearest office",
+    "address": "Multiple locations statewide \u2013 visit website for nearest office",
     "phone": "(517) 371-1100",
     "website": "https://michiganworks.org",
-    "hours": "Mon–Fri: 8am–5pm; hours vary by location",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; hours vary by location",
     "eligibility": "Michigan residents seeking employment, job training, or credentials; youth and adult programs available",
     "intake_process": "Visit your nearest Michigan Works! service center or the website. Services include job search support, resume help, training programs, credentials, and connections to employers.",
     "tags": [
@@ -626,7 +639,7 @@
     "address": "9301 Michigan Ave, Detroit, MI 48210",
     "phone": "(313) 894-5900",
     "website": "https://www.sermetro.org",
-    "hours": "Mon–Fri: 8am–5pm",
+    "hours": "Mon\u2013Fri: 8am\u20135pm",
     "eligibility": "Detroit and Metro Detroit residents; adult and youth programs available including YouthBuild for trade skills and GED prep",
     "intake_process": "Call or visit to schedule an intake. Programs include adult work readiness, job placement, YouthBuild trade skills training, and GED preparation.",
     "tags": [
@@ -654,8 +667,8 @@
     "address": "11500 Glenfield Ave, Detroit, MI 48213",
     "phone": "(313) 371-0100",
     "website": "https://detroit.jobcorps.gov",
-    "hours": "Mon–Fri: 8am–5pm; residential program available",
-    "eligibility": "Youth ages 16–24; free program including housing, meals, and stipend for eligible participants",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; residential program available",
+    "eligibility": "Youth ages 16\u201324; free program including housing, meals, and stipend for eligible participants",
     "intake_process": "Call or visit the website to apply. Free services include high school diploma (via Penn Foster), high-paying trade programs (CNA, CMA, HVAC, etc.), three meals daily, bi-weekly stipend, childcare, driver's training, on-center medical care, transportation, and counseling.",
     "tags": [
       "education",
@@ -710,13 +723,14 @@
       "housing",
       "Wayne County",
       "Detroit",
-      "referral"
+      "referral",
+      "emergency shelter"
     ],
     "last_verified_date": "2026-03-05"
   },
   {
     "id": 31,
-    "name": "Covenant House Michigan – Grand Rapids",
+    "name": "Covenant House Michigan \u2013 Grand Rapids",
     "category": "housing",
     "county": "Kent",
     "city": "Grand Rapids",
@@ -724,7 +738,7 @@
     "phone": "(616) 454-3773",
     "website": "https://www.covenantmi.org/grand-rapids",
     "hours": "24/7 crisis intake",
-    "eligibility": "Youth ages 17–24 experiencing homelessness or housing instability in the Grand Rapids area",
+    "eligibility": "Youth ages 17\u201324 experiencing homelessness or housing instability in the Grand Rapids area",
     "intake_process": "Walk in or call 24/7. Services include emergency shelter, crisis support, street outreach, and physical and mental health services.",
     "tags": [
       "youth",
@@ -733,7 +747,8 @@
       "housing",
       "Grand Rapids",
       "street outreach",
-      "24/7"
+      "24/7",
+      "emergency shelter"
     ],
     "last_verified_date": "2026-02-19"
   },
@@ -904,7 +919,8 @@
       "human trafficking",
       "youth",
       "housing",
-      "outreach"
+      "outreach",
+      "parenting"
     ],
     "last_verified_date": "2026-04-07"
   },
@@ -977,7 +993,7 @@
   },
   {
     "id": 42,
-    "name": "CAM Detroit – Community Resource Navigator",
+    "name": "CAM Detroit \u2013 Community Resource Navigator",
     "category": "crisis",
     "county": "Wayne",
     "city": "Detroit",
@@ -1020,7 +1036,7 @@
   },
   {
     "id": 44,
-    "name": "Hope Clinic – Westland",
+    "name": "Hope Clinic \u2013 Westland",
     "category": "health",
     "county": "Wayne",
     "city": "Westland",
@@ -1084,7 +1100,7 @@
   },
   {
     "id": 47,
-    "name": "Covenant Community Care – Grand Blvd",
+    "name": "Covenant Community Care \u2013 Grand Blvd",
     "category": "health",
     "county": "Wayne",
     "city": "Detroit",
@@ -1146,7 +1162,7 @@
   },
   {
     "id": 50,
-    "name": "Planned Parenthood – Detroit Health Center",
+    "name": "Planned Parenthood \u2013 Detroit Health Center",
     "category": "health",
     "county": "Wayne",
     "city": "Detroit",
@@ -1256,7 +1272,7 @@
   },
   {
     "id": 55,
-    "name": "CVS Pharmacy – Low Cost Prescriptions",
+    "name": "CVS Pharmacy \u2013 Low Cost Prescriptions",
     "category": "health",
     "county": "Wayne",
     "city": "Multiple",
@@ -1275,7 +1291,7 @@
   },
   {
     "id": 56,
-    "name": "Henry Ford Health – Same Day Care",
+    "name": "Henry Ford Health \u2013 Same Day Care",
     "category": "health",
     "county": "Wayne",
     "city": "Detroit",
@@ -1315,7 +1331,7 @@
   },
   {
     "id": 58,
-    "name": "Detroit Health Department – Vision Services",
+    "name": "Detroit Health Department \u2013 Vision Services",
     "category": "health",
     "county": "Wayne",
     "city": "Detroit",
@@ -1375,7 +1391,7 @@
   },
   {
     "id": 61,
-    "name": "Michigan Medicine Community Health Services – Screening Programs",
+    "name": "Michigan Medicine Community Health Services \u2013 Screening Programs",
     "category": "health",
     "county": "Washtenaw",
     "city": "Ann Arbor",
@@ -1413,7 +1429,7 @@
   },
   {
     "id": 63,
-    "name": "Catholic Charities of Southeast Michigan – Counseling Services",
+    "name": "Catholic Charities of Southeast Michigan \u2013 Counseling Services",
     "category": "health",
     "county": "Wayne",
     "city": "Detroit",
@@ -1427,7 +1443,8 @@
       "mental health",
       "spiritual",
       "counseling",
-      "low cost"
+      "low cost",
+      "parenting"
     ],
     "last_verified_date": "2026-04-07",
     "categories": [
@@ -1437,7 +1454,7 @@
   },
   {
     "id": 64,
-    "name": "Islamic House of Wisdom – Counseling & Community Support",
+    "name": "Islamic House of Wisdom \u2013 Counseling & Community Support",
     "category": "health",
     "county": "Wayne",
     "city": "Dearborn Heights",
@@ -1475,7 +1492,8 @@
       "legal",
       "asylum",
       "citizenship",
-      "free"
+      "free",
+      "free legal"
     ],
     "last_verified_date": "2026-04-07"
   },
@@ -1500,7 +1518,8 @@
       "legal",
       "citizenship",
       "detention",
-      "free"
+      "free",
+      "free legal"
     ],
     "last_verified_date": "2026-04-07"
   },
@@ -1517,7 +1536,7 @@
     "address": "22124 Garrison St, Dearborn, MI",
     "phone": "(616) 320-2734",
     "website": "https://www.iljmi.org",
-    "hours": "Mon–Fri 9am–5pm",
+    "hours": "Mon\u2013Fri 9am\u20135pm",
     "eligibility": "Low-income immigrants and refugees",
     "intake_process": "Appointment required",
     "tags": [
@@ -1525,7 +1544,8 @@
       "legal",
       "refugees",
       "asylum",
-      "free"
+      "free",
+      "free legal"
     ],
     "last_verified_date": "2026-04-07"
   },
@@ -1550,7 +1570,8 @@
       "legal",
       "asylum",
       "students",
-      "free"
+      "free",
+      "free legal"
     ],
     "last_verified_date": "2026-04-07"
   },
@@ -1669,7 +1690,9 @@
       "immigration",
       "workers rights",
       "legal",
-      "free"
+      "free",
+      "free legal",
+      "legal aid"
     ],
     "last_verified_date": "2026-04-07"
   },
@@ -1759,7 +1782,7 @@
     "city": "Grand Rapids",
     "address": "118 Commerce Ave SW, Grand Rapids, MI 49503",
     "phone": "(616) 459-6281",
-    "hours": "Mon–Fri 9am–5pm",
+    "hours": "Mon\u2013Fri 9am\u20135pm",
     "eligibility": "Residents needing community resource referrals",
     "intake_process": "Call or dial 2-1-1 for immigrant service referrals",
     "tags": [
@@ -1773,7 +1796,7 @@
   },
   {
     "id": 78,
-    "name": "Migrant Resource Councils – Michigan",
+    "name": "Migrant Resource Councils \u2013 Michigan",
     "category": "immigration",
     "categories": [
       "immigration"
@@ -1830,7 +1853,7 @@
     "city": "Rockford",
     "address": "1005 Northland Drive NE, Rockford, MI 49341",
     "phone": "(616) 866-3478",
-    "hours": "Mon–Fri 9am–5pm",
+    "hours": "Mon\u2013Fri 9am\u20135pm",
     "eligibility": "Immigrant families and individuals in North Kent County",
     "intake_process": "Call for immigration referrals, community support, and advocacy",
     "tags": [
@@ -1854,7 +1877,7 @@
     "city": "Grand Rapids",
     "address": "1204 Cesar E Chavez Ave SW, Grand Rapids, MI 49503",
     "phone": "(616) 742-0200",
-    "hours": "Mon–Fri 9am–5pm",
+    "hours": "Mon\u2013Fri 9am\u20135pm",
     "eligibility": "Hispanic and immigrant communities",
     "intake_process": "Call for community programs, advocacy, and immigration referrals",
     "tags": [
@@ -1879,7 +1902,7 @@
     "city": "Kentwood",
     "address": "2130 Enterprise St SE, Kentwood, MI 49508",
     "phone": "(616) 247-9611",
-    "hours": "Mon–Fri 8am–4pm",
+    "hours": "Mon\u2013Fri 8am\u20134pm",
     "eligibility": "Refugees and immigrant learners",
     "intake_process": "Call for educational programs and refugee support",
     "tags": [
@@ -1968,7 +1991,8 @@
       "legal advocacy",
       "counseling",
       "wayne county",
-      "crisis"
+      "crisis",
+      "support group"
     ],
     "description": "Wayne County provider offering crisis intervention, shelter, advocacy, referrals, and supportive services for survivors.",
     "last_verified_date": "2026-04-12"
@@ -1996,7 +2020,8 @@
       "shelter",
       "hotline",
       "advocacy",
-      "crisis"
+      "crisis",
+      "support group"
     ],
     "description": "Oakland County provider offering comprehensive support for survivors of intimate partner violence and sexual assault.",
     "last_verified_date": "2026-04-12"
@@ -2025,7 +2050,8 @@
       "shelter",
       "hotline",
       "counseling",
-      "advocacy"
+      "advocacy",
+      "support group"
     ],
     "description": "Macomb County provider offering free and confidential support including hotline, shelter, counseling, and advocacy.",
     "last_verified_date": "2026-04-12"
@@ -2053,7 +2079,8 @@
       "washtenaw county",
       "shelter",
       "hotline",
-      "legal advocacy"
+      "legal advocacy",
+      "support group"
     ],
     "description": "Washtenaw County provider offering free and confidential services including shelter, support, advocacy, and referrals.",
     "last_verified_date": "2026-04-12"
@@ -2265,7 +2292,7 @@
     "address": "250 Elizabeth Lake Rd, Suite 1000, Pontiac, MI 48341",
     "phone": "(248) 269-0707",
     "website": "https://www.communityhousingnetwork.org",
-    "hours": "Mon–Fri: 9am–5pm",
+    "hours": "Mon\u2013Fri: 9am\u20135pm",
     "eligibility": "Individuals and families in Oakland County experiencing housing instability or homelessness",
     "intake_process": "Call or visit the website to connect with a housing specialist. Walk-ins welcome during business hours.",
     "tags": [
@@ -2290,7 +2317,7 @@
     "address": "1920 25th St, Detroit, MI 48216",
     "phone": "(313) 297-0903",
     "website": "https://www.southwesthousing.org",
-    "hours": "Mon–Fri: 9am–5pm",
+    "hours": "Mon\u2013Fri: 9am\u20135pm",
     "eligibility": "Detroit and Wayne County residents seeking affordable housing or homeownership counseling",
     "intake_process": "Call or visit the website for available programs. Appointment recommended.",
     "tags": [
@@ -2315,7 +2342,7 @@
     "address": "21800 Greenfield Rd, Oak Park, MI 48237",
     "phone": "(248) 545-4737",
     "website": "https://www.forgottenharvest.org",
-    "hours": "Mon–Fri: 8am–4pm; food rescue and distribution ongoing",
+    "hours": "Mon\u2013Fri: 8am\u20134pm; food rescue and distribution ongoing",
     "eligibility": "Open to anyone in need in metro Detroit; distribution sites vary by location",
     "intake_process": "Visit the website to find the nearest food distribution site. No appointment needed at most locations.",
     "tags": [
@@ -2340,7 +2367,7 @@
     "address": "1 Carrot Way, Ann Arbor, MI 48105",
     "phone": "(734) 761-2796",
     "website": "https://www.foodgatherers.org",
-    "hours": "Mon–Fri: 8am–5pm; partner pantry hours vary",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; partner pantry hours vary",
     "eligibility": "Open to Washtenaw County residents experiencing food insecurity",
     "intake_process": "Visit the website to find a partner food pantry near you. Most pantries require no prior registration.",
     "tags": [
@@ -2365,7 +2392,7 @@
     "address": "2573 S. State St, Ann Arbor, MI 48104",
     "phone": "(734) 662-5461",
     "website": "https://aaaamow.org",
-    "hours": "Mon–Fri: 8am–3:30pm",
+    "hours": "Mon\u2013Fri: 8am\u20133:30pm",
     "eligibility": "Homebound individuals in Washtenaw County who have difficulty preparing meals",
     "intake_process": "Call to schedule an intake assessment. Meal delivery is typically within a few days of approval.",
     "tags": [
@@ -2407,7 +2434,7 @@
   },
   {
     "id": 4018,
-    "name": "The Salvation Army – Metro Detroit",
+    "name": "The Salvation Army \u2013 Metro Detroit",
     "category": "clothing",
     "categories": [
       "clothing",
@@ -2420,7 +2447,7 @@
     "address": "3737 Lawton St, Detroit, MI 48208",
     "phone": "(313) 965-7760",
     "website": "https://centralusa.salvationarmy.org/michigan/",
-    "hours": "Mon–Fri: 9am–5pm; thrift store hours vary",
+    "hours": "Mon\u2013Fri: 9am\u20135pm; thrift store hours vary",
     "eligibility": "Open to all in need; some emergency assistance programs have income guidelines",
     "intake_process": "Walk in to a service center or call for emergency assistance. Thrift store clothing available without eligibility requirements.",
     "tags": [
@@ -2429,7 +2456,8 @@
       "emergency assistance",
       "shelter",
       "thrift",
-      "crisis"
+      "crisis",
+      "emergency shelter"
     ],
     "description": "Provides emergency food, clothing, disaster relief, shelter, and social services across metro Detroit through multiple locations.",
     "last_verified_date": "2026-04-15"
@@ -2449,7 +2477,7 @@
     "address": "11745 Rosa Parks Blvd, Detroit, MI 48206",
     "phone": "(313) 883-2277",
     "website": "https://www.casscommunity.org",
-    "hours": "Mon–Fri: 9am–5pm; meal programs have additional hours",
+    "hours": "Mon\u2013Fri: 9am\u20135pm; meal programs have additional hours",
     "eligibility": "Open to all individuals in need, especially those experiencing homelessness or extreme poverty",
     "intake_process": "Walk in during business hours for most services. Call for information about housing and case management programs.",
     "tags": [
@@ -2460,7 +2488,8 @@
       "laundry",
       "housing",
       "Detroit",
-      "homelessness"
+      "homelessness",
+      "free clothing"
     ],
     "description": "Comprehensive social services hub offering hot meals, clothing, showers, laundry, housing support, and employment programs in Detroit.",
     "last_verified_date": "2026-04-15"
@@ -2490,7 +2519,9 @@
       "hygiene",
       "recovery",
       "Detroit",
-      "homelessness"
+      "homelessness",
+      "emergency shelter",
+      "crisis"
     ],
     "description": "Provides emergency shelter, hot meals, showers, hygiene supplies, substance use recovery, and job training for individuals in Detroit.",
     "last_verified_date": "2026-04-15"
@@ -2508,7 +2539,7 @@
     "address": "30000 Hiveley St, Inkster, MI 48141",
     "phone": "(734) 728-3400",
     "website": "https://www.starfishfamilyservices.org",
-    "hours": "Mon–Fri: 8am–5pm",
+    "hours": "Mon\u2013Fri: 8am\u20135pm",
     "eligibility": "Families with children from birth through age 18 in Wayne County",
     "intake_process": "Call or visit the website to learn about available programs and begin enrollment.",
     "tags": [
@@ -2536,7 +2567,7 @@
     "address": "13101 Allen Rd, Southgate, MI 48195",
     "phone": "(734) 785-7700",
     "website": "https://www.theguidancecenter.org",
-    "hours": "Mon–Fri: 8am–5pm; crisis line 24/7",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; crisis line 24/7",
     "eligibility": "Children, youth, adults, and families in Downriver Wayne County communities",
     "intake_process": "Call to schedule an intake appointment or speak with a staff member about your needs.",
     "tags": [
@@ -2552,7 +2583,7 @@
   },
   {
     "id": 4023,
-    "name": "SMART – Suburban Mobility Authority for Regional Transportation",
+    "name": "SMART \u2013 Suburban Mobility Authority for Regional Transportation",
     "category": "transportation",
     "categories": [
       "transportation"
@@ -2562,7 +2593,7 @@
     "address": "535 Griswold St, Suite 600, Detroit, MI 48226",
     "phone": "(866) 962-5515",
     "website": "https://www.smartbus.org",
-    "hours": "Bus routes operate daily; Customer service Mon–Fri: 7am–7pm",
+    "hours": "Bus routes operate daily; Customer service Mon\u2013Fri: 7am\u20137pm",
     "eligibility": "Open to all riders; reduced fare programs available for seniors, people with disabilities, and low-income riders",
     "intake_process": "Plan your trip using the website or call customer service. Purchase passes at RideStore locations or online.",
     "tags": [
@@ -2579,7 +2610,7 @@
   },
   {
     "id": 4024,
-    "name": "DDOT – Detroit Department of Transportation",
+    "name": "DDOT \u2013 Detroit Department of Transportation",
     "category": "transportation",
     "categories": [
       "transportation"
@@ -2589,7 +2620,7 @@
     "address": "1301 E. Warren Ave, Detroit, MI 48207",
     "phone": "(313) 933-1300",
     "website": "https://detroitmi.gov/departments/transportation",
-    "hours": "Bus routes operate daily; Customer service Mon–Fri: 8am–5pm",
+    "hours": "Bus routes operate daily; Customer service Mon\u2013Fri: 8am\u20135pm",
     "eligibility": "Open to all riders; reduced fare programs available for seniors, people with disabilities, and youth",
     "intake_process": "Plan routes using the DDOT website. Purchase passes at RideStore locations, online, or through the Token Transit app.",
     "tags": [
@@ -2618,8 +2649,8 @@
     "address": "20651 W. Warren Ave, Dearborn Heights, MI 48127",
     "phone": "(313) 271-3050",
     "website": "https://www.vistamaria.org",
-    "hours": "Mon–Fri: 8am–5pm; residential program is 24/7",
-    "eligibility": "Girls, young women, and LGBTQ+ youth ages 10–25 in need of residential services, crisis intervention, or trauma support",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; residential program is 24/7",
+    "eligibility": "Girls, young women, and LGBTQ+ youth ages 10\u201325 in need of residential services, crisis intervention, or trauma support",
     "intake_process": "Call for intake assessment or crisis placement. Referrals accepted from courts, DHHS, and self-referrals.",
     "tags": [
       "domestic violence",
@@ -2647,7 +2678,7 @@
     "address": "445 Ledyard St, Detroit, MI 48201",
     "phone": "(313) 962-9446",
     "website": "https://www.mariners-inn.org",
-    "hours": "Mon–Fri: 8am–5pm; residential program is 24/7",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; residential program is 24/7",
     "eligibility": "Men 18 and older seeking substance use recovery services and transitional housing in Detroit",
     "intake_process": "Call for an intake appointment or walk in during business hours. Services available to men who are ready to begin recovery.",
     "tags": [
@@ -2675,7 +2706,7 @@
     "address": "37450 Schoolcraft Rd, Livonia, MI 48150",
     "phone": "(734) 953-7760",
     "website": "https://www.hegirahealth.org",
-    "hours": "Mon–Fri: 8am–5pm; crisis services available extended hours",
+    "hours": "Mon\u2013Fri: 8am\u20135pm; crisis services available extended hours",
     "eligibility": "Adults and youth in Wayne, Monroe, and surrounding counties seeking mental health or substance use services",
     "intake_process": "Call to schedule an intake appointment at the nearest location. Walk-ins accepted for crisis services.",
     "tags": [
@@ -2706,7 +2737,7 @@
     "address": "6773 W Maple Rd, West Bloomfield, MI 48322",
     "phone": "(248) 661-6100",
     "website": "https://www.henryford.com/Locations/Maplegrove",
-    "hours": "Mon–Fri 8am–5pm; residential admissions 24/7",
+    "hours": "Mon\u2013Fri 8am\u20135pm; residential admissions 24/7",
     "eligibility": "Adults seeking addiction recovery, detox, and behavioral health support",
     "intake_process": "Call or visit the website for admission requirements and program details",
     "tags": [
@@ -2721,12 +2752,12 @@
       "Oakland",
       "recovery"
     ],
-    "description": "One of Michigan’s most established addiction centers offering full-spectrum care (detox → rehab → aftercare) with a strong medical and psychiatric approach.",
+    "description": "One of Michigan\u2019s most established addiction centers offering full-spectrum care (detox \u2192 rehab \u2192 aftercare) with a strong medical and psychiatric approach.",
     "last_verified_date": "2026-05-04"
   },
   {
     "id": 4030,
-    "name": "Meridian Health Services – Detox & Men's Residential",
+    "name": "Meridian Health Services \u2013 Detox & Men's Residential",
     "category": "rehabilitation",
     "categories": [
       "rehabilitation",
@@ -2737,7 +2768,7 @@
     "address": "1255 N Oakland Blvd, Waterford Township, MI 48327",
     "phone": "(248) 599-8999",
     "website": "https://www.meridian-hs.org/",
-    "hours": "Mon–Fri 8am–5pm; residential program available 24/7",
+    "hours": "Mon\u2013Fri 8am\u20135pm; residential program available 24/7",
     "eligibility": "Men seeking detox and residential addiction treatment",
     "intake_process": "Call for admission details and residential intake",
     "tags": [
@@ -2750,12 +2781,12 @@
       "opioid treatment",
       "recovery"
     ],
-    "description": "Detox and men’s residential addiction care at a community-oriented treatment center serving Oakland County.",
+    "description": "Detox and men\u2019s residential addiction care at a community-oriented treatment center serving Oakland County.",
     "last_verified_date": "2026-05-04"
   },
   {
     "id": 4031,
-    "name": "Meridian Health Services – Women's Residential",
+    "name": "Meridian Health Services \u2013 Women's Residential",
     "category": "rehabilitation",
     "categories": [
       "rehabilitation",
@@ -2766,7 +2797,7 @@
     "address": "1435 N Oakland Blvd, Waterford Township, MI 48327",
     "phone": "(248) 599-8999",
     "website": "https://www.meridian-hs.org/",
-    "hours": "Mon–Fri 8am–5pm; residential program available 24/7",
+    "hours": "Mon\u2013Fri 8am\u20135pm; residential program available 24/7",
     "eligibility": "Women seeking residential addiction treatment",
     "intake_process": "Call for admission details and residential intake",
     "tags": [
@@ -2778,12 +2809,12 @@
       "Oakland",
       "recovery"
     ],
-    "description": "Women’s residential addiction treatment at Meridian Health Services, offering structured recovery and supportive care.",
+    "description": "Women\u2019s residential addiction treatment at Meridian Health Services, offering structured recovery and supportive care.",
     "last_verified_date": "2026-05-04"
   },
   {
     "id": 4032,
-    "name": "Meridian Health Services – Outpatient & MAT",
+    "name": "Meridian Health Services \u2013 Outpatient & MAT",
     "category": "rehabilitation",
     "categories": [
       "rehabilitation",
@@ -2794,7 +2825,7 @@
     "address": "269 Summit Dr, Waterford Township, MI 48327",
     "phone": "(248) 599-8999",
     "website": "https://www.meridian-hs.org/",
-    "hours": "Mon–Fri 8am–5pm",
+    "hours": "Mon\u2013Fri 8am\u20135pm",
     "eligibility": "Individuals seeking outpatient therapy and medication-assisted treatment for opioid use disorder",
     "intake_process": "Call for outpatient intake and MAT enrollment",
     "tags": [
@@ -2856,7 +2887,7 @@
     "address": "5505 Corporate Dr, Troy, MI 48098",
     "phone": "(248) 858-1210",
     "website": "https://www.oaklandchn.org",
-    "hours": "Mon–Fri 8am–5pm",
+    "hours": "Mon\u2013Fri 8am\u20135pm",
     "eligibility": "Oakland County residents seeking publicly funded substance use disorder services",
     "intake_process": "Visit the website or call to access prevention, treatment coordination, and recovery referrals",
     "tags": [
@@ -2886,7 +2917,7 @@
     "address": "43740 N Groesbeck Hwy, Clinton Township, MI 48036",
     "phone": "(855) 996-2264",
     "website": "https://www.mccmh.net",
-    "hours": "Mon–Fri 8am–5pm",
+    "hours": "Mon\u2013Fri 8am\u20135pm",
     "eligibility": "Medicaid, uninsured individuals, and residents seeking substance use support",
     "intake_process": "Call or visit the website to learn about treatment, prevention, and recovery programs",
     "tags": [
@@ -2915,7 +2946,7 @@
     "address": "750 N University Ave, Ann Arbor, MI 48104",
     "phone": "(734) 764-0231",
     "website": "https://medschool.umich.edu/departments/psychiatry/psychiatry-programs/addiction-center",
-    "hours": "Mon–Fri 8am–5pm",
+    "hours": "Mon\u2013Fri 8am\u20135pm",
     "eligibility": "Adults and families seeking academic addiction care and psychiatric treatment",
     "intake_process": "Call or visit the website to schedule an appointment or learn about clinical programs",
     "tags": [
@@ -3031,7 +3062,7 @@
     "address": "Online resource",
     "phone": "1-800-EARLY-ON",
     "website": "https://1800earlyon.org",
-    "hours": "Mon–Fri 8am–5pm; phone support outside business hours may be available",
+    "hours": "Mon\u2013Fri 8am\u20135pm; phone support outside business hours may be available",
     "eligibility": "Children birth to age 3 and their families seeking developmental support",
     "intake_process": "Call or visit the website for a free screening and to connect with local Early On services.",
     "tags": [
@@ -3044,7 +3075,7 @@
       "toddlers",
       "Statewide"
     ],
-    "description": "Free developmental support for children 0–3. If you’re worried about your child’s development, this is free and does not require insurance.",
+    "description": "Free developmental support for children 0\u20133. If you\u2019re worried about your child\u2019s development, this is free and does not require insurance.",
     "last_verified_date": "2026-05-04"
   },
   {
@@ -3156,7 +3187,7 @@
       "health",
       "maternal"
     ],
-    "description": "MIHP is Michigan’s statewide home visiting program for Medicaid-eligible pregnant individuals and infants, providing coordinated in-home services.",
+    "description": "MIHP is Michigan\u2019s statewide home visiting program for Medicaid-eligible pregnant individuals and infants, providing coordinated in-home services.",
     "last_verified_date": "2026-05-04"
   },
   {
@@ -3172,7 +3203,7 @@
     "address": "Royal Oak, Detroit, Warren, MI",
     "phone": "N/A",
     "website": "https://www.judsoncenter.org",
-    "hours": "Mon–Fri 8am–5pm",
+    "hours": "Mon\u2013Fri 8am\u20135pm",
     "eligibility": "Families seeking parenting classes, foster/adoption support, and behavioral health services",
     "intake_process": "Visit the website or call to learn about program availability at local locations.",
     "tags": [
@@ -3258,7 +3289,7 @@
     "address": "21357 Redmond Avenue, Eastpointe, MI 48021",
     "phone": "(586) 445-0440",
     "website": "http://giannahouse.org/programs/community-outreach-center/",
-    "hours": "Mon–Fri 9am–5pm",
+    "hours": "Mon\u2013Fri 9am\u20135pm",
     "eligibility": "Mothers and pregnant people seeking prenatal education, support groups, and baby supplies",
     "intake_process": "Call or visit the website to learn about upcoming support groups, prenatal classes, and community services.",
     "tags": [
@@ -3286,7 +3317,7 @@
     "address": "Online resource",
     "phone": "888-510-5100",
     "website": "https://medsourcellc.com/our-services/patients/",
-    "hours": "Mon–Fri 8am–5pm",
+    "hours": "Mon\u2013Fri 8am\u20135pm",
     "eligibility": "Patients and caregivers seeking medical equipment, durable medical supplies, and infant care products",
     "intake_process": "Call or visit the website to order DME products and learn about delivery options.",
     "tags": [
@@ -3691,7 +3722,7 @@
   },
   {
     "id": 4065,
-    "name": "Michigan Department of Health & Human Services (MDHHS) – Cash & Food Assistance",
+    "name": "Michigan Department of Health & Human Services (MDHHS) \u2013 Cash & Food Assistance",
     "category": "financial",
     "categories": [
       "financial",
@@ -3721,7 +3752,7 @@
   },
   {
     "id": 4066,
-    "name": "WIC – Wayne County",
+    "name": "WIC \u2013 Wayne County",
     "category": "parenting",
     "categories": [
       "parenting",
@@ -3934,7 +3965,7 @@
   },
   {
     "id": 4074,
-    "name": "St. Vincent de Paul – Clothing Assistance",
+    "name": "St. Vincent de Paul \u2013 Clothing Assistance",
     "category": "clothing",
     "categories": [
       "clothing"
