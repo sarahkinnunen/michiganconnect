@@ -332,6 +332,14 @@
       };
     });
 
+    // Crisis/safety needs always appear first
+    var SAFETY_FIRST = { 'crisis': true };
+    planSections.sort(function (a, b) {
+      var aFirst = SAFETY_FIRST[a.need.id] ? 0 : 1;
+      var bFirst = SAFETY_FIRST[b.need.id] ? 0 : 1;
+      return aFirst - bFirst;
+    });
+
     renderOutput(planSections, age, city);
   }
 
@@ -431,7 +439,7 @@
     html += '<div class="planner-plan-header">';
     html += '<div>';
     html += '<h3><i class="bi bi-map-fill" aria-hidden="true"></i> Your Resource Plan</h3>';
-    html += '<p>' + contextLine + ' — <strong>' + totalResources + ' resource' + (totalResources !== 1 ? 's' : '') + '</strong> across ' + planSections.length + ' need' + (planSections.length !== 1 ? 's' : '') + '</p>';
+    html += '<p>' + contextLine + ': <strong>' + totalResources + ' resource' + (totalResources !== 1 ? 's' : '') + '</strong> across ' + planSections.length + ' need' + (planSections.length !== 1 ? 's' : '') + '</p>';
     html += '</div>';
     html += '<button type="button" class="btn btn-outline btn-sm" onclick="window.print()"><i class="bi bi-printer-fill" aria-hidden="true"></i> Print</button>';
     html += '</div>';
