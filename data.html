@@ -216,13 +216,294 @@
       <div class="container">
         <div style="max-width:800px">
           <h2 id="stats-heading">Community Need at a Glance</h2>
-          <p style="color:var(--color-text-muted);margin:1rem 0 2rem">
+          <p style="color:var(--color-text-muted);margin:1rem 0 1.5rem">
             Data from national and state sources illustrating the scope of need in our service communities.
             All statistics are sourced from peer-reviewed research or government agencies.
           </p>
 
+          <!-- Jump navigation -->
+          <nav aria-label="Jump to category statistics" style="margin-bottom:2rem">
+            <div style="display:flex;flex-wrap:wrap;gap:.4rem">
+              <a href="#stat-housing"         style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-house-fill" aria-hidden="true"></i> Housing</a>
+              <a href="#stat-food"            style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-basket-fill" aria-hidden="true"></i> Food</a>
+              <a href="#stat-healthcare"      style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-hospital" aria-hidden="true"></i> Healthcare</a>
+              <a href="#stat-legal"           style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-briefcase-fill" aria-hidden="true"></i> Legal Aid</a>
+              <a href="#stat-crisis"          style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-telephone-plus-fill" aria-hidden="true"></i> Crisis Services</a>
+              <a href="#stat-employment"      style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-person-workspace" aria-hidden="true"></i> Employment</a>
+              <a href="#stat-education"       style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-mortarboard-fill" aria-hidden="true"></i> Education</a>
+              <a href="#stat-trafficking"     style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-shield-exclamation" aria-hidden="true"></i> Human Trafficking</a>
+              <a href="#stat-dv"              style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-heart-pulse-fill" aria-hidden="true"></i> Domestic Violence</a>
+              <a href="#stat-immigration"     style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-globe-americas" aria-hidden="true"></i> Immigration</a>
+              <a href="#stat-clothing"        style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-bag-fill" aria-hidden="true"></i> Clothing</a>
+              <a href="#stat-hygiene"         style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-droplet-fill" aria-hidden="true"></i> Hygiene</a>
+              <a href="#stat-parenting"       style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-people-fill" aria-hidden="true"></i> Parenting</a>
+              <a href="#stat-transportation"  style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-bus-front-fill" aria-hidden="true"></i> Transportation</a>
+              <a href="#stat-rehab"           style="display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;color:var(--color-primary);background:var(--color-accent-bg);border:1px solid var(--color-border);border-radius:999px;padding:.3rem .85rem;font-size:var(--font-size-xs);white-space:nowrap"><i class="bi bi-bandaid-fill" aria-hidden="true"></i> Rehab &amp; Recovery</a>
+            </div>
+          </nav>
+
+          <!-- Housing & Homelessness -->
+          <div id="stat-housing" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-house-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Housing &amp; Homelessness
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>653,100 people</strong> experienced homelessness on a single night in January 2023, the highest count recorded since HUD began tracking in 2007, a 12% increase from 2022.
+              </li>
+              <li>
+                <strong>35,574 unaccompanied youth</strong> under age 25 were counted as experiencing homelessness on that same night. Researchers estimate the true number is far higher, as many youth avoid shelters and are not counted.
+              </li>
+              <li>
+                <strong>More than 40%</strong> of people experiencing homelessness were unsheltered, sleeping outside, in vehicles, or in places not meant for human habitation.
+              </li>
+              <li>
+                <strong>Black Americans</strong> are significantly overrepresented, making up 37% of all people experiencing homelessness while comprising 13% of the general U.S. population.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Source:
+              <a href="https://www.hudexchange.info/homelessness-assistance/ahar/"
+                 target="_blank" rel="noopener noreferrer">
+                HUD 2023 Annual Homeless Assessment Report (AHAR) Part 1
+              </a>
+            </p>
+          </div>
+
+          <!-- Food -->
+          <div id="stat-food" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-basket-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Food Security
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>12.8% of U.S. households</strong>, approximately 44 million people, were food insecure in 2022, meaning they lacked consistent access to enough food for an active, healthy life.
+              </li>
+              <li>
+                <strong>13.5 million children</strong> (17.3% of all children) lived in food-insecure households in 2022, making children one of the most at-risk groups for hunger.
+              </li>
+              <li>
+                <strong>Michigan:</strong> Approximately 12.6% of Michigan residents, over 1.2 million people, face food insecurity, with Wayne County among the counties with the highest rates in the state.
+              </li>
+              <li>
+                <strong>Food insecurity is strongly linked</strong> to housing instability, poor health outcomes, and lower educational attainment, making it both a cause and a consequence of other hardships.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-u-s/"
+                 target="_blank" rel="noopener noreferrer">
+                USDA Economic Research Service, Household Food Security in the United States, 2022
+              </a>;
+              <a href="https://www.feedingamerica.org/hunger-in-america/michigan"
+                 target="_blank" rel="noopener noreferrer">
+                Feeding America, Map the Meal Gap, Michigan
+              </a>
+            </p>
+          </div>
+
+          <!-- Healthcare -->
+          <div id="stat-healthcare" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-hospital" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Healthcare Access
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>25.6 million people</strong> under age 65 were uninsured in the United States in 2022. Young adults are among the most likely to be uninsured of any age group.
+              </li>
+              <li>
+                <strong>57.8 million adults</strong> (22.8%) live with a mental illness. Of those, only about 47% received any mental health treatment in 2021, leaving the majority without care.
+              </li>
+              <li>
+                <strong>41% of U.S. adults</strong> report having medical debt, with lower-income households and people of color disproportionately affected. Medical debt is a leading driver of bankruptcy and financial instability.
+              </li>
+              <li>
+                <strong>Youth experiencing homelessness</strong> face compounded health barriers: high rates of trauma, untreated mental illness, and a near-complete lack of continuity of care.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.census.gov/topics/health/health-insurance.html"
+                 target="_blank" rel="noopener noreferrer">
+                U.S. Census Bureau, Health Insurance Coverage
+              </a>;
+              <a href="https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health"
+                 target="_blank" rel="noopener noreferrer">
+                SAMHSA, National Survey on Drug Use and Health (NSDUH) 2021
+              </a>;
+              <a href="https://www.kff.org/health-costs/poll-finding/kff-health-care-debt-survey/"
+                 target="_blank" rel="noopener noreferrer">
+                KFF Health Care Debt Survey, 2022
+              </a>
+            </p>
+          </div>
+
+          <!-- Legal Aid -->
+          <div id="stat-legal" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-briefcase-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Legal Aid
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>92% of the civil legal problems</strong> faced by low-income Americans receive inadequate or no legal help, according to the Legal Services Corporation's 2022 Justice Gap Report.
+              </li>
+              <li>
+                <strong>Low-income Americans experience</strong> an average of 1.4 civil legal problems per year, issues like eviction, domestic violence, child custody, and benefits denials, but most never connect with an attorney.
+              </li>
+              <li>
+                <strong>Only 20%</strong> of low-income Americans with a civil legal problem seek help from an attorney or legal aid organization, often due to lack of awareness, cost, or fear.
+              </li>
+              <li>
+                <strong>Legal aid is a poverty-prevention tool:</strong> Stable housing, protection from exploitation, and access to benefits all hinge on legal rights that unrepresented people cannot effectively assert.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Source:
+              <a href="https://justicegap.lsc.gov/"
+                 target="_blank" rel="noopener noreferrer">
+                Legal Services Corporation, The Justice Gap: The Unmet Civil Legal Needs of Low-Income Americans (2022)
+              </a>
+            </p>
+          </div>
+
+          <!-- Crisis Services -->
+          <div id="stat-crisis" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-telephone-plus-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Crisis Services
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>49,449 people</strong> died by suicide in the United States in 2022. Suicide is the second leading cause of death for people aged 10–34.
+              </li>
+              <li>
+                <strong>12.3 million adults</strong> reported having serious thoughts of suicide in 2021, while 3.5 million made a plan and 1.7 million attempted suicide.
+              </li>
+              <li>
+                <strong>LGBTQ+ youth</strong> are at significantly elevated risk: 41% of LGBTQ+ youth seriously considered suicide in the past year, with transgender and nonbinary youth facing the highest rates (Trevor Project, 2023).
+              </li>
+              <li>
+                <strong>The 988 Suicide &amp; Crisis Lifeline</strong> launched in July 2022 and saw call volume increase by more than 57% in its first year. If you or someone you know is in crisis, call or text <strong>988</strong>.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.cdc.gov/suicide/index.html"
+                 target="_blank" rel="noopener noreferrer">
+                CDC, Suicide Data and Statistics (2022)
+              </a>;
+              <a href="https://www.samhsa.gov/find-help/988"
+                 target="_blank" rel="noopener noreferrer">
+                SAMHSA, 988 Suicide &amp; Crisis Lifeline
+              </a>;
+              <a href="https://www.thetrevorproject.org/survey-2023/"
+                 target="_blank" rel="noopener noreferrer">
+                The Trevor Project, 2023 National Survey on LGBTQ+ Youth Mental Health
+              </a>
+            </p>
+          </div>
+
+          <!-- Employment -->
+          <div id="stat-employment" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-person-workspace" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Employment
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>Approximately 4.3 million young people</strong> aged 16–24 were "opportunity youth" in 2022, neither enrolled in school nor participating in the workforce, limiting their long-term economic stability.
+              </li>
+              <li>
+                <strong>Youth unemployment</strong> (ages 16–24) consistently runs at roughly twice the overall adult unemployment rate, and far higher for Black and Hispanic youth and those without a high school diploma.
+              </li>
+              <li>
+                <strong>Young people experiencing homelessness</strong> face compounding employment barriers: lack of a stable address, gaps in work history, limited references, and transportation challenges all make securing and keeping a job harder.
+              </li>
+              <li>
+                <strong>Youth who age out of foster care</strong> experience unemployment at much higher rates than their peers, with many struggling to find living-wage work without family financial support or professional networks.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.bls.gov/yth/"
+                 target="_blank" rel="noopener noreferrer">
+                U.S. Bureau of Labor Statistics, Youth Labor Force Statistics
+              </a>;
+              <a href="https://www.aecf.org/topics/disconnected-youth"
+                 target="_blank" rel="noopener noreferrer">
+                Annie E. Casey Foundation, Disconnected Youth Data
+              </a>
+            </p>
+          </div>
+
+          <!-- Education -->
+          <div id="stat-education" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-mortarboard-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Education
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>1.5 million students</strong> were identified as experiencing homelessness in U.S. public schools during the 2021–22 school year under the McKinney-Vento Homeless Assistance Act.
+              </li>
+              <li>
+                <strong>Graduation gap:</strong> Students experiencing homelessness graduate at approximately 64%, compared to 86.5% for all students, a gap of more than 20 percentage points.
+              </li>
+              <li>
+                <strong>About 75%</strong> of students experiencing homelessness are "doubled up, " temporarily living with friends or relatives. This makes them harder to identify and connect with school-based supports.
+              </li>
+              <li>
+                <strong>Housing instability disrupts learning</strong> through frequent school changes, chronic absenteeism, and lack of a stable place to study, compounding long-term economic and social instability.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Source:
+              <a href="https://nche.ed.gov/data-and-stats/"
+                 target="_blank" rel="noopener noreferrer">
+                National Center for Homeless Education (NCHE), 2021–22 Federal Data Summary
+              </a>
+            </p>
+          </div>
+
+          <!-- Human Trafficking -->
+          <div id="stat-trafficking" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-shield-exclamation" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Human Trafficking
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>9,917 potential trafficking victims</strong> were identified through the National Human Trafficking Hotline in 2022. Michigan consistently ranks among the top 10 states for trafficking reports due to its major highways and border proximity.
+              </li>
+              <li>
+                <strong>1 in 6 endangered runaways</strong> reported to the National Center for Missing &amp; Exploited Children are estimated to be victims of child sex trafficking, and young people experiencing homelessness are disproportionately targeted.
+              </li>
+              <li>
+                <strong>Labor trafficking</strong> affects agricultural workers, domestic workers, and people in service industries, and often goes unreported due to fear, language barriers, or lack of immigration status.
+              </li>
+              <li>
+                <strong>Traffickers target vulnerability:</strong> Housing instability, poverty, prior trauma, and LGBTQ+ identity are all documented risk factors. Stable housing and trusted adult relationships are among the strongest protective factors.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://polarisproject.org/human-trafficking/national-human-trafficking-hotline/"
+                 target="_blank" rel="noopener noreferrer">
+                Polaris Project, National Human Trafficking Hotline 2022 Data
+              </a>;
+              <a href="https://www.missingkids.org/theissues/trafficking"
+                 target="_blank" rel="noopener noreferrer">
+                National Center for Missing &amp; Exploited Children
+              </a>
+            </p>
+          </div>
+
           <!-- Domestic Violence -->
-          <div class="info-card" style="margin-bottom:1.5rem">
+          <div id="stat-dv" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
             <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
               <i class="bi bi-heart-pulse-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
               Domestic Violence
@@ -256,6 +537,200 @@
               <a href="https://www.cdc.gov/nisvs/media/pdfs/intimatepartnerviolence-brief.pdf"
                  target="_blank" rel="noopener noreferrer">
                 CDC National Intimate Partner and Sexual Violence Survey (NISVS), 2023/2024 Data Brief
+              </a>
+            </p>
+          </div>
+
+          <!-- Immigration -->
+          <div id="stat-immigration" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-globe-americas" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Immigration
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>Over 44 million immigrants</strong> live in the United States. Michigan is home to approximately 700,000 immigrants, about 7% of the state's population, with Wayne County among the most diverse counties in the Midwest.
+              </li>
+              <li>
+                <strong>Fear of deportation is a documented barrier</strong> to seeking healthcare, food assistance, housing services, and legal help, even for those with legal status or U.S.-born children.
+              </li>
+              <li>
+                <strong>5.3 million U.S.-born children</strong> live in mixed-status households where at least one parent is undocumented, creating fear and instability that affects education, health, and housing access.
+              </li>
+              <li>
+                <strong>Language access</strong> is a critical equity issue: limited English proficiency can bar individuals from navigating systems of care, understanding legal rights, and accessing services they are entitled to.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.migrationpolicy.org/data/state-profiles/state/demographics/MI"
+                 target="_blank" rel="noopener noreferrer">
+                Migration Policy Institute, Michigan Immigration Data Profile
+              </a>;
+              <a href="https://www.americanimmigrationcouncil.org/research/immigrants-in-michigan"
+                 target="_blank" rel="noopener noreferrer">
+                American Immigration Council, Immigrants in Michigan
+              </a>
+            </p>
+          </div>
+
+          <!-- Clothing -->
+          <div id="stat-clothing" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-bag-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Clothing
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>37.9 million Americans</strong> lived in poverty in 2022 (Census Bureau), and clothing is one of the first needs to go unmet when families face financial hardship, often sacrificed in favor of food, rent, or utilities.
+              </li>
+              <li>
+                <strong>Appropriate clothing affects employment and education:</strong> Lacking weather-appropriate or professional attire is a documented barrier to job interviews, school attendance, and participation in structured programs.
+              </li>
+              <li>
+                <strong>Children in poverty</strong> are disproportionately affected by clothing insecurity, which can lead to social stigma, reduced school engagement, and worsened mental health outcomes.
+              </li>
+              <li>
+                <strong>People experiencing homelessness</strong> have acute clothing needs, including weather protection and clean, professional attire, that are rarely addressed by emergency shelters alone.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Source:
+              <a href="https://www.census.gov/topics/income-poverty/poverty.html"
+                 target="_blank" rel="noopener noreferrer">
+                U.S. Census Bureau, Poverty in the United States, 2022
+              </a>
+            </p>
+          </div>
+
+          <!-- Hygiene -->
+          <div id="stat-hygiene" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-droplet-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Hygiene
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>Hygiene insecurity</strong>, lacking reliable access to soap, toothbrushes, menstrual products, and other basic supplies, is widespread among low-income households but is not systematically tracked at the national level, leaving this need largely invisible in data systems.
+              </li>
+              <li>
+                <strong>People experiencing homelessness</strong> consistently cite hygiene access as a top daily barrier, affecting their ability to secure employment, maintain health, and engage with services.
+              </li>
+              <li>
+                <strong>Menstrual product insecurity</strong> affects students and adults alike: research shows that many low-income individuals miss school or work due to lack of period supplies, with youth experiencing homelessness at particular risk.
+              </li>
+              <li>
+                <strong>Hygiene is a social determinant of health:</strong> Without clean water, soap, and sanitation access, infectious disease risk rises sharply, a reality for many residents in overcrowded or unstable housing.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.cdc.gov/hygiene/index.html"
+                 target="_blank" rel="noopener noreferrer">
+                CDC, Hygiene and Health
+              </a>;
+              <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6705543/"
+                 target="_blank" rel="noopener noreferrer">
+                NIH/NCBI, Period Poverty and School Attendance (2019)
+              </a>
+            </p>
+          </div>
+
+          <!-- Parenting -->
+          <div id="stat-parenting" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-people-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Parenting
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>13.5 per 1,000</strong> females aged 15–19 gave birth in 2022 (CDC). Teen parents, both mothers and fathers, face dramatically elevated rates of poverty, school dropout, and housing instability.
+              </li>
+              <li>
+                <strong>38.1% of children</strong> in single-mother households live in poverty, compared to 7.5% in married-couple families (Census Bureau, 2022), underscoring the economic vulnerability young parents face without support systems.
+              </li>
+              <li>
+                <strong>Young parents who have experienced foster care</strong> are at significantly elevated risk for child welfare involvement themselves, creating cycles of family separation that targeted parenting support can help break.
+              </li>
+              <li>
+                <strong>Access to parenting resources</strong>, including childcare, diaper assistance, parenting classes, and income support, is strongly associated with improved outcomes for both young parents and their children.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.cdc.gov/teen-pregnancy/data/index.html"
+                 target="_blank" rel="noopener noreferrer">
+                CDC, Teen Pregnancy Data and Statistics (2022)
+              </a>;
+              <a href="https://www.census.gov/topics/income-poverty/poverty.html"
+                 target="_blank" rel="noopener noreferrer">
+                U.S. Census Bureau, Poverty in the United States, 2022
+              </a>
+            </p>
+          </div>
+
+          <!-- Transportation -->
+          <div id="stat-transportation" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-bus-front-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Transportation Access
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>Nearly 1 in 10 U.S. households</strong> has no vehicle available. In the city of Detroit, approximately 1 in 4 households lacks access to a personal vehicle, well above the national average.
+              </li>
+              <li>
+                <strong>Transportation is among the most common unmet social needs</strong> identified in healthcare settings, affecting a person's ability to attend medical appointments, access social services, and maintain employment.
+              </li>
+              <li>
+                <strong>People without reliable transportation</strong> are more likely to delay or forgo medical care, experience food insecurity, and lose employment, compounding other forms of instability.
+              </li>
+              <li>
+                <strong>Rural communities</strong> in Monroe County face additional barriers, with limited public transit options requiring long travel distances to reach essential services.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.census.gov/programs-surveys/acs"
+                 target="_blank" rel="noopener noreferrer">
+                U.S. Census Bureau, American Community Survey (ACS) 5-Year Estimates
+              </a>;
+              <a href="https://www.cdc.gov/about/sdoh/index.html"
+                 target="_blank" rel="noopener noreferrer">
+                CDC, Social Determinants of Health
+              </a>
+            </p>
+          </div>
+
+          <!-- Rehab & Recovery -->
+          <div id="stat-rehab" class="info-card" style="margin-bottom:1.5rem;scroll-margin-top:80px">
+            <h3 style="margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="bi bi-bandaid-fill" style="color:var(--color-accent)" aria-hidden="true"></i>
+              Rehab &amp; Recovery
+            </h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:.85rem;font-size:var(--font-size-sm)">
+              <li>
+                <strong>46.8 million Americans aged 12 or older</strong> had a substance use disorder in 2021, about 1 in 6 people. Alcohol and drug use disorders affect every demographic, but young adults 18–25 have the highest rates of any age group.
+              </li>
+              <li>
+                <strong>Only about 10%</strong> of people with a substance use disorder receive any specialty addiction treatment, leaving the vast majority without access to evidence-based care.
+              </li>
+              <li>
+                <strong>Approximately 107,941 people</strong> died from drug overdoses in the United States in 2022, more than any prior year on record. Synthetic opioids, primarily fentanyl, drove the majority of deaths.
+              </li>
+              <li>
+                <strong>Recovery is possible with support:</strong> Access to medication-assisted treatment (MAT), peer support specialists, stable housing, and employment significantly improves long-term recovery outcomes.
+              </li>
+            </ul>
+            <p style="margin-top:1rem;font-size:var(--font-size-xs);color:var(--color-text-muted)">
+              Sources:
+              <a href="https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health"
+                 target="_blank" rel="noopener noreferrer">
+                SAMHSA, National Survey on Drug Use and Health (NSDUH) 2021
+              </a>;
+              <a href="https://www.cdc.gov/drugoverdose/deaths/index.html"
+                 target="_blank" rel="noopener noreferrer">
+                CDC, Drug Overdose Deaths in the United States, 2022
               </a>
             </p>
           </div>
