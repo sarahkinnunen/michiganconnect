@@ -5,7 +5,8 @@
  *  1. Fetch resources.json once
  *  2. Build a pre-computed lowercase search index per resource
  *  3. On each keystroke / filter change, run lightweight scoring and re-render
- *     (search input is debounced; filter dropdowns fire immediately)
+ *     (search input debounced 200 ms; chip clicks respond immediately)
+ *  4. Multi-select filters: OR within a group, AND across groups
  *
  * No third-party dependencies – pure vanilla JS.
  */
@@ -14,200 +15,304 @@
   'use strict';
 
   /* ── State ──────────────────────────────────────────────── */
-  let allResources = [];  // raw data from JSON, augmented with ._idx
-  let filteredResources = [];  // current filtered/searched subset
-  let debounceTimer = null;
+  let allResources      = [];
+  let filteredResources = [];
+  let debounceTimer     = null;
 
+  // Active filter sets – OR within group, AND across groups
+  const activeCats     = new Set();
+  const activeCounties = new Set();
+  const activeCities   = new Set();
+  const activeTags     = new Set();
+
+  /* ── Synonym map ─────────────────────────────────────────── */
   const QUERY_SYNONYMS = {
-    shelter: ['housing', 'emergency shelter', 'sleep', 'sleeping', 'camp'],
-    housing: ['shelter', 'emergency shelter', 'housing support'],
-    clothes: ['clothing', 'apparel', 'outfit', 'wardrobe', 'shoes'],
-    clothing: ['clothes', 'apparel', 'outfit', 'wardrobe', 'shoes'],
-    toothpaste: ['hygiene', 'oral', 'dental', 'toothbrush', 'tooth brush'],
-    toothbrush: ['toothpaste', 'hygiene', 'oral', 'dental'],
-    dentist: ['dental', 'oral health', 'tooth', 'tooth care'],
-    dental: ['dentist', 'oral health', 'tooth', 'tooth care'],
-    advocate: ['advocacy', 'legal', 'immigration', 'immigrant'],
-    advocates: ['advocacy', 'legal', 'immigration', 'immigrant'],
-    advocacy: ['advocate', 'legal aid', 'immigration', 'immigrant'],
-    baby: ['formula', 'infant', 'feeding', 'parenting'],
-    formula: ['baby', 'infant', 'feeding', 'parenting'],
-    soap: ['hygiene', 'shower', 'bath'],
-    shampoo: ['hygiene', 'hair care'],
-    diapers: ['baby', 'parenting', 'infant', 'hygiene', 'formula', 'cloth'],
-    wic: ['nutrition', 'baby', 'pregnancy', 'parenting', 'food'],
-    pregnancy: ['prenatal', 'baby', 'parenting', 'maternal', 'WIC'],
-    maternal: ['pregnancy', 'prenatal', 'baby', 'parenting', 'home visiting'],
-    doula: ['birth support', 'labor support', 'postpartum', 'pregnancy', 'parenting'],
-    'women': ['health', 'reproductive', 'family planning', 'OB-GYN', 'abortion'],
-    'women\'s': ['health', 'reproductive', 'family planning', 'OB-GYN', 'abortion'],
-    'ob-gyn': ['women', 'health', 'reproductive', 'pregnancy', 'pap smear'],
-    obgyn: ['women', 'health', 'reproductive', 'pregnancy', 'pap smear'],
-    family: ['planning', 'support', 'health', 'parenting'],
+    shelter:       ['housing', 'emergency shelter', 'sleep', 'sleeping', 'camp'],
+    housing:       ['shelter', 'emergency shelter', 'housing support'],
+    clothes:       ['clothing', 'apparel', 'outfit', 'wardrobe', 'shoes'],
+    clothing:      ['clothes', 'apparel', 'outfit', 'wardrobe', 'shoes'],
+    toothpaste:    ['hygiene', 'oral', 'dental', 'toothbrush'],
+    toothbrush:    ['toothpaste', 'hygiene', 'oral', 'dental'],
+    teeth:         ['dental', 'tooth', 'oral health', 'dentist', 'toothache'],
+    tooth:         ['dental', 'teeth', 'oral health', 'dentist'],
+    gum:           ['dental', 'teeth', 'oral health'],
+    dentist:       ['dental', 'oral health', 'tooth', 'teeth'],
+    dental:        ['dentist', 'oral health', 'tooth', 'teeth'],
+    advocate:      ['advocacy', 'legal', 'immigration', 'immigrant'],
+    advocates:     ['advocacy', 'legal', 'immigration', 'immigrant'],
+    advocacy:      ['advocate', 'legal aid', 'immigration', 'immigrant'],
+    baby:          ['formula', 'infant', 'feeding', 'parenting'],
+    formula:       ['baby', 'infant', 'feeding', 'parenting'],
+    soap:          ['hygiene', 'shower', 'bath'],
+    shampoo:       ['hygiene', 'hair care'],
+    diapers:       ['baby', 'parenting', 'infant', 'hygiene', 'formula'],
+    wic:           ['nutrition', 'baby', 'pregnancy', 'parenting', 'food'],
+    pregnancy:     ['prenatal', 'baby', 'parenting', 'maternal', 'wic'],
+    pregnant:      ['pregnancy', 'prenatal', 'parenting', 'maternal', 'wic'],
+    prenatal:      ['pregnancy', 'maternal', 'baby', 'parenting', 'health'],
+    maternal:      ['pregnancy', 'prenatal', 'baby', 'parenting'],
+    doula:         ['birth support', 'postpartum', 'pregnancy', 'parenting'],
+    women:         ['health', 'reproductive', 'family planning'],
+    'ob-gyn':      ['women', 'health', 'reproductive', 'pregnancy'],
+    obgyn:         ['women', 'health', 'reproductive', 'pregnancy'],
+    family:        ['planning', 'support', 'health', 'parenting'],
     'family planning': ['contraception', 'reproductive', 'pregnancy', 'health'],
-    abortion: ['reproductive', 'women', 'pregnancy', 'health'],
-    hiv: ['aids', 'HIV/AIDS', 'testing', 'prevention', 'sexual health'],
-    aids: ['hiv', 'HIV/AIDS', 'testing', 'prevention', 'sexual health'],
-    'HIV/AIDS': ['hiv', 'aids', 'testing', 'prevention', 'sexual health'],
-    veterans: ['VA', 'women veterans', 'health care', 'military'],
-    veteran: ['VA', 'women veterans', 'health care', 'military'],
-    telehealth: ['virtual care', 'online care', 'remote care', 'telemedicine'],
-    medicaid: ['health insurance', 'WIC', 'sliding scale', 'care'],
-    clinic: ['health', 'medical', 'primary care', 'specialty'],
-    childcare: ['child care', 'preschool', 'early childhood', 'parenting', 'education'],
-    preschool: ['childcare', 'child care', 'early childhood', 'education'],
-    'child care': ['childcare', 'preschool', 'early childhood', 'parenting'],
+    abortion:      ['reproductive', 'women', 'pregnancy', 'health'],
+    hiv:           ['aids', 'testing', 'prevention', 'sexual health'],
+    aids:          ['hiv', 'testing', 'prevention', 'sexual health'],
+    veterans:      ['va', 'health care', 'military'],
+    veteran:       ['va', 'health care', 'military'],
+    telehealth:    ['virtual care', 'online care', 'telemedicine'],
+    medicaid:      ['health insurance', 'wic', 'sliding scale'],
+    clinic:        ['health', 'medical', 'primary care'],
+    childcare:     ['child care', 'preschool', 'early childhood', 'parenting', 'education', 'daycare'],
+    preschool:     ['childcare', 'child care', 'early childhood', 'education'],
+    'child care':  ['childcare', 'preschool', 'early childhood', 'parenting'],
     'home visiting': ['parenting', 'pregnancy', 'maternal', 'health'],
-    rent: ['housing', 'eviction', 'shelter'],
-    eviction: ['housing', 'rent', 'homelessness'],
-    rehab: ['recovery', 'detox', 'treatment', 'substance use', 'addiction'],
-    detox: ['withdrawal', 'rehab', 'detoxification', 'recovery', 'treatment'],
-    outpatient: ['treatment', 'therapy', 'rehab', 'recovery'],
-    inpatient: ['residential', 'rehab', 'treatment', 'detox'],
-    mat: ['medication-assisted treatment', 'suboxone', 'methadone', 'buprenorphine', 'opioid treatment'],
-    addiction: ['substance use', 'rehab', 'detox', 'recovery', 'treatment'],
-    substance: ['addiction', 'rehab', 'detox', 'treatment'],
-    directory: ['legal', 'immigration', 'advocacy', 'resources'],
-    nonprofit: ['legal', 'immigration', 'advocacy', 'directory', 'resources'],
-    financial: ['money', 'cash', 'aid', 'assistance', 'benefits'],
-    childcare: ['child care', 'preschool', 'early childhood', 'daycare'],
-    parenting: ['family', 'children', 'kids', 'baby'],
-    transportation_assistance: ['transportation', 'bus', 'fare', 'rides'],
-    disability: ['disabled', 'handicap', 'accessibility'],
-    senior_services: ['seniors', 'elderly', 'aging', 'older adults']
+    rent:          ['housing', 'eviction', 'shelter'],
+    eviction:      ['housing', 'rent', 'homelessness'],
+    rehab:         ['recovery', 'detox', 'treatment', 'substance use', 'addiction'],
+    detox:         ['withdrawal', 'rehab', 'recovery', 'treatment'],
+    outpatient:    ['treatment', 'therapy', 'rehab', 'recovery'],
+    inpatient:     ['residential', 'rehab', 'treatment', 'detox'],
+    mat:           ['suboxone', 'methadone', 'buprenorphine', 'opioid treatment'],
+    addiction:     ['substance use', 'rehab', 'detox', 'recovery', 'treatment'],
+    substance:     ['addiction', 'rehab', 'detox', 'treatment'],
+    alcohol:       ['substance use', 'addiction', 'rehab', 'recovery', 'sobriety', 'aa'],
+    heroin:        ['opioid', 'substance use', 'addiction', 'rehab', 'recovery', 'mat'],
+    heroine:       ['heroin', 'opioid', 'substance use', 'addiction', 'rehab'],
+    meth:          ['methamphetamine', 'substance use', 'addiction', 'rehab'],
+    opioid:        ['heroin', 'fentanyl', 'mat', 'suboxone', 'addiction', 'recovery'],
+    fentanyl:      ['opioid', 'substance use', 'addiction', 'narcan', 'overdose'],
+    narcan:        ['naloxone', 'overdose', 'opioid', 'harm reduction'],
+    naloxone:      ['narcan', 'overdose', 'opioid', 'harm reduction'],
+    mental:        ['mental health', 'therapy', 'counseling', 'health'],
+    therapy:       ['counseling', 'mental health', 'behavioral health', 'therapist'],
+    counseling:    ['therapy', 'mental health', 'behavioral health'],
+    depression:    ['mental health', 'therapy', 'counseling', 'crisis'],
+    anxiety:       ['mental health', 'therapy', 'counseling'],
+    ptsd:          ['trauma', 'mental health', 'therapy'],
+    directory:     ['legal', 'immigration', 'advocacy', 'resources'],
+    financial:     ['money', 'cash', 'aid', 'assistance', 'benefits'],
+    parenting:     ['family', 'children', 'kids', 'baby'],
+    car:           ['transportation', 'bus', 'rides', 'vehicle'],
+    bus:           ['transportation', 'transit', 'ddot', 'smart bus'],
+    transportation: ['bus', 'rides', 'car', 'transit'],
+    disability:    ['disabled', 'handicap', 'accessibility'],
+    senior_services: ['seniors', 'elderly', 'aging', 'older adults'],
+    // Immigration / documents
+    documents:     ['immigration', 'legal', 'identification', 'undocumented'],
+    document:      ['immigration', 'legal', 'identification'],
+    'birth certificate': ['legal', 'vital records', 'identification', 'immigration'],
+    'social security': ['legal', 'identification', 'benefits'],
+    id:            ['identification', 'legal', 'immigration'],
+    ice:           ['immigration', 'deportation', 'undocumented', 'removal'],
+    deportation:   ['immigration', 'undocumented', 'ice', 'removal', 'asylum'],
+    immigration:   ['immigrant', 'undocumented', 'legal', 'asylum', 'daca'],
+    immigrant:     ['immigration', 'undocumented', 'legal', 'asylum'],
+    undocumented:  ['immigration', 'legal', 'asylum', 'daca', 'documents'],
+    asylum:        ['immigration', 'refugee', 'legal', 'undocumented'],
+    daca:          ['immigration', 'dreamer', 'undocumented', 'legal'],
+    refugee:       ['immigration', 'asylum', 'legal'],
+    // Housing / shelter barriers
+    waitlist:      ['housing', 'shelter', 'section 8', 'rapid rehousing'],
+    homeless:      ['housing', 'shelter', 'emergency housing'],
+    // Safety
+    abuse:         ['domestic violence', 'crisis', 'shelter', 'safety'],
+    violence:      ['domestic violence', 'crisis', 'shelter', 'safety'],
+    trafficking:   ['human trafficking', 'crisis', 'exploitation'],
   };
 
+  /* ── Translated query normalization ─────────────────────── */
   const TRANSLATED_QUERY_PATTERNS = [
-    { pattern: /\b(no\s+tengo\s+comida|no\s+hay\s+comida|sin\s+comida|sin\s+alimentos|no\s+tengo\s+alimentos)\b/g, replacement: 'no food' },
-    { pattern: /\b(comida|alimentos|hambre|hambriento|hambrienta)\b/g, replacement: 'food' },
-    { pattern: /\b(vivienda|casa|hogar|alojamiento|alquiler|alquilar|sin\s+hogar|sin\s+casa|sin\s+vivienda)\b/g, replacement: 'housing' },
-    { pattern: /\b(dinero|efectivo|crédito|credito|banco|ayuda\s+financiera|asistencia\s+financiera|subsidio|beneficios|pago|pagos|cuentas)\b/g, replacement: 'financial' },
-    { pattern: /\b(transporte|autobús|autobus|bus|taxi|vehículo|vehiculo|uber|lyft|tren|metro)\b/g, replacement: 'transportation' },
-    { pattern: /\b(discapacidad|discapacitado|discapacitada|accesibilidad)\b/g, replacement: 'disability' },
-    { pattern: /\b(anciano|anciana|mayor|mayores|adultos\s+mayores|senior|jubilado|jubilar)\b/g, replacement: 'senior_services' },
-    { pattern: /(食物|食品|饥饿|饿|没有食物|没吃)/g, replacement: 'food' },
-    { pattern: /(住房|房子|家|无家可归|没有家)/g, replacement: 'housing' },
-    { pattern: /(钱|金钱|资金|经济|贫困|财务|补助|没有钱|没钱)/g, replacement: 'financial' },
-    { pattern: /(交通|公交|出租车|火车|地铁|巴士|车辆)/g, replacement: 'transportation' },
-    { pattern: /(残疾|残障|无障碍)/g, replacement: 'disability' },
-    { pattern: /(老人|老年|退休|老年人)/g, replacement: 'senior_services' },
-    { pattern: /(孩子|儿童|父母|养育|家庭)/g, replacement: 'parenting' },
-    { pattern: /(计划生育|避孕|怀孕|产前)/g, replacement: 'family planning' },
-    { pattern: /(远程|远程医疗|线上医疗)/g, replacement: 'telehealth' },
-    { pattern: /(健康|医生|医院|诊所|医疗|医药)/g, replacement: 'health' },
-    { pattern: /(家暴|暴力|虐待)/g, replacement: 'domestic-violence' },
-    { pattern: /(没有钱|没钱|没有资金)/g, replacement: 'no money' },
-    { pattern: /(طعام|جوع|جائع)/g, replacement: 'food' },
-    { pattern: /(سكن|منزل|بيت|مأوى|بلا مأوى)/g, replacement: 'housing' },
-    { pattern: /(مال|نقود|مالية|مساعدة مالية|دعم مالي)/g, replacement: 'financial' },
-    { pattern: /(مواصلات|تاكسي|حافلة|قطار|مترو)/g, replacement: 'transportation' },
-    { pattern: /(إعاقة|معاق|وصول)/g, replacement: 'disability' },
-    { pattern: /(كبار السن|مسن|شيخوخة)/g, replacement: 'senior_services' },
-    { pattern: /(أسرة|أطفال|طفل|أم|أب|رعاية أطفال|تربية)/g, replacement: 'parenting' },
-    { pattern: /(تنظيم الأسرة|منع الحمل|حمل)/g, replacement: 'family planning' },
-    { pattern: /(الطب عن بعد|استشارة عن بعد|الرعاية عن بعد)/g, replacement: 'telehealth' },
-    { pattern: /(الإيدز|فيروس نقص المناعة|hiv)/g, replacement: 'hiv' },
-    { pattern: /(صحة|طبيب|مستشفى|عيادة)/g, replacement: 'health' },
-    { pattern: /(عنف منزلي|عنف أسري|اعتداء)/g, replacement: 'domestic-violence' },
-    { pattern: /(ليس لدي نقود|لا يوجد مال|لا مال|ما عندي فلوس)/g, replacement: 'no money' },
+    { pattern: /\b(no\s+tengo\s+comida|sin\s+comida|sin\s+alimentos)\b/g, replacement: 'no food' },
+    { pattern: /\b(comida|alimentos|hambre|hambriento|hambrienta)\b/g,    replacement: 'food' },
+    { pattern: /\b(vivienda|sin\s+hogar|sin\s+casa|alquiler|alojamiento)\b/g, replacement: 'housing' },
+    { pattern: /\b(transporte|autob[uú]s|taxi|veh[ií]culo)\b/g,          replacement: 'transportation' },
+    { pattern: /\b(discapacidad|discapacitad[oa]|accesibilidad)\b/g,      replacement: 'disability' },
+    { pattern: /\b(ancian[oa]|adultos\s+mayores|jubilad[oa])\b/g,         replacement: 'senior_services' },
+    { pattern: /\b(sin\s+trabajo|busco\s+trabajo|desempleo|desemplead[oa])\b/g, replacement: 'unemployed' },
+    { pattern: /\b(no\s+tengo\s+papeles|soy\s+indocumentad[oa]|deportaci[oó]n)\b/g, replacement: 'undocumented deportation' },
+    { pattern: /\b(dinero|efectivo|ayuda\s+financiera|beneficios)\b/g,    replacement: 'financial' },
+    { pattern: /(食物|食品|饥饿|饿|没有食物|没吃)/g,                      replacement: 'food' },
+    { pattern: /(住房|房子|无家可归|没有家|没地方住)/g,                    replacement: 'housing' },
+    { pattern: /(没有工作|找工作|失业)/g,                                  replacement: 'unemployed' },
+    { pattern: /(交通|公交|出租车|火车|地铁|巴士)/g,                       replacement: 'transportation' },
+    { pattern: /(健康|医生|医院|诊所|医疗)/g,                              replacement: 'health' },
+    { pattern: /(孩子|儿童|父母|养育|家庭)/g,                              replacement: 'parenting' },
+    { pattern: /(家暴|暴力|虐待)/g,                                        replacement: 'domestic-violence' },
+    { pattern: /(没有钱|没钱)/g,                                           replacement: 'no money' },
+    { pattern: /(طعام|جوع|جائع)/g,                                        replacement: 'food' },
+    { pattern: /(سكن|منزل|بيت|مأوى|بلا\s+مأوى)/g,                       replacement: 'housing' },
+    { pattern: /(مواصلات|تاكسي|حافلة|قطار|مترو)/g,                       replacement: 'transportation' },
+    { pattern: /(صحة|طبيب|مستشفى|عيادة)/g,                               replacement: 'health' },
+    { pattern: /(أسرة|أطفال|طفل|أم|أب)/g,                                replacement: 'parenting' },
+    { pattern: /(عنف\s+منزلي|عنف\s+أسري)/g,                              replacement: 'domestic-violence' },
+    { pattern: /(ليس\s+لدي\s+نقود|لا\s+يوجد\s+مال)/g,                   replacement: 'no money' },
   ];
 
+  // Strip "I need / looking for / where can I find" filler prefixes
+  const NL_PREFIX_RE = /^(i('m| am)?\s+)?(looking for|need help (with|for|finding|getting)|need|want(ing)?|trying to (find|get)|where (can i (find|get)|do i (find|get))|how (do i|can i) (get|find)|help (with|for|me find|me get))\s+/i;
+
   function normalizeQuery(rawQuery) {
-    let normalized = String(rawQuery || '').toLowerCase();
-    TRANSLATED_QUERY_PATTERNS.forEach(function (entry) {
-      normalized = normalized.replace(entry.pattern, entry.replacement);
+    let q = String(rawQuery || '').toLowerCase().trim();
+    q = q.replace(NL_PREFIX_RE, '');
+    COMMON_MISSPELLINGS.forEach(function (e) {
+      q = q.replace(new RegExp('\\b' + e.typo + '\\b', 'gi'), e.correct);
     });
-    return normalized;
+    TRANSLATED_QUERY_PATTERNS.forEach(function (e) {
+      q = q.replace(e.pattern, e.replacement);
+    });
+    return q;
   }
 
-  /* ── Intent Detection Rules ─────────────────────────────────────── */
+  /* ── Intent detection rules ─────────────────────────────── */
   const INTENT_RULES = [
     {
       patterns: [
-        /\b(crisis|emergency|help|urgent|immediately?|now|please|dying|emergency|911)/i,
-        /\b(suicid|kill\s+myself|end\s+my\s+life|self\s+harm|overdose|cannot\s+cope|no\s+way\s+out)/i,
-        /\b(domestic\s+violence|being\s+abused|being\s+hit|assault|rape|trafficking)/i,
-        /\b(homeless|no\s+place|evict|lost\s+my\s+home|on\s+street)/i,
+        /\b(crisis|emergency|urgent|immediately?|dying|911)/i,
+        /\b(suicid|kill\s+myself|end\s+my\s+life|self\s+harm|overdose)/i,
+        /\b(domestic\s+viol|being\s+abused|assault|rape|trafficking)/i,
+        /\b(homeless|no\s+place\s+to\s+stay|evict|on\s+the\s+street)/i,
       ],
       categories: ['crisis', 'housing', 'domestic-violence'],
       weight: 100,
     },
     {
-      patterns: [
-        /\b(hungry|no\s+food|starving|food\s+bank|food\s+stamp|snap|wic)/i,
-      ],
+      patterns: [/\b(hungry|no\s+food|starving|food\s+bank|snap|wic|haven.?t\s+eaten|out\s+of\s+food)\b/i],
       categories: ['food', 'financial'],
       weight: 90,
     },
     {
-      patterns: [
-        /\b(job|employment|work|laid\s+off|fired|unemploy|income|career)/i,
-      ],
+      patterns: [/\b(job|employment|work|laid\s+off|fired|unemploy|income|career)\b/i],
       categories: ['employment', 'financial'],
       weight: 80,
     },
     {
-      patterns: [
-        /\b(health|doctor|hospital|medical|clinic|insurance|medicaid|medication|prescription)/i,
-      ],
+      patterns: [/\b(health|doctor|hospital|medical|clinic|insurance|medicaid|medication|prescription|teeth|dental|tooth)\b/i],
       categories: ['health'],
       weight: 75,
     },
     {
-      patterns: [
-        /\b(housing|rent|mortgage|shelter|apartment|house|homeless|eviction)/i,
-      ],
-      categories: ['housing', 'financial'],
+      patterns: [/\b(housing|rent|mortgage|shelter|apartment|homeless|eviction|waitlist|no\s+place\s+to\s+stay)\b/i],
+      categories: ['housing'],
       weight: 75,
+    },
+    {
+      patterns: [/\b(immigra|undocumented|ice\b|deport|asylum|daca|dreamer|visa|document|birth\s+cert|papers)\b/i],
+      categories: ['immigration', 'legal'],
+      weight: 75,
+    },
+    {
+      patterns: [/\b(addict|alcohol|heroin[e]?|meth|fentanyl|opioid|drug|rehab|recovery|detox|quit\s+(drinking|using))\b/i],
+      categories: ['rehabilitation'],
+      weight: 75,
+    },
+    {
+      patterns: [/\b(pregnant|pregnancy|baby|infant|prenatal|postpartum|wic|childcare|first\s+time\s+mom|new\s+mom)\b/i],
+      categories: ['parenting', 'health'],
+      weight: 70,
+    },
+    {
+      patterns: [/\b(no\s+car|no\s+transportation|bus\s+(pass|fare)|can.?t\s+drive|no\s+ride|stranded|no\s+vehicle)\b/i],
+      categories: ['transportation'],
+      weight: 65,
+    },
+    {
+      patterns: [/\b(clothes|clothing|shoes|coat|jacket|nothing\s+to\s+wear|no\s+clothes)\b/i],
+      categories: ['clothing'],
+      weight: 60,
+    },
+    {
+      patterns: [/\b(shower|laundry|hygiene|soap|shampoo|period\s+products|feminine\s+(hygiene|products))\b/i],
+      categories: ['hygiene'],
+      weight: 60,
     },
   ];
 
-  /* ── Common Misspellings ─────────────────────────────────────────── */
+  /* ── Common misspellings ─────────────────────────────────── */
   const COMMON_MISSPELLINGS = [
-    { typo: 'denist', correct: 'dentist' },
-    { typo: 'houzing', correct: 'housing' },
-    { typo: 'emergancy', correct: 'emergency' },
-    { typo: 'assitance', correct: 'assistance' },
-    { typo: 'familiy', correct: 'family' },
-    { typo: 'pregnent', correct: 'pregnant' },
-    { typo: 'chlidcare', correct: 'childcare' },
-    { typo: 'helth', correct: 'health' },
-    { typo: 'medicaid', correct: 'medicaid' },
+    { typo: 'denist',        correct: 'dentist' },
+    { typo: 'dentel',        correct: 'dental' },
+    { typo: 'dential',       correct: 'dental' },
+    { typo: 'houzing',       correct: 'housing' },
+    { typo: 'homless',       correct: 'homeless' },
+    { typo: 'homeles',       correct: 'homeless' },
+    { typo: 'emergancy',     correct: 'emergency' },
+    { typo: 'emerjency',     correct: 'emergency' },
+    { typo: 'assitance',     correct: 'assistance' },
+    { typo: 'asistance',     correct: 'assistance' },
+    { typo: 'familiy',       correct: 'family' },
+    { typo: 'pregnent',      correct: 'pregnant' },
+    { typo: 'pregant',       correct: 'pregnant' },
+    { typo: 'prgenant',      correct: 'pregnant' },
+    { typo: 'chlidcare',     correct: 'childcare' },
+    { typo: 'cildcare',      correct: 'childcare' },
+    { typo: 'helth',         correct: 'health' },
+    { typo: 'heatlh',        correct: 'health' },
     { typo: 'transportaion', correct: 'transportation' },
+    { typo: 'trasportation', correct: 'transportation' },
+    { typo: 'alchohol',      correct: 'alcohol' },
+    { typo: 'alcahol',       correct: 'alcohol' },
+    { typo: 'alcohal',       correct: 'alcohol' },
+    { typo: 'heroine',       correct: 'heroin' },
+    { typo: 'immigrasion',   correct: 'immigration' },
+    { typo: 'imigration',    correct: 'immigration' },
+    { typo: 'deportasion',   correct: 'deportation' },
+    { typo: 'sheltar',       correct: 'shelter' },
+    { typo: 'shleter',       correct: 'shelter' },
+    { typo: 'recoverey',     correct: 'recovery' },
+    { typo: 'recovory',      correct: 'recovery' },
+    { typo: 'emploiment',    correct: 'employment' },
+    { typo: 'emploment',     correct: 'employment' },
+    { typo: 'medicin',       correct: 'medicine' },
+    { typo: 'medecine',      correct: 'medicine' },
+    { typo: 'perscription',  correct: 'prescription' },
+    { typo: 'prescrition',   correct: 'prescription' },
+    { typo: 'counceling',    correct: 'counseling' },
+    { typo: 'counselling',   correct: 'counseling' },
+    { typo: 'terapy',        correct: 'therapy' },
+    { typo: 'therepy',       correct: 'therapy' },
+    { typo: 'voilence',      correct: 'violence' },
+    { typo: 'violense',      correct: 'violence' },
+    { typo: 'trafiking',     correct: 'trafficking' },
+    { typo: 'traffiking',    correct: 'trafficking' },
+    { typo: 'addiciton',     correct: 'addiction' },
+    { typo: 'adiction',      correct: 'addiction' },
+    { typo: 'anxeity',       correct: 'anxiety' },
+    { typo: 'anxity',        correct: 'anxiety' },
   ];
 
   /* ── DOM refs ───────────────────────────────────────────── */
-  const searchInput   = document.getElementById('search-input');
-  const clearBtn      = document.getElementById('search-clear');
-  const filterCat     = document.getElementById('filter-category');
-  const filterCounty  = document.getElementById('filter-county');
-  const filterCity    = document.getElementById('filter-city');
-  const filterTag     = document.getElementById('filter-tag');
-  const resetBtn      = document.getElementById('filter-reset');
-  const resultsGrid   = document.getElementById('results-grid');
-  const resultsCount  = document.getElementById('results-count');
+  const searchInput    = document.getElementById('search-input');
+  const clearBtn       = document.getElementById('search-clear');
+  const chipCat        = document.getElementById('filter-category');
+  const chipCounty     = document.getElementById('filter-county');
+  const chipCity       = document.getElementById('filter-city');
+  const chipTag        = document.getElementById('filter-tag');
+  const resetBtn       = document.getElementById('filter-reset');
+  const filterBadge    = document.getElementById('filter-badge');
+  const fltCatCount    = document.getElementById('flt-cat-count');
+  const fltCountyCount = document.getElementById('flt-county-count');
+  const fltCityCount   = document.getElementById('flt-city-count');
+  const fltTagCount    = document.getElementById('flt-tag-count');
+  const resultsGrid    = document.getElementById('results-grid');
+  const resultsCount   = document.getElementById('results-count');
 
-  if (!resultsGrid) return;  // not on directory page
+  if (!resultsGrid) return;
 
   /* ── Bootstrap ──────────────────────────────────────────── */
   fetchResources();
 
   /* ── Data loading ───────────────────────────────────────── */
   function fetchResources() {
-    // Show skeleton placeholders while loading
     renderSkeletons(6);
-
-    // Path works whether served from root or /directory.html
-    const jsonPath = getBasePath() + 'data/resources.json';
-
-    fetch(jsonPath)
+    fetch(getBasePath() + 'data/resources.json')
       .then(function (res) {
-        if (!res.ok) throw new Error('Failed to load resources.json: ' + res.status);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       })
       .then(function (data) {
-        // Pre-build a lowercase search index on each resource so
-        // scoreAndSort never has to re-join the fields on every keystroke.
         allResources = data.map(function (r) {
           r._idx = [
             r.name, r.category, ...(r.categories || []),
@@ -229,37 +334,65 @@
       });
   }
 
-  /**
-   * Determine the base path relative to the current page.
-   * Works for both root-level pages and pages in sub-directories.
-   */
   function getBasePath() {
     const depth = window.location.pathname.split('/').length - 2;
-    if (depth <= 0) return './';
-    return '../'.repeat(depth);
+    return depth <= 0 ? './' : '../'.repeat(depth);
   }
 
-  /* ── Populate filter <select> options ───────────────────── */
+  /* ── Build multi-select chip filters ────────────────────── */
   function populateFilterOptions(data) {
-    const categories = unique(data.map(r => r.category)).sort();
-    const counties   = unique(data.map(r => r.county)).sort();
-    const cities     = unique(data.map(r => r.city)).sort();
-    const tags       = unique(data.flatMap(r => r.tags)).sort();
+    const categories = unique(data.map(function (r) { return r.category; })).sort();
+    const counties   = unique(data.map(function (r) { return r.county; })).sort();
+    const cities     = unique(data.map(function (r) { return r.city; })).sort();
+    const tags       = unique(data.flatMap(function (r) { return r.tags || []; })).sort();
 
-    appendOptions(filterCat,    categories, capitalise);
-    appendOptions(filterCounty, counties);
-    appendOptions(filterCity,   cities);
-    appendOptions(filterTag,    tags);
+    renderChips(chipCat,    categories, activeCats,     fltCatCount,    capitalise);
+    renderChips(chipCounty, counties,   activeCounties,  fltCountyCount);
+    renderChips(chipCity,   cities,     activeCities,    fltCityCount);
+    renderChips(chipTag,    tags,       activeTags,      fltTagCount);
   }
 
-  function appendOptions(select, values, labelFn) {
-    if (!select) return;
+  function renderChips(container, values, activeSet, countEl, labelFn) {
+    if (!container) return;
+    container.innerHTML = '';
     values.forEach(function (v) {
-      const opt = document.createElement('option');
-      opt.value = v;
-      opt.textContent = labelFn ? labelFn(v) : v;
-      select.appendChild(opt);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'filter-chip';
+      btn.dataset.value = v;
+      btn.textContent = labelFn ? labelFn(v) : v;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.addEventListener('click', function () {
+        if (activeSet.has(v)) {
+          activeSet.delete(v);
+          btn.classList.remove('active');
+          btn.setAttribute('aria-pressed', 'false');
+        } else {
+          activeSet.add(v);
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+        }
+        updateGroupCount(countEl, activeSet.size);
+        updateBadge();
+        applyFilters();
+      });
+      container.appendChild(btn);
     });
+  }
+
+  function updateGroupCount(countEl, count) {
+    if (!countEl) return;
+    countEl.textContent = count;
+    if (count > 0) countEl.removeAttribute('hidden');
+    else           countEl.setAttribute('hidden', '');
+  }
+
+  function updateBadge() {
+    if (!filterBadge) return;
+    const total = activeCats.size + activeCounties.size + activeCities.size + activeTags.size;
+    filterBadge.textContent = total;
+    if (total > 0) filterBadge.removeAttribute('hidden');
+    else           filterBadge.setAttribute('hidden', '');
   }
 
   /* ── Event wiring ───────────────────────────────────────── */
@@ -267,30 +400,19 @@
     if (searchInput) {
       searchInput.addEventListener('input', onSearchChange);
       searchInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') { clearSearch(); }
+        if (e.key === 'Escape') clearSearch();
       });
     }
-    if (clearBtn)    clearBtn.addEventListener('click',  clearSearch);
-    if (filterCat)   filterCat.addEventListener('change',   applyFilters);
-    if (filterCounty) filterCounty.addEventListener('change', applyFilters);
-    if (filterCity)  filterCity.addEventListener('change',  applyFilters);
-    if (filterTag)   filterTag.addEventListener('change',   applyFilters);
-    if (resetBtn)    resetBtn.addEventListener('click',    resetFilters);
+    if (clearBtn) clearBtn.addEventListener('click', clearSearch);
+    if (resetBtn) resetBtn.addEventListener('click', resetFilters);
 
-    // Delegate clicks on dynamically rendered action buttons (e.g. "Clear Filters" in empty state)
     document.addEventListener('click', function (e) {
-      if (e.target.closest('[data-action="reset-filters"]')) {
-        resetFilters();
-      }
+      if (e.target.closest('[data-action="reset-filters"]')) resetFilters();
     });
   }
 
   function onSearchChange() {
-    if (clearBtn) {
-      clearBtn.classList.toggle('visible', searchInput.value.length > 0);
-    }
-    // Debounce: wait 200 ms after the user stops typing before filtering.
-    // Filter dropdowns (applyFilters directly) still respond instantly.
+    if (clearBtn) clearBtn.classList.toggle('visible', searchInput.value.length > 0);
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(applyFilters, 200);
   }
@@ -303,42 +425,59 @@
   }
 
   function resetFilters() {
-    if (searchInput)  searchInput.value = '';
-    if (clearBtn)     clearBtn.classList.remove('visible');
-    if (filterCat)    filterCat.value    = '';
-    if (filterCounty) filterCounty.value = '';
-    if (filterCity)   filterCity.value   = '';
-    if (filterTag)    filterTag.value    = '';
+    if (searchInput) searchInput.value = '';
+    if (clearBtn)    clearBtn.classList.remove('visible');
+
+    [activeCats, activeCounties, activeCities, activeTags].forEach(function (s) { s.clear(); });
+
+    document.querySelectorAll('.filter-chip.active').forEach(function (chip) {
+      chip.classList.remove('active');
+      chip.setAttribute('aria-pressed', 'false');
+    });
+
+    [fltCatCount, fltCountyCount, fltCityCount, fltTagCount].forEach(function (el) {
+      if (el) el.setAttribute('hidden', '');
+    });
+
+    updateBadge();
     applyFilters();
   }
 
   /* ── Core filter + search logic ─────────────────────────── */
   function applyFilters() {
-    const rawQuery  = searchInput  ? searchInput.value.trim() : '';
-    const query     = normalizeQuery(rawQuery).toLowerCase();
-    const cat       = filterCat    ? filterCat.value    : '';
-    const county    = filterCounty ? filterCounty.value : '';
-    const city      = filterCity   ? filterCity.value   : '';
-    const tag       = filterTag    ? filterTag.value     : '';
+    const rawQuery = searchInput ? searchInput.value.trim() : '';
+    const query    = normalizeQuery(rawQuery);
 
     let results = allResources;
 
-    // Dropdown filters (exact match)
-    if (cat)    results = results.filter(r => (r.categories || [r.category]).includes(cat));
-    if (county) results = results.filter(r => r.county   === county);
-    if (city)   results = results.filter(r => r.city     === city);
-    if (tag)    results = results.filter(r => r.tags.includes(tag));
+    // Multi-select: OR within each group, AND across groups
+    if (activeCats.size > 0) {
+      results = results.filter(function (r) {
+        return (r.categories || [r.category]).some(function (c) { return activeCats.has(c); });
+      });
+    }
+    if (activeCounties.size > 0) {
+      results = results.filter(function (r) { return activeCounties.has(r.county); });
+    }
+    if (activeCities.size > 0) {
+      results = results.filter(function (r) { return activeCities.has(r.city); });
+    }
+    if (activeTags.size > 0) {
+      results = results.filter(function (r) {
+        return (r.tags || []).some(function (t) { return activeTags.has(t); });
+      });
+    }
 
-    // Text search (multi-token, scored)
     if (query) {
       const intentScores = detectIntent(query);
-      // Crisis override: prioritize crisis resources if crisis intent is detected
+      // Crisis override: surface crisis resources first
       if (intentScores.has('crisis')) {
-        const crisisResources = results.filter(r => (r.categories || [r.category]).includes('crisis'));
+        const crisisResources = results.filter(function (r) {
+          return (r.categories || [r.category]).includes('crisis');
+        });
         if (crisisResources.length > 0) {
-          results = crisisResources.slice(0, 5);
-          filteredResources = results;
-          render(results, rawQuery, query);
+          filteredResources = crisisResources.slice(0, 5);
+          render(crisisResources.slice(0, 5), rawQuery, query);
           return;
         }
       }
@@ -349,67 +488,45 @@
     render(results, rawQuery, query);
   }
 
-  /**
-   * Score and sort resources against a query with field-weighted scoring.
-   *
-   * Scoring weights:
-   *  +20  category matches detected intent
-   *  +10  exact phrase in name
-   *  + 5  exact phrase anywhere
-   *  + 5  token found in tags
-   *  + 3  token match in name (per token)
-   *  + 2  token found in description
-   *  + 1  token match elsewhere (per token)
-   *  + 5  bonus when ALL tokens match (promotes full-match results to top)
-   *
-   * Uses pre-built _idx / _nameLower strings so no per-call field joining.
-   */
+  /* ── Scoring ────────────────────────────────────────────── */
   function scoreAndSort(resources, query, intentScores) {
-    const phrase = query.toLowerCase();
-    const tokens = phrase.split(/\s+/).filter(Boolean);
+    const phrase         = query.toLowerCase();
+    const tokens         = phrase.split(/\s+/).filter(Boolean);
     const expandedTokens = expandQueryTokens(tokens);
 
     const scored = resources.map(function (r) {
       let score = 0;
 
-      // Intent matching: boost if resource category matches detected intent
+      // Intent boost
       if (intentScores) {
-        const resCategory = r.categories ? r.categories[0] : r.category;
-        if (intentScores.has(resCategory)) {
-          score += 20;
-        }
+        const cat = r.categories ? r.categories[0] : r.category;
+        if (intentScores.has(cat)) score += 20;
       }
 
       // Phrase-level bonuses
       if (r._nameLower.includes(phrase)) score += 10;
       else if (r._idx.includes(phrase))  score += 5;
 
-      // Token-level scoring with field weighting
+      // Token-level, field-weighted scoring
       let allMatch = true;
       expandedTokens.forEach(function (token) {
-        const inName = r._nameLower.includes(token);
-        const inTags = r.tags && r.tags.some(function (tag) {
-          return tag.toLowerCase().includes(token);
-        });
-        const inDescription = r.description && r.description.toLowerCase().includes(token);
-        const inIdx = inName || inTags || inDescription || r._idx.includes(token);
+        const inName  = r._nameLower.includes(token);
+        const inTags  = (r.tags || []).some(function (t) { return t.toLowerCase().includes(token); });
+        const inDesc  = r.description && r.description.toLowerCase().includes(token);
+        const inIdx   = inName || inTags || inDesc || r._idx.includes(token);
 
         if (inIdx) {
-          if (inName) score += 3;
+          if      (inName) score += 3;
           else if (inTags) score += 5;
-          else if (inDescription) score += 2;
-          else score += 1;
+          else if (inDesc) score += 2;
+          else             score += 1;
         }
       });
 
-      // Check if all original tokens matched (not expanded ones)
       tokens.forEach(function (token) {
-        if (!r._idx.includes(token) && !r._nameLower.includes(token)) {
-          allMatch = false;
-        }
+        if (!r._idx.includes(token) && !r._nameLower.includes(token)) allMatch = false;
       });
 
-      // Bonus if every original query token matched
       if (allMatch && tokens.length > 1) score += 5;
 
       return { resource: r, score: score };
@@ -422,116 +539,63 @@
   }
 
   function expandQueryTokens(tokens) {
-    const expanded = [];
-    const seen = new Set();
-
+    const expanded = [], seen = new Set();
     tokens.forEach(function (token) {
-      if (!seen.has(token)) {
-        expanded.push(token);
-        seen.add(token);
-      }
-      const aliases = QUERY_SYNONYMS[token];
-      if (aliases) {
-        aliases.forEach(function (alias) {
-          if (!seen.has(alias)) {
-            expanded.push(alias);
-            seen.add(alias);
-          }
-        });
-      }
+      if (!seen.has(token)) { expanded.push(token); seen.add(token); }
+      (QUERY_SYNONYMS[token] || []).forEach(function (alias) {
+        if (!seen.has(alias)) { expanded.push(alias); seen.add(alias); }
+      });
     });
-
     return expanded;
   }
 
-  /* ── Intent Detection & Advanced Scoring ────────────────────────── */
+  /* ── Intent detection ───────────────────────────────────── */
   function detectIntent(query) {
-    const lowerQuery = query.toLowerCase();
-    let matchedCategories = new Map();
-
+    const lq = query.toLowerCase();
+    const matched = new Map();
     INTENT_RULES.forEach(function (rule) {
       rule.patterns.forEach(function (pattern) {
-        const matches = (pattern instanceof RegExp && pattern.test(lowerQuery)) ||
-                        (typeof pattern === 'string' && lowerQuery.includes(pattern));
-        if (matches) {
+        const hit = (pattern instanceof RegExp) ? pattern.test(lq) : lq.includes(pattern);
+        if (hit) {
           rule.categories.forEach(function (cat) {
-            matchedCategories.set(cat, (matchedCategories.get(cat) || 0) + rule.weight);
+            matched.set(cat, (matched.get(cat) || 0) + rule.weight);
           });
         }
       });
     });
-
-    return matchedCategories;
+    return matched;
   }
 
-  /**
-   * Levenshtein distance (edit distance) for fuzzy matching.
-   * Returns the number of single-character edits needed to change a into b.
-   */
+  /* ── Fuzzy matching / suggestions ───────────────────────── */
   function levenshtein(a, b) {
-    const aLen = a.length;
-    const bLen = b.length;
-    const dp = Array.from({ length: aLen + 1 }, function () {
-      return Array(bLen + 1);
-    });
-
+    const aLen = a.length, bLen = b.length;
+    const dp = Array.from({ length: aLen + 1 }, function () { return Array(bLen + 1).fill(0); });
     for (let i = 0; i <= aLen; i++) dp[i][0] = i;
     for (let j = 0; j <= bLen; j++) dp[0][j] = j;
-
     for (let i = 1; i <= aLen; i++) {
       for (let j = 1; j <= bLen; j++) {
         const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-        dp[i][j] = Math.min(
-          dp[i - 1][j] + 1,      // deletion
-          dp[i][j - 1] + 1,      // insertion
-          dp[i - 1][j - 1] + cost // substitution
-        );
+        dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
       }
     }
-
     return dp[aLen][bLen];
-  }
-
-  function fuzzyMatch(text, term) {
-    const termLower = term.toLowerCase();
-    const textLower = text.toLowerCase();
-    return textLower.includes(termLower) || levenshtein(textLower, termLower) <= 2;
   }
 
   function suggestClosestQuery(query) {
     if (!query || query.length < 2) return null;
-
-    // Check common misspellings first
-    for (let i = 0; i < COMMON_MISSPELLINGS.length; i++) {
-      const entry = COMMON_MISSPELLINGS[i];
-      if (levenshtein(query.toLowerCase(), entry.typo) <= 1) {
-        return entry.correct;
-      }
+    const lq = query.toLowerCase();
+    for (const e of COMMON_MISSPELLINGS) {
+      if (levenshtein(lq, e.typo) <= 1) return e.correct;
     }
-
-    // Check all resource names and tags for fuzzy matches
-    const lowerQuery = query.toLowerCase();
-    let bestMatch = null;
-    let bestDistance = 3; // threshold
-
+    let bestMatch = null, bestDist = 3;
     allResources.forEach(function (r) {
-      // Check name
-      const nameDist = levenshtein(lowerQuery, r._nameLower);
-      if (nameDist < bestDistance) {
-        bestDistance = nameDist;
-        bestMatch = r._nameLower;
-      }
-
-      // Check tags
+      const d = levenshtein(lq, r._nameLower);
+      if (d < bestDist) { bestDist = d; bestMatch = r._nameLower; }
       (r.tags || []).forEach(function (tag) {
-        const tagDist = levenshtein(lowerQuery, tag.toLowerCase());
-        if (tagDist < bestDistance) {
-          bestDistance = tagDist;
-          bestMatch = tag;
-        }
+        const td = levenshtein(lq, tag.toLowerCase());
+        if (td < bestDist) { bestDist = td; bestMatch = tag; }
       });
     });
-
     return bestMatch;
   }
 
@@ -542,15 +606,8 @@
         ? '1 resource found'
         : resources.length + ' resources found';
     }
-
-    if (resources.length === 0) {
-      renderEmpty(displayQuery, query || displayQuery);
-      return;
-    }
-
-    resultsGrid.innerHTML = resources.map(function (r) {
-      return buildCardHTML(r, displayQuery);
-    }).join('');
+    if (resources.length === 0) { renderEmpty(displayQuery, query || displayQuery); return; }
+    resultsGrid.innerHTML = resources.map(function (r) { return buildCardHTML(r, displayQuery); }).join('');
   }
 
   function renderEmpty(displayQuery, query) {
@@ -559,44 +616,37 @@
       const suggestion = suggestClosestQuery(query);
       if (suggestion) {
         suggestionHTML = `
-          <p style="margin-top: 0.75rem;">
-            <strong>Did you mean:</strong> <button class="btn btn-sm btn-outline" 
-              style="padding: 0.25rem 0.75rem; margin-left: 0.5rem;" 
-              onclick="document.getElementById('search-input').value = '${escapeHTML(suggestion)}'; 
+          <p style="margin-top:.75rem">
+            <strong>Did you mean:</strong>
+            <button class="btn btn-sm btn-outline" style="padding:.25rem .75rem;margin-left:.5rem"
+              onclick="document.getElementById('search-input').value='${escapeHTML(suggestion)}';
                        document.getElementById('search-input').dispatchEvent(new Event('input'));">
               ${escapeHTML(suggestion)}
             </button>
-          </p>
-        `;
+          </p>`;
       }
     }
-
     resultsGrid.innerHTML = `
       <div class="empty-state" role="status" aria-live="polite">
         <div class="empty-icon" aria-hidden="true"><i class="bi bi-search" aria-hidden="true"></i></div>
         <h3>No resources found</h3>
-        <p>
-          ${query
-            ? 'No results for <strong>"' + escapeHTML(query) + '"</strong>. Try different keywords or clear the search.'
-            : 'No resources match the selected filters.'}
-        </p>
+        <p>${query
+          ? 'No results for <strong>"' + escapeHTML(query) + '"</strong>. Try different keywords or clear filters.'
+          : 'No resources match the selected filters.'}</p>
         ${suggestionHTML}
-        <button class="btn btn-outline" style="margin-top:1rem" data-action="reset-filters">
-          Clear Filters
-        </button>
+        <button class="btn btn-outline" style="margin-top:1rem" data-action="reset-filters">Clear All Filters</button>
       </div>`;
   }
 
   function renderSkeletons(count) {
-    const cards = Array.from({ length: count }, function () {
+    resultsGrid.innerHTML = Array.from({ length: count }, function () {
       return `<div class="resource-card" aria-hidden="true">
         <div class="skeleton" style="height:1.2rem;width:70%;margin-bottom:.75rem"></div>
         <div class="skeleton" style="height:.85rem;width:40%;margin-bottom:.5rem"></div>
         <div class="skeleton" style="height:.85rem;width:55%;margin-bottom:.5rem"></div>
         <div class="skeleton" style="height:.85rem;width:50%"></div>
       </div>`;
-    });
-    resultsGrid.innerHTML = cards.join('');
+    }).join('');
   }
 
   function renderError() {
@@ -616,9 +666,7 @@
 
     const websiteHTML = r.website
       ? `<li><em class="meta-icon" aria-hidden="true"><i class="bi bi-globe-americas" aria-hidden="true"></i></em>
-           <a href="${escapeHTML(r.website)}" target="_blank" rel="noopener noreferrer">
-             Visit website
-           </a></li>`
+           <a href="${escapeHTML(r.website)}" target="_blank" rel="noopener noreferrer">Visit website</a></li>`
       : '';
 
     return `
@@ -633,8 +681,10 @@
       <ul class="card-meta" aria-label="Resource details">
         <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></em>
           <span>${escapeHTML(r.city)}, ${escapeHTML(r.county)} County</span></li>
-        ${r.phone ? `<li><em class="meta-icon" aria-hidden="true"><i class="bi bi-telephone-fill" aria-hidden="true"></i></em>
-          <a href="tel:${sanitizePhone(r.phone)}">${escapeHTML(r.phone)}</a></li>` : ''}
+        ${r.phone
+          ? `<li><em class="meta-icon" aria-hidden="true"><i class="bi bi-telephone-fill" aria-hidden="true"></i></em>
+               <a href="tel:${sanitizePhone(r.phone)}">${escapeHTML(r.phone)}</a></li>`
+          : ''}
         <li><em class="meta-icon" aria-hidden="true"><i class="bi bi-clock-fill" aria-hidden="true"></i></em>
           <span>${escapeHTML(r.hours)}</span></li>
         ${websiteHTML}
@@ -644,12 +694,9 @@
 
       <div id="details-${r.id}" class="card-details" aria-hidden="true">
         <dl>
-          <dt>Address</dt>
-          <dd>${escapeHTML(r.address)}</dd>
-          <dt>Eligibility</dt>
-          <dd>${escapeHTML(r.eligibility)}</dd>
-          <dt>How to Access</dt>
-          <dd>${escapeHTML(r.intake_process)}</dd>
+          <dt>Address</dt><dd>${escapeHTML(r.address)}</dd>
+          <dt>Eligibility</dt><dd>${escapeHTML(r.eligibility)}</dd>
+          <dt>How to Access</dt><dd>${escapeHTML(r.intake_process)}</dd>
         </dl>
       </div>
 
@@ -660,9 +707,11 @@
                 aria-controls="details-${r.id}">
           More Info
         </button>
-        ${r.phone ? `<a href="tel:${sanitizePhone(r.phone)}" class="btn btn-primary btn-sm">
-          <i class="bi bi-telephone-fill" aria-hidden="true"></i> Call
-        </a>` : ''}
+        ${r.phone
+          ? `<a href="tel:${sanitizePhone(r.phone)}" class="btn btn-primary btn-sm">
+               <i class="bi bi-telephone-fill" aria-hidden="true"></i> Call
+             </a>`
+          : ''}
       </div>
 
       <p class="card-verified" aria-label="Data last verified">
@@ -672,60 +721,40 @@
   }
 
   /* ── Helpers ─────────────────────────────────────────────── */
-  function unique(arr) {
-    return [...new Set(arr)];
-  }
+  function unique(arr) { return [...new Set(arr)]; }
 
   function capitalise(str) {
     if (!str) return '';
-    return str.replace(/[-_]/g, ' ')
-              .replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    return str.replace(/[-_]/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
   }
 
-  // Faster than the DOM-node approach: no element allocation per call.
   const HTML_ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
   function escapeHTML(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) { return HTML_ESCAPES[c]; });
   }
 
-  function sanitizePhone(phone) {
-    return (phone || '').replace(/[^\d+]/g, '');
-  }
+  function sanitizePhone(p) { return (p || '').replace(/[^\d+]/g, ''); }
 
   function formatDate(dateStr) {
     if (!dateStr) return 'Unknown';
     const d = new Date(dateStr + 'T00:00:00');
-    if (isNaN(d.getTime())) return dateStr;
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return isNaN(d.getTime()) ? dateStr : d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
-  /**
-   * Wrap each query token in <mark> for visual highlighting.
-   * Highlights individual tokens so multi-word searches like "food detroit"
-   * highlight "food" and "detroit" independently (matches how scoring works).
-   */
   function highlightMatch(text, query) {
     const safe = escapeHTML(text);
     if (!query) return safe;
     const tokens = query.trim().split(/\s+/).filter(Boolean);
     if (!tokens.length) return safe;
-
-    // Build a single regex alternating all tokens, longest first to avoid
-    // partial overlaps (e.g. "food" before "ood").
     const pattern = tokens
       .map(function (t) { return escapeRegExp(escapeHTML(t)); })
       .sort(function (a, b) { return b.length - a.length; })
       .join('|');
-
     try {
       return safe.replace(new RegExp('(' + pattern + ')', 'gi'), '<mark>$1</mark>');
-    } catch (e) {
-      return safe;
-    }
+    } catch (e) { return safe; }
   }
 
-  function escapeRegExp(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
+  function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
 })();

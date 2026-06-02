@@ -120,7 +120,7 @@
     // ================================================================
     {
       patterns: [
-        /\b(domestic\s+viol(ence)?|intimate\s+partner\s+(viol|abus)|abusive?\s+(partner|relationship|boyfriend|girlfriend|husband|wife|home|household|situation)|partner\s+(is\s+)?(abus|hit|hurt|chok|strangle|threaten|controll|stalk|isolat)|being\s+(abus(ed)?|hit|hurt|beaten?|threaten(ed)?|stalk(ed)?|isolat(ed)?|control(led)?)|he\s+(hit|hurt|beats?|chok|strangle|threaten|abus|scream|yell|controll|stalk)|she\s+(hit|hurt|beats?|chok|strangle|threaten|abus|scream|yell|controll|stalk)|my\s+(partner|boyfriend|girlfriend|husband|wife|ex|baby.?s?\s*dad|baby.?s?\s*mom)\s+(hit|hurt|beats?|threaten|abus|controll|won.?t\s+let|wont\s+let|is\s+hurting)|cycle\s+of\s+abus|toxic\s+relationship)/i,
+        /\b(domestic\s+viol(ence)?|intimate\s+partner\s+(viol|abus)|abusive?\s+(partner|relationship|boyfriend|girlfriend|husband|wife|home|household|situation)|partner\s+(is\s+)?(abus|hit|hurt|chok|strangle|threaten|controll|stalk|isolat)|being\s+(abus(ed)?|hit|hurt|beaten?|threaten(ed)?|stalk(ed)?|isolat(ed)?|control(led)?)|he\s+(hit|hurt|beats?|chok|strangle|threaten|abus|scream|yell|controll|stalk)|she\s+(hit|hurt|beats?|chok|strangle|threaten|abus|scream|yell|controll|stalk)|my\s+(partner|boyfriend|girlfriend|husband|wife|ex|baby.?s?\s*dad|baby.?s?\s*mom)\s+(hit|hurt|beats?|threaten|abus|controll|won.?t\s+let|wont\s+let|is\s+(hurting|abusive?))|fled(\s+(the\s+)?(home|house|relationship|abuse))?|fleeing(\s+abuse|\s+from)?|escaped(\s+abuse)?|i.?m\s+a\s+survivor|cycle\s+of\s+abus|toxic\s+relationship)/i,
         'domestic violence', 'domestic abuse', 'i am being abused',
         "i'm being abused", 'being abused', 'he hit me', 'she hit me',
         'my partner hit me', 'my boyfriend hit me', 'my girlfriend hit me',
@@ -152,6 +152,16 @@
         'walking on eggshells', 'he has a gun', 'she has a gun',
         'i have bruises', 'they throw things at me',
         'my kids are witnessing abuse',
+        'my husband is abusive', 'my boyfriend is abusive', 'my girlfriend is abusive',
+        'my wife is abusive', 'my partner is abusive', 'my ex is abusive',
+        'he is abusive', 'she is abusive', 'they are abusive',
+        'i just left an abusive relationship', 'i left my abuser',
+        'i just left him', 'i just left her', 'i fled domestic violence',
+        "i'm fleeing abuse", "i'm fleeing", 'i escaped abuse', 'i just escaped',
+        "i'm a survivor", 'i am a survivor', 'survivor of abuse',
+        'i left my husband', 'i left my boyfriend', 'i left my partner',
+        'trying to leave', "i can't leave him", "i can't leave her",
+        'afraid to leave', 'scared to leave my partner', 'my relationship is toxic and scary',
       ],
       categories: ['crisis', 'domestic-violence'],
       weight: 95,
@@ -236,7 +246,7 @@
     // ================================================================
     {
       patterns: [
-        /\b(homeless(ness)?|houseless|unhoused|no\s+(place|where|home|house|roof)\s+to\s+(stay|live|go|sleep|call\s+home)|evict(ed|ion|ment)?|facing\s+eviction|about\s+to\s+be\s+evicted|can.?t\s+(afford|pay|make)\s+(rent|my\s+rent|housing|the\s+rent|mortgage)|behind\s+on\s+rent|past\s+due\s+on\s+rent|lost?\s+(my\s+)?(home|house|apartment|place|housing|condo|unit)|losing\s+(my\s+)?(home|house|apartment|place)|living\s+in\s+(my\s+car|a\s+car|the\s+street|streets|a\s+shelter|a\s+tent|a\s+motel)|sleeping\s+(outside|in\s+my\s+car|on\s+the\s+street|rough|at\s+a\s+shelter)|need\s+(housing|emergency\s+housing|emergency\s+shelter|a\s+shelter|a\s+place\s+to\s+(live|stay|sleep))|got\s+kicked\s+out|thrown\s+out|kicked\s+out|couch\s+surf(ing)?|no\s+stable\s+housing|house\s+(fire|burned\s+down|flooded)|section\s*8|public\s+housing|housing\s+(voucher|subsidy|assistance|authority)|utility\s+(shutoff|disconnect|bill)|lights?\s+(got\s+)?(shut\s+off|turned\s+off|cut\s+off)|gas\s+(got\s+)?(shut\s+off|turned\s+off)|water\s+(shut\s+off|turned\s+off)|no\s+(electricity|power|heat|hot\s+water|running\s+water))/i,
+        /\b(homeless(ness)?|houseless|unhoused|no\s+(place|where|home|house|roof)\s+to\s+(stay|live|go|sleep|call\s+home)|evict(ed|ion|ment)?|facing\s+eviction|about\s+to\s+be\s+evicted|can.?t\s+(afford|pay|make)\s+(rent|my\s+rent|housing|the\s+rent|mortgage)|behind\s+on\s+rent|past\s+due\s+on\s+rent|lost?\s+(my\s+)?(home|house|apartment|place|housing|condo|unit)|losing\s+(my\s+)?(home|house|apartment|place)|living\s+in\s+(my\s+car|a\s+car|the\s+street|streets|a\s+shelter|a\s+tent|a\s+motel)|sleeping\s+(outside|in\s+my\s+car|on\s+the\s+street|rough|at\s+a\s+shelter)|need\s+(housing|emergency\s+housing|emergency\s+shelter|a\s+shelter|a\s+place\s+to\s+(live|stay|sleep))|got\s+kicked\s+out|thrown\s+out|kicked\s+out|couch\s+surf(ing)?|no\s+stable\s+housing|house\s+(fire|burned\s+down|flooded)|section\s*8|public\s+housing|housing\s+(voucher|subsidy|assistance|authority)|utility\s+(shutoff|disconnect|bill)|lights?\s+(got\s+)?(shut\s+off|turned\s+off|cut\s+off)|gas\s+(got\s+)?(shut\s+off|turned\s+off)|water\s+(shut\s+off|turned\s+off)|no\s+(electricity|power|heat|hot\s+water|running\s+water)|waitlist\b|on\s+a\s+wait.?list|shelter\s+(is\s+)?(full|denied|waitlist)|can.?t\s+(qualify|get\s+into)\s+(a\s+)?shelter|shelter\s+won.?t)/i,
         'homeless', 'homelessness', 'houseless', 'unhoused',
         'i am homeless', "i'm homeless", 'we are homeless', "we're homeless",
         'no place to stay', 'nowhere to stay', 'no place to live',
@@ -281,6 +291,18 @@
         'liheap', 'energy assistance', 'sober living', 'halfway house',
         'rapid rehousing', 'aging out of foster care',
         'just got released', 'just got out of prison',
+        "can't qualify for shelter", "don't qualify for shelter",
+        "don't qualify for a shelter", 'shelter won\'t take me', 'no shelters will take me',
+        'shelters won\'t accept me', 'shelter denied me', 'been denied from shelter',
+        'denied shelter', 'i was denied housing', 'shelter is full', 'shelters are full',
+        'on a waitlist', "i've been on a waitlist", 'been on a waitlist for months',
+        'waitlist for housing', 'housing waitlist', 'shelter waitlist',
+        'on the waitlist', 'months on a waitlist', 'been waiting months for housing',
+        'been waiting for housing', 'waiting for housing assistance',
+        'can\'t get approved for housing', 'background check preventing housing',
+        'record preventing housing', 'no shelter will accept me',
+        'barriers to housing', 'i have a pet and need shelter', 'shelter won\'t take my pet',
+        'i can\'t get into a shelter',
       ],
       categories: ['housing'],
       weight: 80,
@@ -291,7 +313,7 @@
     // ================================================================
     {
       patterns: [
-        /\b(immigra(nt|tion|te(d|s)?)|undocumented|unauthorized\s+immigrant|deport(ed|ation|ment|ing)?|facing\s+deport|asylum\s+(seeker|case|claim|status|application)?|daca\b|dreamer\b|visa\s+(expir(ed|ing)|overstay(ed)?|status|issue)|out\s+of\s+status|no\s+(legal\s+status|papers|documents?)|citizenship\s+(application|test|interview|process)|naturalization|green\s+card|permanent\s+residen(t|ce)|work\s+(permit|authorization|visa)|uscis|ice\s+(raid|arrest|detain(ed)?|come|came)|detained\s+by\s+ice|refugee\s+(status|resettlement|program)|u\s+visa|t\s+visa|vawa\b|tps\b|temporary\s+protected\s+status|migrant\b)/i,
+        /\b(immigra(nt|tion|te(d|s)?)|undocumented|unauthorized\s+immigrant|deport(ed|ation|ment|ing)?|facing\s+deport|asylum\s+(seeker|case|claim|status|application)?|daca\b|dreamer\b|visa\s+(expir(ed|ing)|overstay(ed)?|status|issue)|out\s+of\s+status|no\s+(legal\s+status|papers|documents?)|citizenship\s+(application|test|interview|process)|naturalization|green\s+card|permanent\s+residen(t|ce)|work\s+(permit|authorization|visa)|uscis|ice\s+(raid|arrest|detain(ed)?|come|came)|detained\s+by\s+ice|(worried|scared|afraid|concerned)\s+(about\s+)?ice|refugee\s+(status|resettlement|program)|u\s+visa|t\s+visa|vawa\b|tps\b|temporary\s+protected\s+status|migrant\b|birth\s+certificate|social\s+security\s+card|no\s+(id|identification)|need\s+(an?\s+)?(id|identification))/i,
         'immigration', 'immigrant', 'undocumented', 'unauthorized',
         'i am undocumented', "i'm undocumented", 'undocumented immigrant',
         'out of status', 'no legal status', 'no immigration status',
@@ -322,6 +344,10 @@
         'immigrant advocacy', 'immigrant advocates', 'immigrant legal services', 'immigration legal services',
         'mixed status family', 'my parents are undocumented',
         'special immigrant juvenile',
+        'worried about ice', 'concerned about ice', 'scared that ice will come',
+        'ice is looking for me', 'ice came to my neighborhood', 'fear of ice',
+        "i don't have my documents", "i don't have my papers", "i lost my papers",
+        'need documents', 'lost my documents', 'they took my documents',
       ],
       categories: ['immigration', 'legal'],
       weight: 75,
@@ -359,6 +385,13 @@
         'bankruptcy', 'just got out of jail', 'just released from jail',
         'ban the box', 'housing with a felony',
         "can't get a job because of my record",
+        'birth certificate', 'need a birth certificate', 'i need my birth certificate',
+        "i don't have a birth certificate", 'no birth certificate', 'lost my birth certificate',
+        'vital records', 'need identification', "i don't have an id", 'no id',
+        "don't have identification", 'need an id', 'need a state id',
+        'social security card', "i don't have a social security card",
+        'lost my social security card', 'need my social security card',
+        'need my social security number',
       ],
       categories: ['legal'],
       weight: 70,
@@ -455,7 +488,7 @@
     // ================================================================
     {
       patterns: [
-        /\b(addict(ed|ion|ive)?|drug(s|\s+use|\s+problem|\s+addict|\s+abuse|\s+dependent)?|alcohol(ism|\s+problem|\s+addict|\s+abus|\s+depend)?|substance\s+(use\s+disorder|abus|depend|problem)|sobriet(y|ies)?|(in|entering)\s+recovery|seeking\s+recovery|rehab(ilitation)?\b|residential\s+treatment|in.?patient\s+treatment|outpatient\s+treatment|detox(ification)?\b|withdrawal\b|overdos(e|ed|ing)?|opi(oid|ate)\b|fentanyl\b|meth(amphetamine)?\b|crystal\s+meth|heroin\b|cocaine\b|\bcrack\b|drink(ing)?\s+(too\s+much|problem|every\s+day|daily|heavily)|heavy\s+drink|binge\s+drink|can.?t\s+stop\s+(drinking|using\s+drugs?|using|doing\s+drugs?)|struggling\s+with\s+(drugs?|alcohol|addiction|substance|drinking)|relapse[d]?\b|cravings?\b)/i,
+        /\b(addict(ed|ion|ive)?|drug(s|\s+use|\s+problem|\s+addict|\s+abuse|\s+dependent)?|alcohol(ism|\s+problem|\s+addict|\s+abus|\s+depend)?|substance\s+(use\s+disorder|abus|depend|problem)|sobriet(y|ies)?|(in|entering)\s+recovery|seeking\s+recovery|rehab(ilitation)?\b|residential\s+treatment|in.?patient\s+treatment|outpatient\s+treatment|detox(ification)?\b|withdrawal\b|overdos(e|ed|ing)?|opi(oid|ate)\b|fentanyl\b|meth(amphetamine)?\b|crystal\s+meth|heroin[e]?\b|cocaine\b|\bcrack\b|drink(ing)?\s+(too\s+much|problem|every\s+day|daily|heavily)|heavy\s+drink|binge\s+drink|can.?t\s+stop\s+(drinking|using\s+drugs?|using|doing\s+drugs?)|struggl(e|es|ing)\s+with\s+(drugs?|alcohol|addiction|substance|drinking)|relapse[d]?\b|cravings?\b|want\s+to\s+quit\s+(drugs?|drinking|alcohol|heroin[e]?|using)|quit\s+(drinking|drugs?|using))/i,
         'addiction', 'drug addiction', 'alcohol addiction',
         'substance abuse', 'substance use disorder',
         'i am addicted', "i'm addicted",
@@ -497,6 +530,16 @@
         'buprenorphine', 'medication assisted treatment',
         'my family member is addicted', 'my child is using drugs',
         'clean time', 'in treatment',
+        'struggle with alcohol', 'i struggle with alcohol', 'i struggle with drinking',
+        'struggle with drinking', 'struggle with drugs', 'i struggle with drugs',
+        'i struggle with substances', 'struggle with substances',
+        'i want to quit', 'want to quit heroin', 'want to quit heroine',
+        'addicted to heroine', 'heroine addiction', 'heroine problem',
+        'using heroine', 'want to stop using heroine', 'i want to quit heroine',
+        'quit drinking', 'quit drugs', 'quit using',
+        'my family member is struggling with addiction', 'my son uses drugs',
+        'my daughter uses drugs', 'my husband drinks too much',
+        'my wife drinks too much', 'my partner has a drinking problem',
       ],
       categories: ['rehabilitation', 'health'],
       weight: 75,
@@ -555,7 +598,7 @@
     // ================================================================
     {
       patterns: [
-        /\b(pregnant|pregnancy\b|prenatal|expecting\s+a\s+baby|baby\b|infant\b|newborn\b|toddler\b|childcare\b|child\s+care|daycare\b|parenting\b|parent\s+(support|class|resource|program|help)|single\s+(mom|dad|mother|father|parent)|wic\b|kids?\s+(need|are?\s+(hungry|sick|homeless|without)|don.?t\s+have|require)|children?\s+(need|are?\s+(hungry|sick|without)|don.?t\s+have)|raising\s+(kids?|children|a\s+child|a\s+baby)|teen\s+(parent|mom|dad|pregnancy)|young\s+(parent|mom|dad)|new\s+(parent|mom|dad|mother|father)|foster\s+(care|parent)|kinship\s+care|my\s+child(ren)?\s+(is|are|need|needs?)|my\s+kid(s)?\s+(is|are|need|needs?)|formula\b|diapers?\b|baby\s+(product|supply|formula)|family\s+(planning|support|resource)|birth\s+control|teen\s+pregnancy|cps\b|dcfs\b|child\s+(abus|neglect|protective))/i,
+        /\b(pregnant|pregnancy\b|prenatal|expecting\s+a\s+baby|baby\b|infant\b|newborn\b|toddler\b|childcare\b|child\s+care|daycare\b|parenting\b|parent\s+(support|class|resource|program|help)|single\s+(mom|dad|mother|father|parent)|wic\b|kids?\s+(need|are?\s+(hungry|sick|homeless|without)|don.?t\s+have|require)|children?\s+(need|are?\s+(hungry|sick|without)|don.?t\s+have)|raising\s+(kids?|children|a\s+child|a\s+baby)|teen\s+(parent|mom|dad|pregnancy)|young\s+(parent|mom|dad)|new\s+(parent|mom|dad|mother|father)|first[- ]?time\s+(mom|mother|parent|dad|father)|unplanned\s+pregnan|unexpected\s+pregnan|pregnant.{0,20}(scared|alone|nervous|don.?t\s+know|no\s+support|overwhelmed)|(scared|nervous|alone).{0,20}pregnant|foster\s+(care|parent)|kinship\s+care|my\s+child(ren)?\s+(is|are|need|needs?)|my\s+kid(s)?\s+(is|are|need|needs?)|formula\b|diapers?\b|baby\s+(product|supply|formula)|family\s+(planning|support|resource)|birth\s+control|teen\s+pregnancy|cps\b|dcfs\b|child\s+(abus|neglect|protective))/i,
         'pregnant', "i'm pregnant", 'i think i am pregnant',
         'expecting a baby', 'expecting', 'prenatal care',
         'need prenatal care', 'pregnancy test', 'teen pregnancy',
@@ -586,6 +629,15 @@
         'foster care', 'kinship care',
         'birth control', 'need birth control', 'family planning',
         'teen mom', 'head start', 'early childhood',
+        'first time mom', 'first-time mom', 'new mom', 'i just became a mom',
+        'first time mother', 'first-time mother', 'first time parent', 'first-time parent',
+        'pregnant and scared', 'scared and pregnant', 'pregnant and alone',
+        'pregnant and no support', 'scared i am pregnant', 'pregnant and overwhelmed',
+        'pregnant and nervous', "i don't know what to do i'm pregnant",
+        'just found out i am pregnant', "just found out i'm pregnant",
+        'just found out im pregnant', 'unexpected pregnancy', 'unplanned pregnancy',
+        "i'm pregnant and don't know what to do", 'pregnant with no support',
+        'pregnant and scared of my partner', 'pregnant and he is abusive',
       ],
       categories: ['parenting', 'health'],
       weight: 65,
@@ -596,7 +648,7 @@
     // ================================================================
     {
       patterns: [
-        /\b(no\s+(health\s+)?insurance|uninsured\b|underinsured\b|can.?t\s+(afford|pay\s+for|access)\s+(doct(or|or.?s\s+visit)?|medic(ine|ation|al\s+(care|bill))?|prescri(ption)?|hospital|dent(ist|al\s+care)?|vision|eye\s+care|urgent\s+care)|need\s+(a\s+doctor|medical\s+(care|help|attention)|dental\s+(care|work|help)|vision\s+care|a\s+prescription|medication)|sick\b|ill(ness)?|hospital(ized|ization)?|emergency\s+room|prescription\b|medicaid\b|medicare\b|chip\b|aca\b|obamacare\b|free\s+clinic|community\s+health|dental\s+(care|clinic|pain)|tooth\s+(pain|ache|broken)|vision\s+(care|insurance)|glasses\b|chronic\s+(illness|condition|pain)|diabetes\b|hypertension\b|high\s+blood\s+pressure|asthma\b|cancer\b|hiv\b|std\b|sti\b|sexual\s+health|reproductive\s+health|medical\s+(bill|debt|cost))/i,
+        /\b(no\s+(health\s+)?insurance|uninsured\b|underinsured\b|can.?t\s+(afford|pay\s+for|access)\s+(doct(or|or.?s\s+visit)?|medic(ine|ation|al\s+(care|bill))?|prescri(ption)?|hospital|dent(ist|al\s+care)?|vision|eye\s+care|urgent\s+care)|need\s+(a\s+doctor|medical\s+(care|help|attention)|dental\s+(care|work|help)|vision\s+care|a\s+prescription|medication)|sick\b|ill(ness)?|hospital(ized|ization)?|emergency\s+room|prescription\b|medicaid\b|medicare\b|chip\b|aca\b|obamacare\b|free\s+clinic|community\s+health|dental\s+(care|clinic|pain|problem|issue)|teeth?\b|tooth\s+(pain|ache|broken)|gum\s+(pain|disease|problem)|vision\s+(care|insurance)|glasses\b|chronic\s+(illness|condition|pain)|diabetes\b|hypertension\b|high\s+blood\s+pressure|asthma\b|cancer\b|hiv\b|std\b|sti\b|sexual\s+health|reproductive\s+health|medical\s+(bill|debt|cost))/i,
         'no insurance', "i don't have insurance",
         "i don't have health insurance", 'no health insurance',
         'uninsured', 'lost my insurance', 'lost health coverage',
@@ -619,8 +671,12 @@
         'no prescription', 'need a prescription',
         'prescription assistance', 'medication assistance',
         'ran out of medication',
-        'need dental', 'dental care', 'dental pain',
-        'tooth pain', 'toothache', 'broken tooth',
+        'need dental', 'dental care', 'dental pain', 'dental problems', 'dental issues',
+        'tooth pain', 'toothache', 'broken tooth', 'tooth',
+        'teeth', 'my teeth', 'help with my teeth', 'i need help with my teeth',
+        'my teeth hurt', 'teeth hurt', 'bad teeth', 'my teeth are bad',
+        'my teeth are falling out', 'teeth falling out', 'teeth problems',
+        'mouth pain', 'gum pain', 'gum disease', 'gum problems',
         'need a dentist', "can't afford a dentist",
         "can't afford dental care", 'free dental',
         'need vision care', 'need an eye exam',
@@ -744,44 +800,127 @@
     },
   ];
 
+  // Common misspelling corrections applied before rule matching
+  const MISSPELLING_CORRECTIONS = [
+    [/\bhomless\b|\bhomeles\b/g,                    'homeless'],
+    [/\bhungery\b|\bhungrey\b|\bhuger\b/g,          'hungry'],
+    [/\bvoilence\b|\bviloence\b|\bviolense\b/g,     'violence'],
+    [/\bdomesitc\b|\bdomestic\b/g,                  'domestic'],
+    [/\bpregant\b|\bpregnent\b|\bpregenant\b/g,     'pregnant'],
+    [/\btrasportation\b|\btransporation\b/g,         'transportation'],
+    [/\bmedecine\b|\bmedicin\b|\bmedcine\b/g,        'medicine'],
+    [/\bemergancy\b|\bemergancy\b|\bemerjency\b/g,   'emergency'],
+    [/\bassualt\b|\bassult\b/g,                      'assault'],
+    [/\bcrysis\b|\bcriis\b|\bcrissis\b/g,            'crisis'],
+    [/\btrafficing\b|\btrafficking\b/g,              'trafficking'],
+    [/\baddiciton\b|\badiction\b|\baddiciton\b/g,    'addiction'],
+    [/\balchohol\b|\balcahol\b|\balcohal\b/g,        'alcohol'],
+    [/\bdepresson\b|\bdepresion\b|\bdepresssion\b/g, 'depression'],
+    [/\banxeity\b|\banxity\b|\banxeity\b/g,          'anxiety'],
+    [/\bsuiside\b|\bsuiccide\b|\bsuisside\b/g,       'suicide'],
+    [/\bsheltar\b|\bsheltor\b/g,                     'shelter'],
+    [/\brecoverry\b|\brecovory\b/g,                  'recovery'],
+    [/\bimmigrasion\b|\bimmigration\b/g,             'immigration'],
+    [/\beviciton\b|\beviction\b/g,                   'eviction'],
+    [/\bunemployd\b|\bunemployeed\b/g,               'unemployed'],
+    [/\binshurence\b|\binsurance\b/g,                'insurance'],
+    [/\bprescripton\b|\bprescrition\b/g,             'prescription'],
+    [/\bcounseling\b|\bcounselling\b/g,              'counseling'],
+    [/\btherapist\b|\btherapiest\b/g,                'therapist'],
+    [/\bharrassed\b|\bharassed\b/g,                  'harassed'],
+  ];
+
   const TRANSLATED_SEARCH_PATTERNS = [
+    // ── Spanish: crisis / self-harm ───────────────────────────────────
+    { pattern: /quiero\s+morir|me\s+quiero\s+matar|quiero\s+matarme|me\s+voy\s+a\s+matar/g,           replacement: 'want to kill myself' },
+    { pattern: /no\s+quiero\s+(seguir\s+)?vivir|cansado\s+de\s+vivir|cansada\s+de\s+vivir/g,          replacement: 'dont want to live' },
+    { pattern: /pensando\s+en\s+suicidar(me|se)|pensamientos\s+suicidas|suicidio|suicidarme/g,        replacement: 'thinking about suicide' },
+    { pattern: /me\s+(lastimo|hago\s+daño|corto|autolesion)/g,                                        replacement: 'self harm' },
+    { pattern: /estoy\s+en\s+peligro|me\s+amenazan|me\s+(están\s+)?amenazando/g,                      replacement: 'i am in danger' },
+    { pattern: /necesito\s+ayuda\s+urgente|socorro|auxilio|al\s+rescate/g,                             replacement: 'please help me i am in danger' },
+    { pattern: /\bnecesito\s+ayuda\b/g,                                                               replacement: 'i need help' },
+    // ── Spanish: domestic violence ─────────────────────────────────────
+    { pattern: /violencia\s+doméstica|violencia\s+domestica|violencia\s+de\s+género|violencia\s+de\s+genero/g, replacement: 'domestic violence' },
+    { pattern: /mi\s+(pareja|novio|esposo|marido|novia|esposa)\s+(me\s+)?(golpea|pega|maltrata|hiere|lastima|amenaza)/g, replacement: 'my partner hits me' },
+    { pattern: /me\s+(golpea|pega|maltrata|hiere|lastima)\b/g,                                        replacement: 'being hit' },
+    { pattern: /tengo\s+miedo\s+(de\s+)?(mi\s+pareja|mi\s+novio|mi\s+esposo|mi\s+ex|ir\s+a\s+casa)/g, replacement: 'scared of my partner' },
+    { pattern: /relación\s+abusiva|relacion\s+abusiva|abuso\s+en\s+pareja/g,                          replacement: 'abusive relationship' },
+    { pattern: /me\s+controla|no\s+me\s+deja\s+(salir|ver|ir)/g,                                     replacement: 'being controlled' },
+    // ── Spanish: sexual assault ────────────────────────────────────────
+    { pattern: /me\s+violaron|fui\s+violada|fui\s+violado|violación|violacion/g,                      replacement: 'i was raped' },
+    { pattern: /agresión\s+sexual|agresion\s+sexual|abuso\s+sexual|acoso\s+sexual/g,                  replacement: 'sexual assault' },
+    { pattern: /me\s+tocaron\s+sin\s+mi\s+consentimiento|me\s+forzaron/g,                             replacement: 'sexual assault' },
+    // ── Spanish: human trafficking ─────────────────────────────────────
+    { pattern: /trata\s+de\s+(personas|blancas)|tráfico\s+de\s+personas|trafico\s+de\s+personas/g,    replacement: 'human trafficking' },
+    { pattern: /me\s+están\s+explotando|me\s+explotan|explotación\s+sexual|explotacion\s+sexual/g,   replacement: 'being exploited' },
+    { pattern: /no\s+puedo\s+salir|me\s+tienen\s+encerrada|me\s+tienen\s+encerrado|me\s+retuvieron/g, replacement: 'held against my will' },
+    // ── Spanish: food / housing / employment / immigration ─────────────
     { pattern: /\b(no\s+tengo\s+comida|no\s+hay\s+comida|sin\s+comida|sin\s+alimentos|no\s+tengo\s+alimentos)\b/g, replacement: 'no food' },
-    { pattern: /\b(comida|alimentos|hambre|hambriento|hambrienta)\b/g, replacement: 'food' },
+    { pattern: /\b(comida|alimentos|hambre|hambriento|hambrienta)\b/g,                                replacement: 'food' },
     { pattern: /\b(vivienda|casa|hogar|alojamiento|alquiler|alquilar|sin\s+hogar|sin\s+casa|sin\s+vivienda)\b/g, replacement: 'housing' },
-    { pattern: /\b(dinero|efectivo|crédito|credito|banco|ayuda\s+financiera|asistencia\s+financiera|subsidio|beneficios|pago|pagos|cuentas)\b/g, replacement: 'financial' },
-    { pattern: /\b(transporte|autobús|autobus|bus|taxi|vehículo|vehiculo|uber|lyft|tren|metro)\b/g, replacement: 'transportation' },
-    { pattern: /\b(discapacidad|discapacitado|discapacitada|accesibilidad)\b/g, replacement: 'disability' },
-    { pattern: /\b(anciano|anciana|mayor|mayores|adultos\s+mayores|senior|jubilado|jubilar)\b/g, replacement: 'senior_services' },
-    { pattern: /(食物|食品|饥饿|饿|没有食物|没吃)/g, replacement: 'food' },
-    { pattern: /(住房|房子|家|无家可归|没有家)/g, replacement: 'housing' },
-    { pattern: /(钱|金钱|资金|经济|贫困|财务|补助|没有钱|没钱)/g, replacement: 'financial' },
-    { pattern: /(交通|公交|出租车|火车|地铁|巴士|车辆)/g, replacement: 'transportation' },
-    { pattern: /(残疾|残障|无障碍)/g, replacement: 'disability' },
-    { pattern: /(老人|老年|退休|老年人)/g, replacement: 'senior_services' },
-    { pattern: /(孩子|儿童|父母|养育|家庭)/g, replacement: 'parenting' },
-    { pattern: /(计划生育|避孕|怀孕|产前)/g, replacement: 'family planning' },
-    { pattern: /(远程|远程医疗|线上医疗)/g, replacement: 'telehealth' },
-    { pattern: /(健康|医生|医院|诊所|医疗|医药)/g, replacement: 'health' },
-    { pattern: /(家暴|暴力|虐待)/g, replacement: 'domestic-violence' },
-    { pattern: /(没有钱|没钱|没有资金)/g, replacement: 'no money' },
-    { pattern: /(طعام|جوع|جائع)/g, replacement: 'food' },
-    { pattern: /(سكن|منزل|بيت|مأوى|بلا مأوى)/g, replacement: 'housing' },
-    { pattern: /(مال|نقود|مالية|مساعدة مالية|دعم مالي)/g, replacement: 'financial' },
-    { pattern: /(مواصلات|تاكسي|حافلة|قطار|مترو)/g, replacement: 'transportation' },
-    { pattern: /(إعاقة|معاق|وصول)/g, replacement: 'disability' },
-    { pattern: /(كبار السن|مسن|شيخوخة)/g, replacement: 'senior_services' },
-    { pattern: /(أسرة|أطفال|طفل|أم|أب|رعاية أطفال|تربية)/g, replacement: 'parenting' },
-    { pattern: /(تنظيم الأسرة|منع الحمل|حمل)/g, replacement: 'family planning' },
-    { pattern: /(الطب عن بعد|استشارة عن بعد|الرعاية عن بعد)/g, replacement: 'telehealth' },
-    { pattern: /(الإيدز|فيروس نقص المناعة|hiv)/g, replacement: 'hiv' },
-    { pattern: /(صحة|طبيب|مستشفى|عيادة)/g, replacement: 'health' },
-    { pattern: /(عنف منزلي|عنف أسري|اعتداء)/g, replacement: 'domestic-violence' },
-    { pattern: /(ليس لدي نقود|لا يوجد مال|لا مال|ما عندي فلوس)/g, replacement: 'no money' },
-    { pattern: /\b(y|pero|también|tambien|además|mas)\b/g, replacement: 'and' },
+    { pattern: /\b(sin\s+trabajo|no\s+tengo\s+trabajo|busco\s+trabajo|desempleo|desempleado|desempleada)\b/g, replacement: 'unemployed looking for work' },
+    { pattern: /\b(no\s+tengo\s+papeles|soy\s+indocumentado|soy\s+indocumentada|me\s+quieren\s+deportar|deportación|deportacion)\b/g, replacement: 'undocumented facing deportation' },
+    { pattern: /\b(transporte|autobús|autobus|bus|taxi|vehículo|vehiculo)\b/g,                        replacement: 'transportation' },
+    { pattern: /\b(dinero|efectivo|ayuda\s+financiera|asistencia\s+financiera|beneficios)\b/g,        replacement: 'financial' },
+    { pattern: /\b(anciano|anciana|mayor|mayores|adultos\s+mayores|jubilado)\b/g,                     replacement: 'senior_services' },
+
+    // ── Chinese: crisis / self-harm ───────────────────────────────────
+    { pattern: /想死|不想活|我要死|想结束生命|寻死/g,                                                  replacement: 'want to die' },
+    { pattern: /自杀|想自杀|我要自杀|有自杀念头/g,                                                    replacement: 'thinking about suicide' },
+    { pattern: /自残|伤害自己/g,                                                                       replacement: 'self harm' },
+    { pattern: /需要帮助|救命|救我|帮帮我|求救/g,                                                     replacement: 'please help me' },
+    { pattern: /有危险|我很危险|危险/g,                                                                replacement: 'i am in danger' },
+    // ── Chinese: domestic violence / sexual assault / trafficking ──────
+    { pattern: /家暴|被打|老公打我|被家人打|家庭暴力/g,                                               replacement: 'domestic violence being hit' },
+    { pattern: /性侵|强奸|被性侵|被强奸|遭受性侵/g,                                                   replacement: 'sexual assault rape' },
+    { pattern: /人口贩卖|被贩卖|被卖掉|性剥削/g,                                                      replacement: 'human trafficking being exploited' },
+    { pattern: /不能出门|被关着|被控制|逃不掉/g,                                                       replacement: 'held against my will cannot leave' },
+    // ── Chinese: food / housing / employment / health ──────────────────
+    { pattern: /(食物|食品|饥饿|饿|没有食物|没吃|我很饿)/g,                                          replacement: 'food hungry' },
+    { pattern: /(住房|房子|无家可归|没有家|没地方住)/g,                                               replacement: 'homeless no housing' },
+    { pattern: /(没有工作|找工作|失业|丢了工作)/g,                                                    replacement: 'unemployed looking for work' },
+    { pattern: /(健康|医生|医院|诊所|医疗|医药)/g,                                                    replacement: 'health' },
+    { pattern: /(交通|公交|出租车|火车|地铁|巴士|车辆)/g,                                             replacement: 'transportation' },
+    { pattern: /(孩子|儿童|父母|养育|家庭)/g,                                                         replacement: 'parenting' },
+    { pattern: /(老人|老年|退休|老年人)/g,                                                             replacement: 'senior_services' },
+    { pattern: /(残疾|残障|无障碍)/g,                                                                  replacement: 'disability' },
+    { pattern: /(没有钱|没钱|没有资金|钱|金钱)/g,                                                     replacement: 'no money financial' },
+
+    // ── Arabic: crisis / self-harm ─────────────────────────────────────
+    { pattern: /أريد\s+الموت|أريد\s+أن\s+أموت|لا\s+أريد\s+(أن\s+)?أعيش/g,                          replacement: 'want to die' },
+    { pattern: /أريد\s+الانتحار|أفكر\s+في\s+الانتحار|انتحار/g,                                      replacement: 'thinking about suicide' },
+    { pattern: /أؤذي\s+نفسي|أجرح\s+نفسي|إيذاء\s+النفس/g,                                           replacement: 'self harm' },
+    { pattern: /أحتاج\s+مساعدة\s+عاجلة|النجدة|أنقذوني|ساعدوني/g,                                   replacement: 'please help me i am in danger' },
+    { pattern: /أنا\s+في\s+خطر|أشعر\s+بالخطر/g,                                                     replacement: 'i am in danger' },
+    // ── Arabic: domestic violence / sexual assault / trafficking ───────
+    { pattern: /عنف\s+منزلي|عنف\s+أسري|زوجي\s+يضربني|يضربني|يؤذيني/g,                             replacement: 'domestic violence being hit' },
+    { pattern: /اغتصاب|تعرضت\s+للاغتصاب|اعتداء\s+جنسي|تحرش\s+جنسي/g,                              replacement: 'sexual assault rape' },
+    { pattern: /الاتجار\s+بالبشر|تهريب\s+بشر|أُستغل|تم\s+استغلالي/g,                               replacement: 'human trafficking being exploited' },
+    { pattern: /لا\s+أستطيع\s+المغادرة|محتجز|محتجزة|أسير|أسيرة/g,                                  replacement: 'held against my will cannot leave' },
+    // ── Arabic: food / housing / employment / health ───────────────────
+    { pattern: /(طعام|جوع|جائع|جائعة|لا\s+يوجد\s+طعام|أعاني\s+من\s+الجوع)/g,                     replacement: 'food hungry' },
+    { pattern: /(سكن|منزل|بيت|مأوى|بلا\s+مأوى|لا\s+أملك\s+مأوى|بلا\s+مسكن)/g,                   replacement: 'homeless no housing' },
+    { pattern: /(بلا\s+عمل|أبحث\s+عن\s+عمل|فقدت\s+عملي|لا\s+عمل\s+لي)/g,                         replacement: 'unemployed looking for work' },
+    { pattern: /(صحة|طبيب|مستشفى|عيادة|رعاية\s+صحية)/g,                                            replacement: 'health' },
+    { pattern: /(مواصلات|تاكسي|حافلة|قطار|مترو)/g,                                                  replacement: 'transportation' },
+    { pattern: /(مال|نقود|مالية|مساعدة\s+مالية|لا\s+يوجد\s+مال|ليس\s+لدي\s+نقود)/g,              replacement: 'no money financial' },
+    { pattern: /(أسرة|أطفال|طفل|أم|أب|رعاية\s+أطفال)/g,                                            replacement: 'parenting' },
+    { pattern: /(كبار\s+السن|مسن|شيخوخة)/g,                                                         replacement: 'senior_services' },
+    { pattern: /(إعاقة|معاق|وصول)/g,                                                                 replacement: 'disability' },
+    { pattern: /(الإيدز|فيروس\s+نقص\s+المناعة)/g,                                                   replacement: 'hiv' },
+    { pattern: /(عنف\s+منزلي|عنف\s+أسري|اعتداء)/g,                                                  replacement: 'domestic-violence' },
+
+    // ── Loose connectors (Spanish) ─────────────────────────────────────
+    { pattern: /\b(y|pero|también|tambien|además|mas|necesito|tengo|estoy)\b/g, replacement: 'and' },
   ];
 
   function normalizeSearchText(rawText) {
     let normalized = String(rawText || '').toLowerCase();
+    // 1. Misspelling corrections
+    MISSPELLING_CORRECTIONS.forEach(function (pair) {
+      normalized = normalized.replace(pair[0], pair[1]);
+    });
+    // 2. Multilingual normalization
     TRANSLATED_SEARCH_PATTERNS.forEach(function (entry) {
       normalized = normalized.replace(entry.pattern, entry.replacement);
     });

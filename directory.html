@@ -104,6 +104,7 @@
                 type="button">
           <i class="bi bi-sliders" aria-hidden="true"></i>
           <span>Filters</span>
+          <span class="filter-active-badge" id="filter-badge" hidden aria-live="polite" aria-label="active filters"></span>
         </button>
       </div>
       <p id="search-hint" class="sr-only">Type to filter resources. Results update in real time.</p>
@@ -112,33 +113,50 @@
     <!-- Collapsible filters panel (not sticky; hidden on mobile by default) -->
     <div class="search-filters-bar" id="filter-panel" hidden>
       <div class="container">
-        <div class="filters" role="group" aria-label="Filter options">
-          <div class="filter-group">
-            <label for="filter-category">Category</label>
-            <select id="filter-category" aria-label="Filter by category">
-              <option value="">All Categories</option>
-            </select>
+        <div class="filters filters--multi" role="group" aria-label="Filter options">
+
+          <div class="filter-group filter-group--chips">
+            <div class="filter-group-header">
+              <span class="filter-group-label" id="flt-cat-label">Category</span>
+              <span class="filter-group-count" id="flt-cat-count" hidden></span>
+            </div>
+            <div class="filter-chips" id="filter-category" role="group" aria-labelledby="flt-cat-label">
+              <!-- populated by search.js -->
+            </div>
           </div>
-          <div class="filter-group">
-            <label for="filter-county">County</label>
-            <select id="filter-county" aria-label="Filter by county">
-              <option value="">All Counties</option>
-            </select>
+
+          <div class="filter-group filter-group--chips">
+            <div class="filter-group-header">
+              <span class="filter-group-label" id="flt-county-label">County</span>
+              <span class="filter-group-count" id="flt-county-count" hidden></span>
+            </div>
+            <div class="filter-chips" id="filter-county" role="group" aria-labelledby="flt-county-label">
+              <!-- populated by search.js -->
+            </div>
           </div>
-          <div class="filter-group">
-            <label for="filter-city">City</label>
-            <select id="filter-city" aria-label="Filter by city">
-              <option value="">All Cities</option>
-            </select>
+
+          <div class="filter-group filter-group--chips">
+            <div class="filter-group-header">
+              <span class="filter-group-label" id="flt-city-label">City</span>
+              <span class="filter-group-count" id="flt-city-count" hidden></span>
+            </div>
+            <div class="filter-chips" id="filter-city" role="group" aria-labelledby="flt-city-label">
+              <!-- populated by search.js -->
+            </div>
           </div>
-          <div class="filter-group">
-            <label for="filter-tag">Tag</label>
-            <select id="filter-tag" aria-label="Filter by tag">
-              <option value="">All Tags</option>
-            </select>
+
+          <div class="filter-group filter-group--chips">
+            <div class="filter-group-header">
+              <span class="filter-group-label" id="flt-tag-label">Tag</span>
+              <span class="filter-group-count" id="flt-tag-count" hidden></span>
+            </div>
+            <div class="filter-chips" id="filter-tag" role="group" aria-labelledby="flt-tag-label">
+              <!-- populated by search.js -->
+            </div>
           </div>
+
           <button class="filter-reset" id="filter-reset" type="button"
-                  aria-label="Reset all filters and search">Reset Filters</button>
+                  aria-label="Reset all filters and search">Reset All</button>
         </div>
       </div>
     </div>
