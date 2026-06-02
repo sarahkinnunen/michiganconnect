@@ -115,43 +115,95 @@
       <div class="container">
         <div class="filters filters--multi" role="group" aria-label="Filter options">
 
-          <div class="filter-group filter-group--chips">
+          <div class="filter-group filter-group--chips filter-group--tag-combo">
             <div class="filter-group-header">
               <span class="filter-group-label" id="flt-cat-label">Category</span>
               <span class="filter-group-count" id="flt-cat-count" hidden></span>
             </div>
-            <div class="filter-chips" id="filter-category" role="group" aria-labelledby="flt-cat-label">
-              <!-- populated by search.js -->
+            <div class="tag-combo" id="cat-combo">
+              <div class="tag-combo-field">
+                <input type="text" id="cat-combo-input" class="tag-combo-input"
+                       placeholder="Type to filter…" autocomplete="off"
+                       role="combobox" aria-autocomplete="list"
+                       aria-controls="cat-combo-list" aria-expanded="false"
+                       aria-labelledby="flt-cat-label">
+                <button type="button" class="tag-combo-toggle" id="cat-combo-toggle"
+                        aria-label="Show all categories" tabindex="-1">
+                  <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                </button>
+              </div>
+              <ul class="tag-combo-list" id="cat-combo-list" role="listbox"
+                  aria-multiselectable="true" aria-label="Available categories" hidden></ul>
+              <div class="tag-selected-chips" id="cat-selected-chips" aria-label="Selected categories"></div>
             </div>
           </div>
 
-          <div class="filter-group filter-group--chips">
+          <div class="filter-group filter-group--chips filter-group--tag-combo">
             <div class="filter-group-header">
               <span class="filter-group-label" id="flt-county-label">County</span>
               <span class="filter-group-count" id="flt-county-count" hidden></span>
             </div>
-            <div class="filter-chips" id="filter-county" role="group" aria-labelledby="flt-county-label">
-              <!-- populated by search.js -->
+            <div class="tag-combo" id="county-combo">
+              <div class="tag-combo-field">
+                <input type="text" id="county-combo-input" class="tag-combo-input"
+                       placeholder="Type to filter…" autocomplete="off"
+                       role="combobox" aria-autocomplete="list"
+                       aria-controls="county-combo-list" aria-expanded="false"
+                       aria-labelledby="flt-county-label">
+                <button type="button" class="tag-combo-toggle" id="county-combo-toggle"
+                        aria-label="Show all counties" tabindex="-1">
+                  <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                </button>
+              </div>
+              <ul class="tag-combo-list" id="county-combo-list" role="listbox"
+                  aria-multiselectable="true" aria-label="Available counties" hidden></ul>
+              <div class="tag-selected-chips" id="county-selected-chips" aria-label="Selected counties"></div>
             </div>
           </div>
 
-          <div class="filter-group filter-group--chips">
+          <div class="filter-group filter-group--chips filter-group--tag-combo">
             <div class="filter-group-header">
               <span class="filter-group-label" id="flt-city-label">City</span>
               <span class="filter-group-count" id="flt-city-count" hidden></span>
             </div>
-            <div class="filter-chips" id="filter-city" role="group" aria-labelledby="flt-city-label">
-              <!-- populated by search.js -->
+            <div class="tag-combo" id="city-combo">
+              <div class="tag-combo-field">
+                <input type="text" id="city-combo-input" class="tag-combo-input"
+                       placeholder="Type to filter…" autocomplete="off"
+                       role="combobox" aria-autocomplete="list"
+                       aria-controls="city-combo-list" aria-expanded="false"
+                       aria-labelledby="flt-city-label">
+                <button type="button" class="tag-combo-toggle" id="city-combo-toggle"
+                        aria-label="Show all cities" tabindex="-1">
+                  <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                </button>
+              </div>
+              <ul class="tag-combo-list" id="city-combo-list" role="listbox"
+                  aria-multiselectable="true" aria-label="Available cities" hidden></ul>
+              <div class="tag-selected-chips" id="city-selected-chips" aria-label="Selected cities"></div>
             </div>
           </div>
 
-          <div class="filter-group filter-group--chips">
+          <div class="filter-group filter-group--chips filter-group--tag-combo">
             <div class="filter-group-header">
               <span class="filter-group-label" id="flt-tag-label">Tag</span>
               <span class="filter-group-count" id="flt-tag-count" hidden></span>
             </div>
-            <div class="filter-chips" id="filter-tag" role="group" aria-labelledby="flt-tag-label">
-              <!-- populated by search.js -->
+            <div class="tag-combo" id="tag-combo">
+              <div class="tag-combo-field">
+                <input type="text" id="tag-combo-input" class="tag-combo-input"
+                       placeholder="Type to search…" autocomplete="off"
+                       role="combobox" aria-autocomplete="list"
+                       aria-controls="tag-combo-list" aria-expanded="false"
+                       aria-labelledby="flt-tag-label">
+                <button type="button" class="tag-combo-toggle" id="tag-combo-toggle"
+                        aria-label="Show all tags" tabindex="-1">
+                  <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                </button>
+              </div>
+              <ul class="tag-combo-list" id="tag-combo-list" role="listbox"
+                  aria-multiselectable="true" aria-label="Available tags" hidden></ul>
+              <div class="tag-selected-chips" id="tag-selected-chips" aria-label="Selected tags"></div>
             </div>
           </div>
 
@@ -189,10 +241,23 @@
                 </select>
               </div>
               <div class="planner-field">
-                <label for="planner-city">City / Location</label>
-                <select id="planner-city">
-                  <option value="">Any location</option>
-                </select>
+                <label id="planner-city-label">City / Location <span class="planner-field-hint">(one or more)</span></label>
+                <div class="tag-combo planner-city-combo" id="planner-city-combo">
+                  <div class="tag-combo-field">
+                    <input type="text" id="planner-city-input" class="tag-combo-input"
+                           placeholder="Type to search cities…" autocomplete="off"
+                           role="combobox" aria-autocomplete="list"
+                           aria-controls="planner-city-list" aria-expanded="false"
+                           aria-labelledby="planner-city-label">
+                    <button type="button" class="tag-combo-toggle" id="planner-city-toggle"
+                            aria-label="Show all cities" tabindex="-1">
+                      <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <ul class="tag-combo-list" id="planner-city-list" role="listbox"
+                      aria-multiselectable="true" aria-label="Available cities" hidden></ul>
+                  <div class="tag-selected-chips" id="planner-city-chips" aria-label="Selected cities"></div>
+                </div>
               </div>
             </div>
           </div>

@@ -183,8 +183,13 @@
     },
   ];
 
+  // Safety/crisis need IDs that always sort first in the plan
+  var SAFETY_NEEDS = { 'crisis': true, 'domestic-violence': true, 'human-trafficking': true };
+
   /* ── State ───────────────────────────────────────────────── */
-  var allResources = [];
+  var allResources  = [];
+  var selectedCities = [];
+  var allCityOptions = [];
 
   /* ── Helpers ─────────────────────────────────────────────── */
   function escapeHTML(str) {
@@ -193,6 +198,10 @@
     return d.innerHTML;
   }
   function sanitizePhone(p) { return (p || '').replace(/[^\d+]/g, ''); }
+  function domainOf(url) {
+    if (!url) return '';
+    return url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+  }
 
   /* ── Boot ────────────────────────────────────────────────── */
   var plannerEl = document.getElementById('resource-planner');
@@ -202,31 +211,139 @@
     .then(function (r) { return r.json(); })
     .then(function (data) {
       allResources = data;
-      populateCitySelect(data);
+      initCityCombo(data);
       buildNeedsGrid();
       wireForm();
     })
     .catch(function (err) { console.error('Planner: could not load resources', err); });
 
-  /* ── City select ─────────────────────────────────────────── */
-  function populateCitySelect(data) {
-    var sel = document.getElementById('planner-city');
-    if (!sel) return;
+  /* ── City combobox (multi-select) ────────────────────────── */
+  function initCityCombo(data) {
     var cities = [];
     var seen = {};
     data.forEach(function (r) {
       var c = r.city || '';
-      if (c && !seen[c] && c !== 'N/A' && c !== 'National' && c !== 'Statewide' && c !== 'Multiple' && c !== 'Multiple locations') {
+      if (c && !seen[c] && c !== 'N/A' && c !== 'National' && c !== 'Statewide' &&
+          c !== 'Multiple' && c !== 'Multiple locations') {
         seen[c] = true;
         cities.push(c);
       }
     });
-    cities.sort().forEach(function (city) {
-      var opt = document.createElement('option');
-      opt.value = city;
-      opt.textContent = city;
-      sel.appendChild(opt);
+    cities.sort();
+    allCityOptions = cities;
+
+    var input  = document.getElementById('planner-city-input');
+    var list   = document.getElementById('planner-city-list');
+    var toggle = document.getElementById('planner-city-toggle');
+    var chips  = document.getElementById('planner-city-chips');
+
+    function renderList(filter) {
+      if (!list) return;
+      var q = (filter || '').toLowerCase().trim();
+      var matching = allCityOptions.filter(function (c) {
+        return !q || c.toLowerCase().includes(q);
+      });
+      list.innerHTML = '';
+      if (!matching.length) {
+        var emp = document.createElement('li');
+        emp.className = 'tag-combo-empty';
+        emp.textContent = 'No cities match';
+        list.appendChild(emp);
+        return;
+      }
+      matching.forEach(function (city) {
+        var li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.setAttribute('tabindex', '0');
+        li.setAttribute('aria-selected', selectedCities.indexOf(city) !== -1 ? 'true' : 'false');
+        if (selectedCities.indexOf(city) !== -1) li.classList.add('selected');
+        if (q) {
+          var idx = city.toLowerCase().indexOf(q);
+          if (idx >= 0) {
+            li.innerHTML = escapeHTML(city.slice(0, idx)) +
+              '<mark>' + escapeHTML(city.slice(idx, idx + q.length)) + '</mark>' +
+              escapeHTML(city.slice(idx + q.length));
+          } else {
+            li.textContent = city;
+          }
+        } else {
+          li.textContent = city;
+        }
+        li.addEventListener('click', function () { toggleCity(city); });
+        li.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCity(city); }
+          if (e.key === 'ArrowDown') { e.preventDefault(); var n = li.nextElementSibling; if (n) n.focus(); }
+          if (e.key === 'ArrowUp')   { e.preventDefault(); var p = li.previousElementSibling; if (p) p.focus(); else if (input) input.focus(); }
+          if (e.key === 'Escape')    { closeList(); if (input) input.focus(); }
+        });
+        list.appendChild(li);
+      });
+    }
+
+    function toggleCity(city) {
+      var idx = selectedCities.indexOf(city);
+      if (idx !== -1) selectedCities.splice(idx, 1);
+      else selectedCities.push(city);
+      renderList(input ? input.value : '');
+      renderChips();
+      if (input) input.focus();
+    }
+
+    function renderChips() {
+      if (!chips) return;
+      chips.innerHTML = '';
+      selectedCities.forEach(function (city) {
+        var chip = document.createElement('span');
+        chip.className = 'tag-selected-chip';
+        var lbl = document.createTextNode(city + ' ');
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Remove ' + city);
+        btn.textContent = '×';
+        btn.addEventListener('click', function (e) { e.stopPropagation(); toggleCity(city); });
+        chip.appendChild(lbl);
+        chip.appendChild(btn);
+        chips.appendChild(chip);
+      });
+    }
+
+    function openList() {
+      if (!list) return;
+      list.removeAttribute('hidden');
+      if (input) input.setAttribute('aria-expanded', 'true');
+      if (toggle) toggle.classList.add('open');
+    }
+
+    function closeList() {
+      if (!list) return;
+      list.setAttribute('hidden', '');
+      if (input) input.setAttribute('aria-expanded', 'false');
+      if (toggle) toggle.classList.remove('open');
+    }
+
+    if (input) {
+      input.addEventListener('input', function () { renderList(this.value); openList(); });
+      input.addEventListener('focus', openList);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeList();
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          var first = list && list.querySelector('li:not(.tag-combo-empty)');
+          if (first) first.focus();
+        }
+      });
+    }
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        if (list && list.hasAttribute('hidden')) { openList(); if (input) input.focus(); }
+        else closeList();
+      });
+    }
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#planner-city-combo')) closeList();
     });
+
+    renderList('');
   }
 
   /* ── Needs grid ──────────────────────────────────────────── */
@@ -284,6 +401,13 @@
     if (clearBtn) {
       clearBtn.addEventListener('click', function () {
         if (form) form.reset();
+        // Clear city combobox
+        selectedCities = [];
+        var chips = document.getElementById('planner-city-chips');
+        if (chips) chips.innerHTML = '';
+        var cityInput = document.getElementById('planner-city-input');
+        if (cityInput) cityInput.value = '';
+        initCityCombo(allResources); // re-render city list
         document.querySelectorAll('.planner-subs').forEach(function (el) {
           el.setAttribute('hidden', '');
         });
@@ -300,8 +424,8 @@
   function buildPlan() {
     if (!allResources.length) return;
 
-    var age = (document.getElementById('planner-age') || {}).value || '';
-    var city = (document.getElementById('planner-city') || {}).value || '';
+    var age   = (document.getElementById('planner-age') || {}).value || '';
+    var cities = selectedCities.slice();
 
     // Collect selected needs
     var selections = [];
@@ -328,23 +452,22 @@
       return {
         need: sel.need,
         subTags: sel.subTags,
-        resources: getResources(sel.need, sel.subTags, age, city)
+        resources: getResources(sel.need, sel.subTags, age, cities)
       };
     });
 
-    // Crisis/safety needs always appear first
-    var SAFETY_FIRST = { 'crisis': true };
+    // Safety/crisis needs always appear first
     planSections.sort(function (a, b) {
-      var aFirst = SAFETY_FIRST[a.need.id] ? 0 : 1;
-      var bFirst = SAFETY_FIRST[b.need.id] ? 0 : 1;
+      var aFirst = SAFETY_NEEDS[a.need.id] ? 0 : 1;
+      var bFirst = SAFETY_NEEDS[b.need.id] ? 0 : 1;
       return aFirst - bFirst;
     });
 
-    renderOutput(planSections, age, city);
+    renderOutput(planSections, age, cities);
   }
 
   /* ── Resource filtering ──────────────────────────────────── */
-  function getResources(need, subTags, age, city) {
+  function getResources(need, subTags, age, cities) {
     // Step 1: category match
     var results = allResources.filter(function (r) {
       var cats = r.categories || [r.category || ''];
@@ -370,21 +493,19 @@
         return subTags.some(function (t) { return hay.indexOf(t) !== -1; });
       });
       if (narrowed.length > 0) results = narrowed;
-      // else: keep broader category results so user still sees something
     }
 
-    // Step 4: location filter
-    if (city) {
+    // Step 4: location filter (OR across selected cities; always include statewide)
+    if (cities.length > 0) {
       var byCity = results.filter(function (r) {
-        if (r.city === city) return true;
-        // Include statewide / regional / no-city resources
-        var tags = (r.tags || []).join(' ').toLowerCase();
         var rCity = (r.city || '').toLowerCase();
-        if (!rCity || rCity === 'statewide' || rCity === 'multiple locations' || rCity === 'multiple' || rCity === 'n/a') return true;
-        if (tags.indexOf('statewide') !== -1 || tags.indexOf('michigan') !== -1 || tags.indexOf('national') !== -1) return true;
-        return false;
+        if (!rCity || rCity === 'statewide' || rCity === 'multiple locations' ||
+            rCity === 'multiple' || rCity === 'n/a') return true;
+        var tags = (r.tags || []).join(' ').toLowerCase();
+        if (tags.indexOf('statewide') !== -1 || tags.indexOf('michigan') !== -1 ||
+            tags.indexOf('national') !== -1) return true;
+        return cities.some(function (c) { return r.city === c; });
       });
-      // Only apply city filter if it doesn't wipe out everything
       if (byCity.length > 0) results = byCity;
     }
 
@@ -405,30 +526,36 @@
   function matchesAge(r, age) {
     var tags = (r.tags || []).join(' ').toLowerCase();
     var elig = (r.eligibility || '').toLowerCase();
-    var name = (r.name || '').toLowerCase();
 
     var isYouthOnly = (tags.indexOf('youth') !== -1 && (
-      elig.indexOf('under 18') !== -1 || elig.indexOf('ages 13') !== -1 || elig.indexOf('ages 14') !== -1 ||
-      elig.indexOf('ages 16') !== -1 || elig.indexOf('up to 17') !== -1
+      elig.indexOf('under 18') !== -1 || elig.indexOf('ages 13') !== -1 ||
+      elig.indexOf('ages 14') !== -1 || elig.indexOf('ages 16') !== -1 ||
+      elig.indexOf('up to 17') !== -1
     ));
-    var isSeniorOnly = tags.indexOf('senior') !== -1 && (elig.indexOf('senior') !== -1 || elig.indexOf('55') !== -1 || elig.indexOf('60') !== -1 || elig.indexOf('elderly') !== -1);
-    var isAdultOnly18 = elig.indexOf('18 and older') !== -1 || elig.indexOf('18+') !== -1 || elig.indexOf('must be 18') !== -1;
+    var isSeniorOnly = tags.indexOf('senior') !== -1 &&
+      (elig.indexOf('senior') !== -1 || elig.indexOf('55') !== -1 ||
+       elig.indexOf('60') !== -1 || elig.indexOf('elderly') !== -1);
+    var isAdultOnly18 = elig.indexOf('18 and older') !== -1 || elig.indexOf('18+') !== -1 ||
+      elig.indexOf('must be 18') !== -1;
 
-    if (age === 'teen') return !isSeniorOnly && !isAdultOnly18;
+    if (age === 'teen')        return !isSeniorOnly && !isAdultOnly18;
     if (age === 'young-adult') return !isSeniorOnly;
-    if (age === 'adult') return !isSeniorOnly && !isYouthOnly;
-    if (age === 'senior') return true;
+    if (age === 'adult')       return !isSeniorOnly && !isYouthOnly;
+    if (age === 'senior')      return true;
     return true;
   }
 
   /* ── Render output ───────────────────────────────────────── */
-  function renderOutput(planSections, age, city) {
+  function renderOutput(planSections, age, cities) {
     var output = document.getElementById('planner-output');
     if (!output) return;
 
-    var AGE_LABELS = { teen: 'Teen (13–17)', 'young-adult': 'Young Adult (18–24)', adult: 'Adult (25–54)', senior: 'Senior (55+)' };
+    var AGE_LABELS = {
+      teen: 'Teen (13–17)', 'young-adult': 'Young Adult (18–24)',
+      adult: 'Adult (25–54)', senior: 'Senior (55+)'
+    };
     var totalResources = planSections.reduce(function (s, sec) { return s + sec.resources.length; }, 0);
-    var locationText = city || 'Southeast Michigan';
+    var locationText = cities.length > 0 ? cities.join(', ') : 'Southeast Michigan';
     var ageText = age ? AGE_LABELS[age] : '';
 
     var contextLine = 'Here\'s what we found' +
@@ -439,9 +566,12 @@
     html += '<div class="planner-plan-header">';
     html += '<div>';
     html += '<h3><i class="bi bi-map-fill" aria-hidden="true"></i> Your Resource Plan</h3>';
-    html += '<p>' + contextLine + ': <strong>' + totalResources + ' resource' + (totalResources !== 1 ? 's' : '') + '</strong> across ' + planSections.length + ' need' + (planSections.length !== 1 ? 's' : '') + '</p>';
+    html += '<p>' + contextLine + ': <strong>' + totalResources + ' resource' +
+      (totalResources !== 1 ? 's' : '') + '</strong> across ' + planSections.length +
+      ' need' + (planSections.length !== 1 ? 's' : '') + '</p>';
     html += '</div>';
-    html += '<button type="button" class="btn btn-outline btn-sm" onclick="window.print()"><i class="bi bi-printer-fill" aria-hidden="true"></i> Print</button>';
+    html += '<button type="button" class="btn btn-outline btn-sm" id="planner-print-btn">' +
+      '<i class="bi bi-printer-fill" aria-hidden="true"></i> Print</button>';
     html += '</div>';
 
     planSections.forEach(function (sec, idx) {
@@ -452,53 +582,163 @@
       html += '<span class="planner-step-badge">Step ' + (idx + 1) + '</span>';
       html += '<h4><i class="bi ' + need.icon + '" aria-hidden="true"></i> ' + escapeHTML(need.label) + '</h4>';
       if (resources.length) {
-        html += '<span class="planner-section-count">' + resources.length + ' resource' + (resources.length !== 1 ? 's' : '') + '</span>';
+        html += '<span class="planner-section-count">' + resources.length +
+          ' resource' + (resources.length !== 1 ? 's' : '') + '</span>';
       }
       html += '</div>';
 
       if (resources.length === 0) {
         html += '<div class="planner-no-results">';
         html += '<i class="bi bi-info-circle" aria-hidden="true"></i>';
-        html += '<p>No resources found for <strong>' + escapeHTML(need.label) + '</strong>' + (city ? ' in ' + escapeHTML(city) : '') + '. ';
-        html += '<a href="category/' + need.categories[0] + '.html">Browse all ' + escapeHTML(need.label) + ' resources</a>.</p>';
+        html += '<p>No resources found for <strong>' + escapeHTML(need.label) + '</strong>' +
+          (cities.length ? ' in ' + escapeHTML(cities.join(', ')) : '') + '. ';
+        html += '<a href="category/' + need.categories[0] + '.html">Browse all ' +
+          escapeHTML(need.label) + ' resources</a>.</p>';
         html += '</div>';
       } else {
         html += '<div class="planner-resource-list">';
-        var shown = resources.slice(0, 5);
+        var shown = resources.slice(0, 6);
         shown.forEach(function (r) { html += renderCard(r); });
         html += '</div>';
-        if (resources.length > 5) {
-          html += '<p class="planner-see-more"><a href="category/' + need.categories[0] + '.html">See all ' + resources.length + ' ' + escapeHTML(need.label) + ' resources →</a></p>';
+        if (resources.length > 6) {
+          html += '<p class="planner-see-more"><a href="category/' + need.categories[0] +
+            '.html">See all ' + resources.length + ' ' + escapeHTML(need.label) +
+            ' resources →</a></p>';
         }
       }
       html += '</div>';
     });
 
-    html += '</div>'; // .planner-plan
+    html += '</div>';
     output.innerHTML = html;
     output.removeAttribute('hidden');
     output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Wire print button after DOM insertion
+    var printBtn = document.getElementById('planner-print-btn');
+    if (printBtn) printBtn.addEventListener('click', printPlan);
   }
 
+  /* ── Card renderer ───────────────────────────────────────── */
   function renderCard(r) {
-    var phone = sanitizePhone(r.phone);
+    var phone   = sanitizePhone(r.phone);
+    var domain  = domainOf(r.website);
+
     var html = '<div class="planner-resource-card">';
     html += '<div class="planner-rc-body">';
     html += '<div class="planner-rc-name">' + escapeHTML(r.name) + '</div>';
+
+    // Location + hours + phone on one meta row
     html += '<div class="planner-rc-meta">';
-    if (r.city) html += '<span><i class="bi bi-geo-alt-fill" aria-hidden="true"></i> ' + escapeHTML(r.city) + (r.county ? ', ' + escapeHTML(r.county) + ' Co.' : '') + '</span>';
-    if (r.hours) html += '<span><i class="bi bi-clock-fill" aria-hidden="true"></i> ' + escapeHTML(r.hours) + '</span>';
-    html += '</div>';
-    if (r.eligibility) {
-      html += '<div class="planner-rc-elig"><i class="bi bi-person-check-fill" aria-hidden="true"></i> ' + escapeHTML(r.eligibility) + '</div>';
+    if (r.city) {
+      html += '<span><i class="bi bi-geo-alt-fill" aria-hidden="true"></i> ' +
+        escapeHTML(r.city) + (r.county ? ', ' + escapeHTML(r.county) + ' Co.' : '') + '</span>';
+    }
+    if (r.hours) {
+      html += '<span><i class="bi bi-clock-fill" aria-hidden="true"></i> ' + escapeHTML(r.hours) + '</span>';
+    }
+    if (r.phone) {
+      html += '<span><i class="bi bi-telephone-fill" aria-hidden="true"></i> ' + escapeHTML(r.phone) + '</span>';
     }
     html += '</div>';
+
+    // Address
+    if (r.address) {
+      html += '<div class="planner-rc-detail">' +
+        '<i class="bi bi-map" aria-hidden="true"></i> ' + escapeHTML(r.address) + '</div>';
+    }
+
+    // Website (full domain displayed)
+    if (r.website && domain) {
+      html += '<div class="planner-rc-detail">' +
+        '<i class="bi bi-globe-americas" aria-hidden="true"></i> ' +
+        '<a href="' + escapeHTML(r.website) + '" target="_blank" rel="noopener noreferrer">' +
+        escapeHTML(domain) + '</a></div>';
+    }
+
+    // Eligibility
+    if (r.eligibility) {
+      html += '<div class="planner-rc-detail planner-rc-elig">' +
+        '<i class="bi bi-person-check-fill" aria-hidden="true"></i> ' +
+        escapeHTML(r.eligibility) + '</div>';
+    }
+
+    // Tags
+    if (r.tags && r.tags.length) {
+      html += '<div class="planner-rc-tags">';
+      r.tags.forEach(function (t) {
+        html += '<span class="planner-rc-tag">' + escapeHTML(t) + '</span>';
+      });
+      html += '</div>';
+    }
+
+    html += '</div>'; // .planner-rc-body
+
+    // Action buttons (hidden in print)
     html += '<div class="planner-rc-actions">';
-    if (r.phone) html += '<a href="tel:' + phone + '" class="btn btn-primary btn-sm"><i class="bi bi-telephone-fill" aria-hidden="true"></i> Call</a>';
-    if (r.website) html += '<a href="' + escapeHTML(r.website) + '" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">Website</a>';
+    if (r.phone) {
+      html += '<a href="tel:' + phone + '" class="btn btn-primary btn-sm">' +
+        '<i class="bi bi-telephone-fill" aria-hidden="true"></i> Call</a>';
+    }
+    if (r.website) {
+      html += '<a href="' + escapeHTML(r.website) + '" target="_blank" rel="noopener noreferrer" ' +
+        'class="btn btn-outline btn-sm">Website</a>';
+    }
     html += '</div>';
-    html += '</div>';
+
+    html += '</div>'; // .planner-resource-card
     return html;
+  }
+
+  /* ── Print plan (popup window, plan only) ────────────────── */
+  function printPlan() {
+    var output = document.getElementById('planner-output');
+    if (!output || output.hasAttribute('hidden')) return;
+
+    var win = window.open('', '_blank', 'width=820,height=700');
+    if (!win) { window.print(); return; }
+
+    var styles = [
+      'body{font-family:system-ui,-apple-system,sans-serif;font-size:13px;color:#111;padding:24px;margin:0;line-height:1.45}',
+      'a{color:#5b2c83}',
+      'h3{color:#5b2c83;margin:0 0 3px;font-size:17px}',
+      'h4{color:#5b2c83;margin:0;font-size:14px}',
+      '.planner-plan-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #5b2c83;padding-bottom:10px;margin-bottom:18px}',
+      '.planner-plan-header p{margin:2px 0 0;font-size:12px;color:#555}',
+      '.planner-plan-header .btn,.planner-rc-actions{display:none!important}',
+      '.planner-plan-section{margin-bottom:18px;page-break-inside:avoid}',
+      '.planner-section-heading{display:flex;align-items:center;gap:8px;border-bottom:1px solid #ddd;padding-bottom:5px;margin-bottom:10px}',
+      '.planner-step-badge{background:#5b2c83;color:#fff;border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700}',
+      '.planner-section-count{margin-left:auto;font-size:11px;color:#888}',
+      '.planner-resource-list{display:flex;flex-direction:column;gap:8px}',
+      '.planner-resource-card{border:1px solid #ddd;border-radius:6px;padding:9px 13px;page-break-inside:avoid;display:block}',
+      '.planner-rc-body{width:100%}',
+      '.planner-rc-name{font-weight:700;font-size:13px;margin-bottom:4px}',
+      '.planner-rc-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:#555;margin-bottom:3px}',
+      '.planner-rc-detail{font-size:11px;color:#555;margin:2px 0}',
+      '.planner-rc-detail a{color:#5b2c83;word-break:break-all}',
+      '.planner-rc-elig{font-style:italic}',
+      '.planner-rc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}',
+      '.planner-rc-tag{background:#f0ebf8;color:#5b2c83;border-radius:3px;padding:1px 6px;font-size:10px}',
+      '.planner-no-results{font-size:12px;color:#666;font-style:italic;padding:4px 0}',
+      '.planner-see-more{font-size:11px;margin-top:4px}',
+      'i[class*="bi-"]{display:none}',
+      '@media print{body{padding:12px}.planner-plan-section{page-break-inside:avoid}}',
+    ].join('\n');
+
+    win.document.open();
+    win.document.write('<!DOCTYPE html><html lang="en"><head>');
+    win.document.write('<meta charset="UTF-8">');
+    win.document.write('<title>My Resource Plan – The Connect</title>');
+    win.document.write('<style>' + styles + '</style>');
+    win.document.write('</head><body>');
+    win.document.write('<p style="font-size:11px;color:#888;border-bottom:1px solid #eee;padding-bottom:6px;margin-bottom:0">' +
+      'The Connect – theconnect.org &nbsp;|&nbsp; Resource data is verified periodically — always call ahead to confirm.</p>');
+    win.document.write(output.innerHTML);
+    win.document.write('</body></html>');
+    win.document.close();
+    win.focus();
+    setTimeout(function () { win.print(); }, 400);
   }
 
   /* ── Validation nudge ────────────────────────────────────── */

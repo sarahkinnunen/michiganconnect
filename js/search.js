@@ -5,7 +5,7 @@
  *  1. Fetch resources.json once
  *  2. Build a pre-computed lowercase search index per resource
  *  3. On each keystroke / filter change, run lightweight scoring and re-render
- *     (search input debounced 200 ms; chip clicks respond immediately)
+ *     (search input debounced 200 ms; combo selects respond immediately)
  *  4. Multi-select filters: OR within a group, AND across groups
  *
  * No third-party dependencies – pure vanilla JS.
@@ -24,6 +24,9 @@
   const activeCounties = new Set();
   const activeCities   = new Set();
   const activeTags     = new Set();
+
+  // Combo instances (set in populateFilterOptions)
+  var catCombo = null, countyCombo = null, cityCombo = null, tagCombo = null;
 
   /* ── Synonym map ─────────────────────────────────────────── */
   const QUERY_SYNONYMS = {
@@ -100,7 +103,6 @@
     transportation: ['bus', 'rides', 'car', 'transit'],
     disability:    ['disabled', 'handicap', 'accessibility'],
     senior_services: ['seniors', 'elderly', 'aging', 'older adults'],
-    // Immigration / documents
     documents:     ['immigration', 'legal', 'identification', 'undocumented'],
     document:      ['immigration', 'legal', 'identification'],
     'birth certificate': ['legal', 'vital records', 'identification', 'immigration'],
@@ -114,10 +116,8 @@
     asylum:        ['immigration', 'refugee', 'legal', 'undocumented'],
     daca:          ['immigration', 'dreamer', 'undocumented', 'legal'],
     refugee:       ['immigration', 'asylum', 'legal'],
-    // Housing / shelter barriers
     waitlist:      ['housing', 'shelter', 'section 8', 'rapid rehousing'],
     homeless:      ['housing', 'shelter', 'emergency housing'],
-    // Safety
     abuse:         ['domestic violence', 'crisis', 'shelter', 'safety'],
     violence:      ['domestic violence', 'crisis', 'shelter', 'safety'],
     trafficking:   ['human trafficking', 'crisis', 'exploitation'],
@@ -151,7 +151,6 @@
     { pattern: /(ليس\s+لدي\s+نقود|لا\s+يوجد\s+مال)/g,                   replacement: 'no money' },
   ];
 
-  // Strip "I need / looking for / where can I find" filler prefixes
   const NL_PREFIX_RE = /^(i('m| am)?\s+)?(looking for|need help (with|for|finding|getting)|need|want(ing)?|trying to (find|get)|where (can i (find|get)|do i (find|get))|how (do i|can i) (get|find)|help (with|for|me find|me get))\s+/i;
 
   function normalizeQuery(rawQuery) {
@@ -286,10 +285,6 @@
   /* ── DOM refs ───────────────────────────────────────────── */
   const searchInput    = document.getElementById('search-input');
   const clearBtn       = document.getElementById('search-clear');
-  const chipCat        = document.getElementById('filter-category');
-  const chipCounty     = document.getElementById('filter-county');
-  const chipCity       = document.getElementById('filter-city');
-  const chipTag        = document.getElementById('filter-tag');
   const resetBtn       = document.getElementById('filter-reset');
   const filterBadge    = document.getElementById('filter-badge');
   const fltCatCount    = document.getElementById('flt-cat-count');
@@ -339,45 +334,151 @@
     return depth <= 0 ? './' : '../'.repeat(depth);
   }
 
-  /* ── Build multi-select chip filters ────────────────────── */
+  /* ── Build combobox filters ─────────────────────────────── */
   function populateFilterOptions(data) {
     const categories = unique(data.map(function (r) { return r.category; })).sort();
     const counties   = unique(data.map(function (r) { return r.county; })).sort();
     const cities     = unique(data.map(function (r) { return r.city; })).sort();
     const tags       = unique(data.flatMap(function (r) { return r.tags || []; })).sort();
 
-    renderChips(chipCat,    categories, activeCats,     fltCatCount,    capitalise);
-    renderChips(chipCounty, counties,   activeCounties,  fltCountyCount);
-    renderChips(chipCity,   cities,     activeCities,    fltCityCount);
-    renderChips(chipTag,    tags,       activeTags,      fltTagCount);
+    catCombo    = makeCombo('cat-combo',    activeCats,     fltCatCount,    capitalise, categories);
+    countyCombo = makeCombo('county-combo', activeCounties, fltCountyCount, null,       counties);
+    cityCombo   = makeCombo('city-combo',   activeCities,   fltCityCount,   null,       cities);
+    tagCombo    = makeCombo('tag-combo',    activeTags,     fltTagCount,    null,       tags);
   }
 
-  function renderChips(container, values, activeSet, countEl, labelFn) {
-    if (!container) return;
-    container.innerHTML = '';
-    values.forEach(function (v) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'filter-chip';
-      btn.dataset.value = v;
-      btn.textContent = labelFn ? labelFn(v) : v;
-      btn.setAttribute('aria-pressed', 'false');
-      btn.addEventListener('click', function () {
-        if (activeSet.has(v)) {
-          activeSet.delete(v);
-          btn.classList.remove('active');
-          btn.setAttribute('aria-pressed', 'false');
-        } else {
-          activeSet.add(v);
-          btn.classList.add('active');
-          btn.setAttribute('aria-pressed', 'true');
-        }
-        updateGroupCount(countEl, activeSet.size);
-        updateBadge();
-        applyFilters();
+  /* ── Generic filter combobox factory ───────────────────── */
+  function makeCombo(wrapId, activeSet, countEl, labelFn, allValues) {
+    var prefix = wrapId.replace('-combo', '');
+    var input  = document.getElementById(wrapId + '-input');
+    var list   = document.getElementById(wrapId + '-list');
+    var toggle = document.getElementById(wrapId + '-toggle');
+    var chips  = document.getElementById(prefix + '-selected-chips');
+
+    function render(filter) {
+      if (!list) return;
+      var q = (filter || '').toLowerCase().trim();
+      var matching = allValues.filter(function (v) {
+        return !q || v.toLowerCase().includes(q);
       });
-      container.appendChild(btn);
+      list.innerHTML = '';
+      if (!matching.length) {
+        var emp = document.createElement('li');
+        emp.className = 'tag-combo-empty';
+        emp.textContent = 'No matches';
+        list.appendChild(emp);
+        return;
+      }
+      matching.forEach(function (val) {
+        var display = labelFn ? labelFn(val) : val;
+        var li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.setAttribute('tabindex', '0');
+        li.dataset.value = val;
+        li.setAttribute('aria-selected', activeSet.has(val) ? 'true' : 'false');
+        if (activeSet.has(val)) li.classList.add('selected');
+        if (q) {
+          var lc = display.toLowerCase();
+          var idx = lc.indexOf(q);
+          if (idx >= 0) {
+            li.innerHTML = escapeHTML(display.slice(0, idx)) +
+              '<mark>' + escapeHTML(display.slice(idx, idx + q.length)) + '</mark>' +
+              escapeHTML(display.slice(idx + q.length));
+          } else {
+            li.textContent = display;
+          }
+        } else {
+          li.textContent = display;
+        }
+        li.addEventListener('click', function () { select(val); });
+        li.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(val); }
+          if (e.key === 'ArrowDown') { e.preventDefault(); var n = li.nextElementSibling; if (n) n.focus(); }
+          if (e.key === 'ArrowUp')   { e.preventDefault(); var p = li.previousElementSibling; if (p) p.focus(); else if (input) input.focus(); }
+          if (e.key === 'Escape')    { close(); if (input) input.focus(); }
+        });
+        list.appendChild(li);
+      });
+    }
+
+    function select(val) {
+      if (activeSet.has(val)) activeSet.delete(val);
+      else activeSet.add(val);
+      updateGroupCount(countEl, activeSet.size);
+      updateBadge();
+      render(input ? input.value : '');
+      renderSelected();
+      applyFilters();
+      if (input) input.focus();
+    }
+
+    function renderSelected() {
+      if (!chips) return;
+      chips.innerHTML = '';
+      activeSet.forEach(function (val) {
+        var display = labelFn ? labelFn(val) : val;
+        var chip = document.createElement('span');
+        chip.className = 'tag-selected-chip';
+        var lbl = document.createTextNode(display + ' ');
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Remove ' + display);
+        btn.textContent = '×';
+        btn.addEventListener('click', function (e) { e.stopPropagation(); select(val); });
+        chip.appendChild(lbl);
+        chip.appendChild(btn);
+        chips.appendChild(chip);
+      });
+    }
+
+    function open() {
+      if (!list) return;
+      list.removeAttribute('hidden');
+      if (input) input.setAttribute('aria-expanded', 'true');
+      if (toggle) toggle.classList.add('open');
+    }
+
+    function close() {
+      if (!list) return;
+      list.setAttribute('hidden', '');
+      if (input) input.setAttribute('aria-expanded', 'false');
+      if (toggle) toggle.classList.remove('open');
+    }
+
+    function reset() {
+      activeSet.clear();
+      if (input) input.value = '';
+      render('');
+      close();
+      renderSelected();
+      updateGroupCount(countEl, 0);
+    }
+
+    // Event bindings
+    if (input) {
+      input.addEventListener('input', function () { render(this.value); open(); });
+      input.addEventListener('focus', open);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') close();
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          var first = list && list.querySelector('li:not(.tag-combo-empty)');
+          if (first) first.focus();
+        }
+      });
+    }
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        if (list && list.hasAttribute('hidden')) { open(); if (input) input.focus(); }
+        else close();
+      });
+    }
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#' + wrapId)) close();
     });
+
+    render('');
+    return { reset: reset };
   }
 
   function updateGroupCount(countEl, count) {
@@ -428,16 +529,10 @@
     if (searchInput) searchInput.value = '';
     if (clearBtn)    clearBtn.classList.remove('visible');
 
-    [activeCats, activeCounties, activeCities, activeTags].forEach(function (s) { s.clear(); });
-
-    document.querySelectorAll('.filter-chip.active').forEach(function (chip) {
-      chip.classList.remove('active');
-      chip.setAttribute('aria-pressed', 'false');
-    });
-
-    [fltCatCount, fltCountyCount, fltCityCount, fltTagCount].forEach(function (el) {
-      if (el) el.setAttribute('hidden', '');
-    });
+    if (catCombo)    catCombo.reset();
+    if (countyCombo) countyCombo.reset();
+    if (cityCombo)   cityCombo.reset();
+    if (tagCombo)    tagCombo.reset();
 
     updateBadge();
     applyFilters();
@@ -470,7 +565,6 @@
 
     if (query) {
       const intentScores = detectIntent(query);
-      // Crisis override: surface crisis resources first
       if (intentScores.has('crisis')) {
         const crisisResources = results.filter(function (r) {
           return (r.categories || [r.category]).includes('crisis');
@@ -497,17 +591,14 @@
     const scored = resources.map(function (r) {
       let score = 0;
 
-      // Intent boost
       if (intentScores) {
         const cat = r.categories ? r.categories[0] : r.category;
         if (intentScores.has(cat)) score += 20;
       }
 
-      // Phrase-level bonuses
       if (r._nameLower.includes(phrase)) score += 10;
       else if (r._idx.includes(phrase))  score += 5;
 
-      // Token-level, field-weighted scoring
       let allMatch = true;
       expandedTokens.forEach(function (token) {
         const inName  = r._nameLower.includes(token);
