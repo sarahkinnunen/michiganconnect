@@ -4114,5 +4114,29 @@
     ],
     "description": "Supports food and beverage service employees with children experiencing financial hardship due to illness or medical emergency.",
     "last_verified_date": "2026-05-04"
+  },
+  {
+    "id": 163,
+    "name": "Pure Smiles Dental – Rani Dennison, D.D.S.",
+    "category": "health",
+    "county": "Macomb",
+    "city": "Utica",
+    "address": "45500 Van Dyke Ave, Utica, MI 48317",
+    "phone": "(586) 930-1919",
+    "website": "https://www.puresmiles.net",
+    "hours": "Mon: 9am–4pm; Tue: 9am–6pm; Wed: 8am–4pm; Thu: 9am–6pm",
+    "eligibility": "Accepts Medicaid; open to all patients",
+    "intake_process": "Call (586) 930-1919 or email info@puresmiles.net to schedule an appointment. Medicaid accepted.",
+    "tags": [
+      "dental",
+      "medicaid",
+      "extractions",
+      "teeth cleaning",
+      "crowns",
+      "fillings",
+      "healthcare"
+    ],
+    "description": "General dentistry practice in Utica offering extractions, cleanings, crowns, and fillings. Accepts Medicaid.",
+    "last_verified_date": "2026-06-04"
   }
 ]
