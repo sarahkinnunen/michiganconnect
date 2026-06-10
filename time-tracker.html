@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Time tracking portal for employers and team members — clock in/out, log meetings and calls, and view weekly timesheets.">
+  <title>Time Tracking Portal | The Connect</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%235b2c83'/><text x='50' y='64' text-anchor='middle' font-size='56' fill='white' font-family='Arial'>C</text></svg>">
+  <script src="js/translate-early.js"></script>
+
+  <style>
+    /* ── Time Tracker App ─────────────────────────────────── */
+
+    .tt-hero {
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+      color: white;
+      padding: 2.75rem 0 2.25rem;
+      text-align: center;
+    }
+    .tt-hero h1 { color: white; margin-bottom: .4rem; font-size: clamp(1.6rem, 4vw, 2.25rem); }
+    .tt-hero p  { color: rgba(255,255,255,.85); margin: 0 auto; max-width: 52ch; }
+
+    .tt-wrap {
+      max-width: 900px;
+      margin: 2.25rem auto 4rem;
+      padding: 0 1rem;
+    }
+
+    /* Views */
+    .tt-view { display: none; }
+    .tt-view.active { display: block; }
+
+    /* Card */
+    .tt-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.25rem;
+    }
+    .tt-card h2 {
+      font-size: 1.15rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+
+    /* Role grid */
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 480px) { .role-grid { grid-template-columns: 1fr; } }
+
+    .role-btn {
+      background: var(--color-surface);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.25rem;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color .18s, box-shadow .18s;
+      font-family: inherit;
+    }
+    .role-btn:hover { border-color: var(--color-accent); box-shadow: var(--shadow); }
+    .role-btn .ri { font-size: 2.25rem; color: var(--color-accent); display: block; margin-bottom: .6rem; }
+    .role-btn .rt { font-size: 1.05rem; font-weight: 600; color: var(--color-text); display: block; margin-bottom: .2rem; }
+    .role-btn .rd { font-size: var(--font-size-sm); color: var(--color-text-muted); display: block; line-height: 1.4; }
+
+    /* Auth tabs */
+    .auth-tabs { display: flex; border-bottom: 2px solid var(--color-border); margin-bottom: 1.5rem; }
+    .auth-tab {
+      background: none; border: none; border-bottom: 2px solid transparent;
+      margin-bottom: -2px; padding: .7rem 1.4rem;
+      font-family: inherit; font-size: var(--font-size-base); font-weight: 500;
+      color: var(--color-text-muted); cursor: pointer; transition: color .15s, border-color .15s;
+    }
+    .auth-tab.active { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+    .auth-tab:hover { color: var(--color-accent); }
+
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
+
+    /* Form */
+    .tt-fg { margin-bottom: 1.1rem; }
+    .tt-fg label { display: block; font-size: var(--font-size-sm); font-weight: 500; margin-bottom: .35rem; }
+    .tt-input, .tt-select, .tt-ta {
+      width: 100%;
+      padding: .58rem .8rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius);
+      font-family: inherit; font-size: var(--font-size-base);
+      color: var(--color-text); background: var(--color-surface);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .tt-input:focus, .tt-select:focus, .tt-ta:focus {
+      outline: none; border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(109,95,173,.15);
+    }
+    .tt-ta { resize: vertical; min-height: 76px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+    .form-hint { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-top: .25rem; }
+
+    .tt-err {
+      background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+      border-radius: var(--radius); padding: .55rem .8rem;
+      font-size: var(--font-size-sm); margin-bottom: .85rem; display: none;
+    }
+    .tt-ok {
+      background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534;
+      border-radius: var(--radius); padding: .55rem .8rem;
+      font-size: var(--font-size-sm); margin-bottom: .85rem; display: none;
+    }
+
+    /* Back button */
+    .tt-back {
+      background: none; border: none; color: var(--color-text-muted);
+      font-size: var(--font-size-sm); cursor: pointer; font-family: inherit;
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: 0; margin-bottom: 1.1rem; transition: color .15s;
+    }
+    .tt-back:hover { color: var(--color-accent); }
+
+    /* Dashboard header */
+    .dash-hdr {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+    }
+    .dash-hdr h2 { margin-bottom: .15rem; }
+    .dash-org { font-size: var(--font-size-sm); color: var(--color-text-muted); }
+
+    /* Stats row */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: .85rem; margin-bottom: 1.35rem;
+    }
+    .stat-box { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: .9rem; text-align: center; }
+    .stat-box .s-num { font-size: 1.65rem; font-weight: 700; color: var(--color-accent); line-height: 1.1; }
+    .stat-box .s-lbl { font-size: .75rem; color: var(--color-text-muted); margin-top: .15rem; }
+
+    /* Dashboard tabs */
+    .dash-tabs {
+      display: flex; gap: .15rem; border-bottom: 2px solid var(--color-border);
+      margin-bottom: 1.35rem; overflow-x: auto; scrollbar-width: none;
+    }
+    .dash-tabs::-webkit-scrollbar { display: none; }
+    .dash-tab {
+      background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px;
+      padding: .6rem 1rem; font-family: inherit; font-size: var(--font-size-sm); font-weight: 500;
+      color: var(--color-text-muted); cursor: pointer; white-space: nowrap; transition: all .15s;
+    }
+    .dash-tab.active { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+    .dash-tab:hover { color: var(--color-accent); }
+
+    .dash-panel { display: none; }
+    .dash-panel.active { display: block; }
+
+    /* Clock widget */
+    .clock-widget {
+      background: var(--color-surface); border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: 1.75rem; text-align: center;
+      transition: border-color .2s, background .2s;
+    }
+    .clock-widget.is-clocked { border-color: var(--color-sage); background: var(--color-sage-bg); }
+
+    .clock-status {
+      font-size: .75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--color-text-muted); margin-bottom: .35rem;
+    }
+    .clock-widget.is-clocked .clock-status { color: var(--color-sage-dark); }
+    .clock-timer {
+      font-size: 2.75rem; font-weight: 700; font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em; color: var(--color-text); margin: .2rem 0 .5rem;
+    }
+    .clock-widget.is-clocked .clock-timer { color: var(--color-sage); }
+    .clock-current-task {
+      font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: 1.2rem;
+    }
+
+    .clock-form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .7rem;
+      margin-bottom: .7rem; text-align: left;
+    }
+    @media (max-width: 480px) { .clock-form-row { grid-template-columns: 1fr; } }
+
+    .clock-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+      padding: .8rem 2rem; border-radius: var(--radius); border: none;
+      font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer;
+      transition: background .15s, transform .1s; min-width: 148px;
+    }
+    .clock-btn:active { transform: scale(.97); }
+    .btn-cin  { background: var(--color-sage);  color: white; }
+    .btn-cin:hover  { background: var(--color-sage-dark); }
+    .btn-cout { background: var(--color-crisis); color: white; }
+    .btn-cout:hover { background: var(--color-crisis-dark); }
+
+    /* Timesheet table */
+    .ts-table {
+      width: 100%; border-collapse: collapse; font-size: .82rem;
+      margin-top: .85rem;
+    }
+    .ts-table th {
+      background: var(--color-accent); color: white;
+      padding: .5rem .65rem; text-align: left;
+      font-weight: 600; font-size: .76rem; white-space: nowrap;
+    }
+    .ts-table td {
+      padding: .5rem .65rem; border-bottom: 1px solid var(--color-border);
+      color: var(--color-text); vertical-align: middle;
+    }
+    .ts-table tr:last-child td { border-bottom: none; }
+    .ts-table tbody tr:hover td { background: var(--color-accent-bg); }
+    .ts-table .tr-total td { background: var(--color-accent-bg); font-weight: 600; border-top: 2px solid var(--color-accent); }
+    .ts-table .del-btn {
+      background: none; border: none; color: var(--color-text-muted); cursor: pointer;
+      padding: .2rem .3rem; border-radius: 4px; font-size: .8rem; line-height: 1;
+    }
+    .ts-table .del-btn:hover { color: var(--color-crisis); background: #fef2f2; }
+
+    /* Contact record table */
+    .cr-table {
+      width: 100%; border-collapse: collapse; font-size: .82rem; margin-top: .85rem;
+    }
+    .cr-table th {
+      background: var(--color-sage); color: white;
+      padding: .5rem .65rem; text-align: left; font-weight: 600; font-size: .76rem;
+    }
+    .cr-table td {
+      padding: .5rem .65rem; border-bottom: 1px solid var(--color-border); vertical-align: top;
+    }
+    .cr-table tr:last-child td { border-bottom: none; }
+    .cr-table tbody tr:hover td { background: var(--color-sage-bg); }
+
+    /* Week nav */
+    .week-nav { display: flex; align-items: center; gap: .6rem; margin-bottom: .9rem; flex-wrap: wrap; }
+    .week-nav-btn {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); padding: .3rem .6rem; cursor: pointer;
+      font-size: .82rem; color: var(--color-text-muted); font-family: inherit;
+      transition: all .15s;
+    }
+    .week-nav-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+    .week-lbl { font-weight: 600; font-size: var(--font-size-sm); }
+
+    /* Employee list */
+    .emp-list { list-style: none; padding: 0; }
+    .emp-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .7rem 0; border-bottom: 1px solid var(--color-border); gap: 1rem;
+    }
+    .emp-item:last-child { border-bottom: none; }
+    .emp-item .en { font-weight: 600; }
+    .emp-item .ep { font-size: var(--font-size-sm); color: var(--color-text-muted); }
+
+    /* Badge */
+    .badge {
+      display: inline-block; padding: .15em .55em;
+      border-radius: var(--radius-full); font-size: .72rem; font-weight: 600;
+    }
+    .b-purple { background: var(--color-accent-bg); color: var(--color-accent-dark); }
+    .b-green  { background: var(--color-sage-bg); color: var(--color-sage-dark); }
+    .b-gray   { background: var(--color-bg); color: var(--color-text-muted); border: 1px solid var(--color-border); }
+
+    /* Empty state */
+    .empty-st { text-align: center; padding: 2.5rem 1rem; color: var(--color-text-muted); }
+    .empty-st i { font-size: 1.85rem; margin-bottom: .65rem; display: block; opacity: .35; }
+
+    /* Mileage table */
+    .ml-table {
+      width: 100%; border-collapse: collapse; font-size: .82rem; margin-top: .85rem;
+    }
+    .ml-table th {
+      background: var(--color-sage); color: white;
+      padding: .5rem .65rem; text-align: left; font-weight: 600; font-size: .76rem;
+    }
+    .ml-table td {
+      padding: .5rem .65rem; border-bottom: 1px solid var(--color-border); vertical-align: middle;
+    }
+    .ml-table tr:last-child td { border-bottom: none; }
+    .ml-table tbody tr:hover td { background: var(--color-sage-bg); }
+    .tr-ml-total td { background: var(--color-sage-bg); font-weight: 600; border-top: 2px solid var(--color-sage); }
+
+    /* Print preview */
+    .print-preview {
+      background: white; border: 1px solid var(--color-border); border-radius: var(--radius);
+      padding: 1.5rem; font-size: .85rem;
+    }
+    .print-preview h3 {
+      text-align: center; font-size: 1rem;
+      background: #4f7462; color: white; padding: .5rem; margin: -1.5rem -1.5rem 1rem;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .print-header-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;
+      border: 1px solid #ccc; padding: .75rem; border-radius: 4px;
+    }
+    .ph-field { margin-bottom: .4rem; font-size: .82rem; }
+    .ph-field strong { font-weight: 600; }
+    .ph-box {
+      display: inline-block; width: 14px; height: 14px;
+      border: 1.5px solid #555; vertical-align: middle; margin-right: 4px;
+    }
+    .sig-line {
+      border-top: 1px solid #333; margin-top: .25rem; padding-top: .2rem;
+      min-width: 160px; display: inline-block; font-size: .78rem; color: #666;
+    }
+
+    /* ── Print styles ──────────────────────────────────────── */
+    @media print {
+      .announcement-bar, .site-header, .site-footer,
+      .tt-back, .no-print,
+      .dash-tabs, .week-nav, .del-btn,
+      #tt-top-bar, .stats-row { display: none !important; }
+
+      body { background: white; }
+      .tt-wrap { max-width: 100%; margin: 0; padding: 0; }
+      .tt-card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 1rem; page-break-inside: avoid; }
+
+      .ts-table th { background: #4f7462 !important; -webkit-print-color-adjust: exact; }
+      .cr-table th { background: #4f7462 !important; -webkit-print-color-adjust: exact; }
+      .ts-table .tr-total td { background: #e8f3ed !important; }
+
+      .print-preview { border: none; padding: 0; }
+      .print-preview h3 { -webkit-print-color-adjust: exact; }
+
+      .dash-panel { display: block !important; }
+      .tt-view { display: block !important; }
+    }
+
+    @media (max-width: 640px) {
+      .ts-table, .cr-table { font-size: .74rem; }
+      .ts-table th, .ts-table td,
+      .cr-table th, .cr-table td { padding: .38rem .45rem; }
+      .clock-timer { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="announcement-bar" role="banner" aria-label="Site announcement">
+    <div class="container">
+      <span aria-hidden="true"><i class="bi bi-exclamation-triangle-fill"></i></span>
+      <span>If you are in immediate danger, call <strong>911</strong>.
+        For crisis support, call or text <strong>988</strong>.</span>
+    </div>
+  </div>
+
+  <header class="site-header" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">The <span>Connect</span></a>
+      <nav aria-label="Main navigation">
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="directory.html">Find Resources</a></li>
+          <li><a href="learning-center.html">Learning Center</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="data.html">Data &amp; Reports</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="find-help.html" class="nav-emergency"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</a></li>
+        </ul>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation menu">
+        <i class="bi bi-list" aria-hidden="true"></i>
+        <span class="toggle-label">Menu</span>
+      </button>
+      <div class="translate-wrapper" id="translate-wrapper" translate="no">
+        <button class="translate-toggle" id="translate-btn" onclick="toggleTranslateMenu()" aria-haspopup="true" aria-expanded="false" aria-label="Translate this page">
+          <i class="bi bi-translate" aria-hidden="true"></i> Translate
+        </button>
+        <div class="translate-menu" id="translate-menu" role="menu">
+          <button onclick="triggerTranslate('es')" role="menuitem">Español</button>
+          <button onclick="triggerTranslate('ar')" role="menuitem">&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629; (Arabic)</button>
+          <button onclick="triggerTranslate('zh-CN')" role="menuitem">&#x4E2D;&#x6587; (Chinese)</button>
+          <button onclick="triggerTranslate('en')" role="menuitem">English (original)</button>
+        </div>
+      </div>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="directory.html">Find Resources</a></li>
+        <li><a href="learning-center.html">Learning Center</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="data.html">Data &amp; Reports</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="find-help.html" class="nav-emergency"><i class="bi bi-exclamation-octagon-fill" aria-hidden="true"></i> Find Help Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <div class="tt-hero">
+      <div class="container">
+        <p style="font-size:2.5rem;margin-bottom:.4rem" aria-hidden="true"><i class="bi bi-clock-history"></i></p>
+        <h1>Time Tracking Portal</h1>
+        <p>Clock in/out, log meetings and calls, and generate weekly timesheets</p>
+      </div>
+    </div>
+
+    <div class="tt-wrap" id="tt-app">
+
+      <!-- ══ VIEW: Start ══════════════════════════════════════ -->
+      <div id="view-start" class="tt-view active">
+        <div class="tt-card" style="max-width:540px;margin:0 auto;text-align:center">
+          <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:1.5rem">
+            All data is stored privately in your browser. No information is sent to any server.
+          </p>
+          <div class="role-grid">
+            <button class="role-btn" onclick="ttShowView('employer-auth')">
+              <span class="ri" aria-hidden="true"><i class="bi bi-building"></i></span>
+              <span class="rt">Employer / Team Lead</span>
+              <span class="rd">Create an account, add team members, and view reports</span>
+            </button>
+            <button class="role-btn" onclick="ttShowView('employee-login'); ttPopulateOrgSelect()">
+              <span class="ri" aria-hidden="true"><i class="bi bi-person-badge"></i></span>
+              <span class="rt">Employee / Member</span>
+              <span class="rd">Log in to clock in/out and track your hours</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ VIEW: Employer Auth ══════════════════════════════ -->
+      <div id="view-employer-auth" class="tt-view">
+        <button class="tt-back no-print" onclick="ttShowView('start')"><i class="bi bi-arrow-left"></i> Back</button>
+        <div class="tt-card" style="max-width:480px;margin:0 auto">
+          <div class="auth-tabs">
+            <button id="er-tab-login"  class="auth-tab active" onclick="ttAuthTab('er','login')">Log In</button>
+            <button id="er-tab-signup" class="auth-tab"        onclick="ttAuthTab('er','signup')">Sign Up</button>
+          </div>
+
+          <!-- Login -->
+          <div id="er-panel-login" class="auth-panel active">
+            <div id="er-login-err" class="tt-err"></div>
+            <div class="tt-fg">
+              <label for="er-login-email">Email</label>
+              <input id="er-login-email" type="email" class="tt-input" autocomplete="email" placeholder="you@example.com">
+            </div>
+            <div class="tt-fg">
+              <label for="er-login-pass">Password</label>
+              <input id="er-login-pass" type="password" class="tt-input" autocomplete="current-password">
+            </div>
+            <button class="btn btn-primary" style="width:100%" onclick="ttEmployerLogin()">Log In</button>
+          </div>
+
+          <!-- Sign Up -->
+          <div id="er-panel-signup" class="auth-panel">
+            <div id="er-signup-err" class="tt-err"></div>
+            <div class="tt-fg">
+              <label for="er-su-org">Organization / Program Name *</label>
+              <input id="er-su-org" type="text" class="tt-input" placeholder="e.g. YHSI Youth Action Board">
+            </div>
+            <div class="tt-fg">
+              <label for="er-su-email">Email *</label>
+              <input id="er-su-email" type="email" class="tt-input" autocomplete="email" placeholder="you@example.com">
+            </div>
+            <div class="tt-fg">
+              <label for="er-su-pass">Password * <span style="font-weight:400;color:var(--color-text-muted)">(min 6 chars)</span></label>
+              <input id="er-su-pass" type="password" class="tt-input" autocomplete="new-password">
+            </div>
+            <div class="tt-fg">
+              <label for="er-su-rate">Default Pay Rate ($/hr)</label>
+              <input id="er-su-rate" type="number" class="tt-input" value="50" min="0" step="0.01">
+              <p class="form-hint">Used to calculate weekly pay totals. Matches YAB stipend template default of $50/hr.</p>
+            </div>
+            <button class="btn btn-primary" style="width:100%" onclick="ttEmployerSignup()">Create Account</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ VIEW: Employee Login ═════════════════════════════ -->
+      <div id="view-employee-login" class="tt-view">
+        <button class="tt-back no-print" onclick="ttShowView('start')"><i class="bi bi-arrow-left"></i> Back</button>
+        <div class="tt-card" style="max-width:480px;margin:0 auto">
+          <h2><i class="bi bi-person-badge" aria-hidden="true"></i> Employee Login</h2>
+          <div id="ee-login-err" class="tt-err"></div>
+          <div class="tt-fg">
+            <label for="ee-org-select">Your Organization *</label>
+            <select id="ee-org-select" class="tt-select">
+              <option value="">-- Select your organization --</option>
+            </select>
+          </div>
+          <div class="tt-fg">
+            <label for="ee-name">Your Name *</label>
+            <input id="ee-name" type="text" class="tt-input" placeholder="First and Last Name">
+          </div>
+          <div class="tt-fg">
+            <label for="ee-pin">PIN <span style="font-weight:400;color:var(--color-text-muted)">(if required by your employer)</span></label>
+            <input id="ee-pin" type="password" class="tt-input" placeholder="Leave blank if no PIN">
+          </div>
+          <button class="btn btn-primary" style="width:100%" onclick="ttEmployeeLogin()">Log In</button>
+        </div>
+      </div>
+
+      <!-- ══ VIEW: Employer Dashboard ═════════════════════════ -->
+      <div id="view-employer-dash" class="tt-view">
+        <div id="er-top-bar" class="dash-hdr no-print">
+          <div>
+            <h2 id="er-org-name">Organization</h2>
+            <p class="dash-org">Employer Dashboard</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="ttEmployerLogout()">
+            <i class="bi bi-box-arrow-right" aria-hidden="true"></i> Log Out
+          </button>
+        </div>
+
+        <div class="dash-tabs no-print" role="tablist">
+          <button class="dash-tab active" data-tab="er-employees" onclick="ttDashTab('er','er-employees')" role="tab"><i class="bi bi-people" aria-hidden="true"></i> Team Members</button>
+          <button class="dash-tab"        data-tab="er-reports"   onclick="ttDashTab('er','er-reports')"   role="tab"><i class="bi bi-bar-chart" aria-hidden="true"></i> View Reports</button>
+          <button class="dash-tab"        data-tab="er-settings"  onclick="ttDashTab('er','er-settings')"  role="tab"><i class="bi bi-gear" aria-hidden="true"></i> Settings</button>
+        </div>
+
+        <!-- Panel: Team Members -->
+        <div id="er-panel-er-employees" class="dash-panel active" role="tabpanel">
+          <div class="tt-card">
+            <h2><i class="bi bi-people" aria-hidden="true"></i> Team Members</h2>
+            <div id="er-emp-list-container">
+              <div class="empty-st"><i class="bi bi-people"></i><p>No team members added yet.</p></div>
+            </div>
+          </div>
+          <div class="tt-card">
+            <h2><i class="bi bi-person-plus" aria-hidden="true"></i> Add Team Member</h2>
+            <div id="er-emp-add-err" class="tt-err"></div>
+            <div class="form-row">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-new-name">Name *</label>
+                <input id="er-new-name" type="text" class="tt-input" placeholder="Full name">
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-new-pin">PIN <span style="font-weight:400;color:var(--color-text-muted)">(optional)</span></label>
+                <input id="er-new-pin" type="text" class="tt-input" placeholder="4-digit PIN, or leave blank">
+              </div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:.85rem" onclick="ttAddEmployee()">
+              <i class="bi bi-plus-circle" aria-hidden="true"></i> Add Member
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel: Reports -->
+        <div id="er-panel-er-reports" class="dash-panel" role="tabpanel">
+          <div class="tt-card">
+            <div class="form-row" style="align-items:flex-end">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-rpt-emp">Select Member</label>
+                <select id="er-rpt-emp" class="tt-select" onchange="ttRenderEmployerReport()">
+                  <option value="">-- Select a team member --</option>
+                </select>
+              </div>
+              <div>
+                <button class="btn btn-outline btn-sm" onclick="ttPrint()" style="width:100%">
+                  <i class="bi bi-printer" aria-hidden="true"></i> Print Report
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="er-rpt-container">
+            <div class="empty-st"><i class="bi bi-bar-chart"></i><p>Select a team member to view their report.</p></div>
+          </div>
+        </div>
+
+        <!-- Panel: Settings -->
+        <div id="er-panel-er-settings" class="dash-panel" role="tabpanel">
+          <div class="tt-card">
+            <h2><i class="bi bi-gear" aria-hidden="true"></i> Organization Settings</h2>
+            <div id="er-settings-ok" class="tt-ok"></div>
+            <div id="er-settings-err" class="tt-err"></div>
+            <div class="tt-fg">
+              <label for="er-set-org">Organization Name</label>
+              <input id="er-set-org" type="text" class="tt-input">
+            </div>
+            <div class="form-row">
+              <div class="tt-fg">
+                <label for="er-set-rate">Pay Rate ($/hr)</label>
+                <input id="er-set-rate" type="number" class="tt-input" min="0" step="0.01">
+              </div>
+              <div class="tt-fg">
+                <label for="er-set-milerate">Mileage Rate ($/mile)</label>
+                <input id="er-set-milerate" type="number" class="tt-input" min="0" step="0.001">
+                <p class="form-hint">IRS standard is $0.725/mile</p>
+              </div>
+            </div>
+            <div class="tt-fg">
+              <label for="er-set-template">Print Template</label>
+              <select id="er-set-template" class="tt-select">
+                <option value="yab">YAB Stipend Payment Form</option>
+                <option value="standard">Standard Weekly Timesheet</option>
+                <option value="yab-mileage">YAB + Mileage Reimbursement</option>
+              </select>
+              <p class="form-hint">Controls the format of printed/exported reports for all team members.</p>
+            </div>
+            <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="ttSaveSettings()">Save Settings</button>
+              <button class="btn btn-outline" style="color:var(--color-crisis);border-color:var(--color-crisis)" onclick="ttDeleteAccount()">Delete Account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ VIEW: Employee Dashboard ══════════════════════════ -->
+      <div id="view-employee-dash" class="tt-view">
+        <div class="dash-hdr no-print">
+          <div>
+            <h2 id="ee-dash-name">Name</h2>
+            <p class="dash-org" id="ee-dash-org">Organization</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="ttEmployeeLogout()">
+            <i class="bi bi-box-arrow-right" aria-hidden="true"></i> Log Out
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row no-print">
+          <div class="stat-box"><div class="s-num" id="ee-stat-hours">0</div><div class="s-lbl">Hours This Week</div></div>
+          <div class="stat-box"><div class="s-num" id="ee-stat-pay">$0</div><div class="s-lbl">Est. Gross Pay</div></div>
+          <div class="stat-box"><div class="s-num" id="ee-stat-entries">0</div><div class="s-lbl">Time Entries</div></div>
+          <div class="stat-box"><div class="s-num" id="ee-stat-contacts">0</div><div class="s-lbl">Contact Records</div></div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="dash-tabs no-print" role="tablist">
+          <button class="dash-tab active" data-tab="ee-clock"    onclick="ttDashTab('ee','ee-clock')"    role="tab"><i class="bi bi-clock" aria-hidden="true"></i> Clock</button>
+          <button class="dash-tab"        data-tab="ee-entry"    onclick="ttDashTab('ee','ee-entry')"    role="tab"><i class="bi bi-pencil-square" aria-hidden="true"></i> Add Entry</button>
+          <button class="dash-tab"        data-tab="ee-sheet"    onclick="ttDashTab('ee','ee-sheet');ttRenderTimesheet()" role="tab"><i class="bi bi-table" aria-hidden="true"></i> Timesheet</button>
+          <button class="dash-tab"        data-tab="ee-contacts" onclick="ttDashTab('ee','ee-contacts');ttRenderContacts()" role="tab"><i class="bi bi-telephone" aria-hidden="true"></i> Contact Log</button>
+          <button class="dash-tab"        data-tab="ee-mileage"  onclick="ttDashTab('ee','ee-mileage');ttRenderMileage()"  role="tab"><i class="bi bi-car-front" aria-hidden="true"></i> Mileage</button>
+          <button class="dash-tab"        data-tab="ee-print"    onclick="ttDashTab('ee','ee-print');ttBuildPrint()"    role="tab"><i class="bi bi-printer" aria-hidden="true"></i> Print</button>
+        </div>
+
+        <!-- ── Clock tab ──────────────────────────────────── -->
+        <div id="ee-panel-ee-clock" class="dash-panel active" role="tabpanel">
+          <div class="tt-card">
+            <div class="clock-widget" id="clock-widget">
+              <p class="clock-status" id="clock-status">Not Clocked In</p>
+              <div class="clock-timer" id="clock-display">00:00:00</div>
+              <p class="clock-current-task" id="clock-task-label" style="display:none"></p>
+
+              <!-- Clock-in form -->
+              <div id="clock-in-section">
+                <div class="clock-form-row">
+                  <div class="tt-fg" style="margin:0">
+                    <label for="clock-type">Activity Type</label>
+                    <select id="clock-type" class="tt-select">
+                      <option value="General Work">General Work</option>
+                      <option value="Meeting">Meeting</option>
+                      <option value="Phone Call">Phone Call</option>
+                      <option value="Event">Event</option>
+                      <option value="Training">Training</option>
+                      <option value="Document / Admin">Document / Admin</option>
+                    </select>
+                  </div>
+                  <div class="tt-fg" style="margin:0">
+                    <label for="clock-task">Task / Description *</label>
+                    <input id="clock-task" type="text" class="tt-input" placeholder="What are you working on?">
+                  </div>
+                </div>
+                <div id="clock-in-err" class="tt-err"></div>
+                <button class="clock-btn btn-cin" onclick="ttClockIn()">
+                  <i class="bi bi-play-circle-fill" aria-hidden="true"></i> Clock In
+                </button>
+              </div>
+
+              <!-- Clock-out panel -->
+              <div id="clock-out-section" style="display:none">
+                <div class="tt-fg" style="max-width:420px;margin:.75rem auto .75rem;text-align:left">
+                  <label for="clock-out-notes">Notes (optional)</label>
+                  <textarea id="clock-out-notes" class="tt-ta" rows="2" placeholder="Add any notes before clocking out..."></textarea>
+                </div>
+                <button class="clock-btn btn-cout" onclick="ttClockOut()">
+                  <i class="bi bi-stop-circle-fill" aria-hidden="true"></i> Clock Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Add Entry tab ──────────────────────────────── -->
+        <div id="ee-panel-ee-entry" class="dash-panel" role="tabpanel">
+          <div class="tt-card">
+            <h2><i class="bi bi-pencil-square" aria-hidden="true"></i> Add Time Entry</h2>
+            <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:1.1rem">
+              Use this to log past work, meetings, or tasks you didn't clock in for.
+            </p>
+            <div id="me-err" class="tt-err"></div>
+            <div class="form-row">
+              <div class="tt-fg">
+                <label for="me-type">Activity Type</label>
+                <select id="me-type" class="tt-select">
+                  <option value="General Work">General Work</option>
+                  <option value="Meeting">Meeting</option>
+                  <option value="Phone Call">Phone Call</option>
+                  <option value="Event">Event</option>
+                  <option value="Training">Training</option>
+                  <option value="Document / Admin">Document / Admin</option>
+                </select>
+              </div>
+              <div class="tt-fg">
+                <label for="me-date">Date *</label>
+                <input id="me-date" type="date" class="tt-input">
+              </div>
+            </div>
+            <div class="tt-fg">
+              <label for="me-task">Project / Task Description *</label>
+              <input id="me-task" type="text" class="tt-input" placeholder="e.g. Weekly team meeting, client intake call, data entry">
+            </div>
+            <div class="form-row">
+              <div class="tt-fg">
+                <label for="me-proposed">Proposed Hours</label>
+                <input id="me-proposed" type="number" class="tt-input" placeholder="0.00" step="0.25" min="0">
+                <p class="form-hint">How long you planned to work</p>
+              </div>
+              <div class="tt-fg">
+                <label for="me-completed">Completed Hours *</label>
+                <input id="me-completed" type="number" class="tt-input" placeholder="0.00" step="0.08" min="0">
+                <p class="form-hint">
+                  15 min = 0.25 · 30 min = 0.50 · 45 min = 0.75 · 60 min = 1.0
+                </p>
+              </div>
+            </div>
+            <div class="tt-fg">
+              <label for="me-notes">Notes / Supporting Documents</label>
+              <textarea id="me-notes" class="tt-ta" placeholder="Optional notes, attachments description..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="ttAddManualEntry()">
+              <i class="bi bi-plus-circle" aria-hidden="true"></i> Add to Timesheet
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Timesheet tab ──────────────────────────────── -->
+        <div id="ee-panel-ee-sheet" class="dash-panel" role="tabpanel">
+          <div class="tt-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:.75rem">
+              <h2 style="margin:0"><i class="bi bi-table" aria-hidden="true"></i> Weekly Timesheet</h2>
+              <button class="btn btn-outline btn-sm no-print" onclick="ttExportCSV('timesheet')">
+                <i class="bi bi-download" aria-hidden="true"></i> Export CSV
+              </button>
+            </div>
+            <div class="week-nav no-print">
+              <button class="week-nav-btn" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev</button>
+              <span class="week-lbl" id="ee-week-lbl">This Week</span>
+              <button class="week-nav-btn" onclick="ttWeekShift(1)">Next <i class="bi bi-chevron-right"></i></button>
+              <button class="week-nav-btn" onclick="ttWeekReset()">This Week</button>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="ts-table" aria-label="Weekly timesheet entries">
+                <thead>
+                  <tr>
+                    <th>Project / Task</th>
+                    <th>Date</th>
+                    <th>Proposed Hrs</th>
+                    <th>Completed Hrs</th>
+                    <th>Pay Rate</th>
+                    <th>Total</th>
+                    <th>Notes / Type</th>
+                    <th class="no-print">Del</th>
+                  </tr>
+                </thead>
+                <tbody id="ts-tbody">
+                  <tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No entries for this week</td></tr>
+                </tbody>
+                <tfoot>
+                  <tr class="tr-total">
+                    <td colspan="2"><strong>Totals</strong></td>
+                    <td style="text-align:center" id="ts-tot-proposed">0.00</td>
+                    <td style="text-align:center" id="ts-tot-completed">0.00</td>
+                    <td></td>
+                    <td style="text-align:center" id="ts-tot-pay">$0.00</td>
+                    <td colspan="2"></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Contact Log tab ────────────────────────────── -->
+        <div id="ee-panel-ee-contacts" class="dash-panel" role="tabpanel">
+          <!-- Add contact form -->
+          <div class="tt-card">
+            <h2><i class="bi bi-journal-text" aria-hidden="true"></i> Log a Contact</h2>
+            <div id="cr-err" class="tt-err"></div>
+            <div class="form-row">
+              <div class="tt-fg">
+                <label for="cr-date">Date *</label>
+                <input id="cr-date" type="date" class="tt-input">
+              </div>
+              <div class="tt-fg">
+                <label for="cr-time">Time</label>
+                <input id="cr-time" type="time" class="tt-input">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="tt-fg">
+                <label for="cr-method">Method</label>
+                <select id="cr-method" class="tt-select">
+                  <option value="Phone">Phone</option>
+                  <option value="Email">Email</option>
+                  <option value="In-Person">In-Person</option>
+                  <option value="Video Call">Video Call</option>
+                  <option value="Text">Text</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="tt-fg">
+                <label for="cr-tofrom">To / From *</label>
+                <input id="cr-tofrom" type="text" class="tt-input" placeholder="Name of person contacted">
+              </div>
+            </div>
+            <div class="tt-fg">
+              <label for="cr-affiliation">Contact's Name &amp; Affiliation</label>
+              <input id="cr-affiliation" type="text" class="tt-input" placeholder="e.g. Jane Smith, Wayne Metro CoC">
+            </div>
+            <div class="tt-fg">
+              <label for="cr-content">Content / Purpose *</label>
+              <textarea id="cr-content" class="tt-ta" rows="2" placeholder="Brief description of the contact's purpose..."></textarea>
+            </div>
+            <div class="tt-fg">
+              <label for="cr-timespent">Time Spent (hours)</label>
+              <input id="cr-timespent" type="number" class="tt-input" placeholder="0.00" step="0.08" min="0">
+              <p class="form-hint">5 min = 0.08 · 10 min = 0.17 · 20 min = 0.33 · 30 min = 0.50</p>
+            </div>
+            <button class="btn btn-primary" onclick="ttAddContact()">
+              <i class="bi bi-plus-circle" aria-hidden="true"></i> Add Contact Record
+            </button>
+          </div>
+
+          <!-- Contact record table -->
+          <div class="tt-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:.75rem">
+              <h2 style="margin:0"><i class="bi bi-card-list" aria-hidden="true"></i> YAB Contact Record</h2>
+              <button class="btn btn-outline btn-sm no-print" onclick="ttExportCSV('contacts')">
+                <i class="bi bi-download" aria-hidden="true"></i> Export CSV
+              </button>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="cr-table" aria-label="Contact records">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Method</th>
+                    <th>To / From</th>
+                    <th>Name &amp; Affiliation</th>
+                    <th>Content / Purpose</th>
+                    <th>Time&nbsp;Spent</th>
+                    <th class="no-print">Del</th>
+                  </tr>
+                </thead>
+                <tbody id="cr-tbody">
+                  <tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No contact records yet</td></tr>
+                </tbody>
+                <tfoot>
+                  <tr class="tr-total" style="background:var(--color-sage-bg)">
+                    <td colspan="6" style="font-weight:600">Total Time Spent</td>
+                    <td style="text-align:center;font-weight:600" id="cr-tot-time">0</td>
+                    <td class="no-print"></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Mileage tab ───────────────────────────────── -->
+        <div id="ee-panel-ee-mileage" class="dash-panel" role="tabpanel">
+          <div class="tt-card">
+            <h2><i class="bi bi-car-front" aria-hidden="true"></i> Log Mileage</h2>
+            <div id="ml-err" class="tt-err"></div>
+            <div class="form-row">
+              <div class="tt-fg">
+                <label for="ml-date">Date *</label>
+                <input id="ml-date" type="date" class="tt-input">
+              </div>
+              <div class="tt-fg">
+                <label for="ml-miles">Miles *</label>
+                <input id="ml-miles" type="number" class="tt-input" placeholder="0.0" step="0.1" min="0">
+              </div>
+            </div>
+            <div class="tt-fg">
+              <label for="ml-description">Description / Address of Trip *</label>
+              <input id="ml-description" type="text" class="tt-input" placeholder="e.g. Wayne Metro CoC office, 1 Griswold St, Detroit">
+            </div>
+            <div class="form-row">
+              <div class="tt-fg">
+                <label for="ml-parking">Parking ($)</label>
+                <input id="ml-parking" type="number" class="tt-input" placeholder="0.00" step="0.01" min="0">
+              </div>
+              <div class="tt-fg">
+                <label for="ml-attachments">Attachments / Notes</label>
+                <input id="ml-attachments" type="text" class="tt-input" placeholder="Receipt filename or note">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="ttAddMileage()">
+              <i class="bi bi-plus-circle" aria-hidden="true"></i> Add Mileage Entry
+            </button>
+          </div>
+
+          <div class="tt-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:.75rem">
+              <h2 style="margin:0"><i class="bi bi-table" aria-hidden="true"></i> Mileage Log</h2>
+              <button class="btn btn-outline btn-sm no-print" onclick="ttExportCSV('mileage')">
+                <i class="bi bi-download" aria-hidden="true"></i> Export CSV
+              </button>
+            </div>
+            <div class="week-nav no-print">
+              <button class="week-nav-btn" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev</button>
+              <span class="week-lbl" id="ml-week-lbl">This Week</span>
+              <button class="week-nav-btn" onclick="ttWeekShift(1)">Next <i class="bi bi-chevron-right"></i></button>
+              <button class="week-nav-btn" onclick="ttWeekReset()">This Week</button>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="ml-table" aria-label="Mileage log">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Miles</th>
+                    <th>Rate/Mile</th>
+                    <th>Description / Address of Trip</th>
+                    <th>Mileage $</th>
+                    <th>Parking</th>
+                    <th>Attachments</th>
+                    <th class="no-print">Del</th>
+                  </tr>
+                </thead>
+                <tbody id="ml-tbody">
+                  <tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No mileage entries yet</td></tr>
+                </tbody>
+                <tfoot>
+                  <tr class="tr-ml-total">
+                    <td><strong>Totals</strong></td>
+                    <td style="text-align:center" id="ml-tot-miles">0.00</td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align:center" id="ml-tot-pay">$0.00</td>
+                    <td style="text-align:center" id="ml-tot-park">$0.00</td>
+                    <td colspan="2" style="text-align:right;font-weight:700">Total All: <span id="ml-tot-all">$0.00</span></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Print tab ──────────────────────────────────── -->
+        <div id="ee-panel-ee-print" class="dash-panel" role="tabpanel">
+          <div class="tt-card no-print" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+            <div>
+              <strong>Print or save as PDF</strong>
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin:0">
+                Use your browser's print dialog. Select "Save as PDF" to export.
+              </p>
+            </div>
+            <div style="display:flex;gap:.65rem;flex-wrap:wrap">
+              <button class="btn btn-outline btn-sm" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev Week</button>
+              <span class="week-lbl" id="ee-print-week-lbl" style="align-self:center;font-size:var(--font-size-sm)"></span>
+              <button class="btn btn-outline btn-sm" onclick="ttWeekShift(1)">Next Week <i class="bi bi-chevron-right"></i></button>
+              <button class="btn btn-primary" onclick="ttPrint()"><i class="bi bi-printer" aria-hidden="true"></i> Print</button>
+            </div>
+          </div>
+          <div id="print-preview-area"></div>
+        </div>
+      </div>
+      <!-- end employee dash -->
+
+    </div>
+    <!-- end tt-wrap -->
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>The <span>Connect</span></h2>
+          <p>A youth-centered resource hub for Southeast Michigan communities.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="category/housing.html">Housing</a></li>
+            <li><a href="category/food.html">Food</a></li>
+            <li><a href="category/health.html">Healthcare</a></li>
+            <li><a href="category/employment.html">Employment</a></li>
+            <li><a href="category/education.html">Education</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="directory.html">Resource Directory</a></li>
+            <li><a href="learning-center.html">Learning Center</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Emergency</h3>
+          <ul>
+            <li><a href="tel:911">911 – Emergency</a></li>
+            <li><a href="tel:988">988 – Crisis Lifeline</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>2026 The Connect. Time tracking data is stored only in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <div id="google_translate_element" hidden></div>
+  <script src="js/translate.js"></script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script>
+  /* ═══════════════════════════════════════════════════════
+     TIME TRACKER – All logic
+  ═══════════════════════════════════════════════════════ */
+  (function () {
+    'use strict';
+
+    /* ── Storage ────────────────────────────────────────── */
+    const DB_KEY  = 'tc_tt_db';
+    const SES_KEY = 'tc_tt_session';
+
+    function loadDB() {
+      try { return JSON.parse(localStorage.getItem(DB_KEY)) || mkDB(); }
+      catch (e) { return mkDB(); }
+    }
+    function mkDB() { return { employers: {}, employees: {}, entries: {}, contacts: {}, mileage: {}, clock: null }; }
+    function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+    const SESSION_TTL = 8 * 3600 * 1000; // 8-hour sliding window
+
+    function getSession() {
+      try {
+        const s = JSON.parse(localStorage.getItem(SES_KEY));
+        if (!s) return null;
+        if (s.expiresAt && Date.now() > s.expiresAt) { clearSession(); return null; }
+        s.expiresAt = Date.now() + SESSION_TTL; // slide the window
+        localStorage.setItem(SES_KEY, JSON.stringify(s));
+        return s;
+      } catch (e) { return null; }
+    }
+    function setSession(s) {
+      localStorage.setItem(SES_KEY, JSON.stringify({ ...s, expiresAt: Date.now() + SESSION_TTL }));
+    }
+    function clearSession() { localStorage.removeItem(SES_KEY); }
+
+    /* ── Utilities ──────────────────────────────────────── */
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+    /* ── Password security (PBKDF2-SHA-256, 100k iterations) ── */
+    function generateSalt() {
+      const arr = new Uint8Array(16);
+      crypto.getRandomValues(arr);
+      return btoa(String.fromCharCode(...arr));
+    }
+    async function hashPassword(pass, salt) {
+      const enc = new TextEncoder();
+      const key = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveBits']);
+      const bits = await crypto.subtle.deriveBits(
+        { name: 'PBKDF2', salt: enc.encode(salt), iterations: 100000, hash: 'SHA-256' },
+        key, 256
+      );
+      return btoa(String.fromCharCode(...new Uint8Array(bits)));
+    }
+    /* Legacy btoa hash — only used to migrate old accounts on first login */
+    function legacyHash(pass) { return btoa(unescape(encodeURIComponent(pass + ':tc_tt_salt'))); }
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function val(id) { return (document.getElementById(id) || {}).value || ''; }
+    function setVal(id, v) { const el = document.getElementById(id); if (el) el.value = v; }
+    function showErr(id, msg) { const el = document.getElementById(id); if (el) { el.textContent = msg; el.style.display = 'block'; } }
+    function hideErr(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+    function showOk(id, msg) { const el = document.getElementById(id); if (el) { el.textContent = msg; el.style.display = 'block'; } }
+    function hideOk(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+
+    function todayStr() { return new Date().toISOString().slice(0, 10); }
+    function nowTimeStr() { return new Date().toTimeString().slice(0, 5); }
+
+    function fmtDate(str) {
+      if (!str) return '';
+      const d = new Date(str + 'T12:00:00');
+      return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+    function fmtDateShort(str) {
+      if (!str) return '';
+      const d = new Date(str + 'T12:00:00');
+      return d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
+    }
+
+    /* ── Week helpers ───────────────────────────────────── */
+    function getMonday(d) {
+      const dt = new Date(d);
+      const day = dt.getDay();
+      dt.setDate(dt.getDate() - (day === 0 ? 6 : day - 1));
+      dt.setHours(0, 0, 0, 0);
+      return dt;
+    }
+    function getSunday(mon) {
+      const d = new Date(mon);
+      d.setDate(d.getDate() + 6);
+      return d;
+    }
+    function weekLabel(mon) {
+      const sun = getSunday(mon);
+      const f = dt => dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return `${f(mon)} – ${f(sun)}, ${mon.getFullYear()}`;
+    }
+    function inWeek(dateStr, mon) {
+      const d = new Date(dateStr + 'T12:00:00');
+      const sun = getSunday(mon);
+      sun.setHours(23, 59, 59, 999);
+      return d >= mon && d <= sun;
+    }
+    function roundQ(h) { return Math.round(h * 4) / 4; }
+
+    /* ── View management ────────────────────────────────── */
+    function ttShowView(id) {
+      document.querySelectorAll('.tt-view').forEach(v => v.classList.remove('active'));
+      const el = document.getElementById('view-' + id);
+      if (el) el.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function ttAuthTab(prefix, tab) {
+      document.querySelectorAll(`[id^="${prefix}-tab-"]`).forEach(t => t.classList.remove('active'));
+      document.querySelectorAll(`[id^="${prefix}-panel-"]`).forEach(p => p.classList.remove('active'));
+      const tabEl   = document.getElementById(`${prefix}-tab-${tab}`);
+      const panelEl = document.getElementById(`${prefix}-panel-${tab}`);
+      if (tabEl)   tabEl.classList.add('active');
+      if (panelEl) panelEl.classList.add('active');
+    }
+
+    function ttDashTab(prefix, tab) {
+      const dashEl = document.getElementById(`view-${prefix === 'er' ? 'employer' : 'employee'}-dash`);
+      if (!dashEl) return;
+      dashEl.querySelectorAll('.dash-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+      dashEl.querySelectorAll('.dash-panel').forEach(p => p.classList.toggle('active', p.id === `${prefix}-panel-${tab}`));
+    }
+
+    /* ── Employer auth ──────────────────────────────────── */
+    async function ttEmployerSignup() {
+      hideErr('er-signup-err');
+      const orgName = val('er-su-org').trim();
+      const email   = val('er-su-email').trim().toLowerCase();
+      const pass    = val('er-su-pass');
+      const payRate = parseFloat(val('er-su-rate')) || 50;
+
+      if (!orgName || !email || !pass) { showErr('er-signup-err', 'Please fill in all required fields.'); return; }
+      if (!email.includes('@'))        { showErr('er-signup-err', 'Please enter a valid email address.'); return; }
+      if (pass.length < 6)             { showErr('er-signup-err', 'Password must be at least 6 characters.'); return; }
+
+      const db = loadDB();
+      if (Object.values(db.employers).find(e => e.email === email)) {
+        showErr('er-signup-err', 'An account with this email already exists. Try logging in.'); return;
+      }
+
+      const id       = uid();
+      const salt     = generateSalt();
+      const passHash = await hashPassword(pass, salt);
+
+      db.employers[id] = {
+        id, orgName, email, passHash, salt,
+        payRate, mileageRate: 0.725,
+        templateId: 'yab',
+        createdAt: new Date().toISOString()
+      };
+      db.employees[id] = [];
+      saveDB(db);
+
+      setSession({ role: 'employer', eid: id, orgName });
+      ttRenderEmployerDash();
+      ttShowView('employer-dash');
+    }
+
+    async function ttEmployerLogin() {
+      hideErr('er-login-err');
+      const email = val('er-login-email').trim().toLowerCase();
+      const pass  = val('er-login-pass');
+      if (!email || !pass) { showErr('er-login-err', 'Please enter your email and password.'); return; }
+
+      const db  = loadDB();
+      const emp = Object.values(db.employers).find(e => e.email === email);
+      if (!emp) { showErr('er-login-err', 'Incorrect email or password.'); return; }
+
+      let valid = false;
+      if (emp.salt) {
+        /* Modern PBKDF2 path */
+        valid = (await hashPassword(pass, emp.salt)) === emp.passHash;
+      } else {
+        /* Legacy btoa — migrate to PBKDF2 automatically on successful login */
+        valid = legacyHash(pass) === emp.passHash;
+        if (valid) {
+          emp.salt     = generateSalt();
+          emp.passHash = await hashPassword(pass, emp.salt);
+          db.employers[emp.id] = emp;
+          saveDB(db);
+        }
+      }
+      if (!valid) { showErr('er-login-err', 'Incorrect email or password.'); return; }
+
+      setSession({ role: 'employer', eid: emp.id, orgName: emp.orgName });
+      ttRenderEmployerDash();
+      ttShowView('employer-dash');
+    }
+
+    function ttEmployerLogout() {
+      clearSession();
+      ttShowView('start');
+    }
+
+    /* ── Employee auth ──────────────────────────────────── */
+    function ttPopulateOrgSelect() {
+      const db  = loadDB();
+      const sel = document.getElementById('ee-org-select');
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- Select your organization --</option>';
+      Object.values(db.employers).forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e.id;
+        opt.textContent = esc(e.orgName);
+        sel.appendChild(opt);
+      });
+    }
+
+    function ttEmployeeLogin() {
+      hideErr('ee-login-err');
+      const eid  = val('ee-org-select');
+      const name = val('ee-name').trim();
+      const pin  = val('ee-pin').trim();
+
+      if (!eid || !name) { showErr('ee-login-err', 'Please select your organization and enter your name.'); return; }
+
+      const db       = loadDB();
+      const employer = db.employers[eid];
+      if (!employer) { showErr('ee-login-err', 'Organization not found.'); return; }
+
+      const employees = db.employees[eid] || [];
+      if (employees.length > 0) {
+        const match = employees.find(e =>
+          e.name.toLowerCase() === name.toLowerCase() && (!e.pin || e.pin === pin)
+        );
+        if (!match) {
+          showErr('ee-login-err', 'Name not found or incorrect PIN. Ask your employer to add you, or check your PIN.');
+          return;
+        }
+      }
+
+      setSession({ role: 'employee', eid, empName: name, orgName: employer.orgName });
+      ttRenderEmployeeDash();
+      ttShowView('employee-dash');
+    }
+
+    function ttEmployeeLogout() {
+      clearSession();
+      stopTimer();
+      ttShowView('start');
+    }
+
+    /* ── Employee management ────────────────────────────── */
+    function ttAddEmployee() {
+      hideErr('er-emp-add-err');
+      const sess = getSession();
+      if (!sess) return;
+      const name = val('er-new-name').trim();
+      const pin  = val('er-new-pin').trim();
+      if (!name) { showErr('er-emp-add-err', 'Please enter a name.'); return; }
+
+      const db = loadDB();
+      if (!db.employees[sess.eid]) db.employees[sess.eid] = [];
+      if (db.employees[sess.eid].find(e => e.name.toLowerCase() === name.toLowerCase())) {
+        showErr('er-emp-add-err', 'A member with this name already exists.'); return;
+      }
+
+      db.employees[sess.eid].push({ id: uid(), name, pin });
+      saveDB(db);
+      setVal('er-new-name', '');
+      setVal('er-new-pin', '');
+      ttRenderEmpList();
+    }
+
+    function ttRemoveEmployee(empId) {
+      if (!confirm('Remove this team member? Their time entries will remain in the records.')) return;
+      const sess = getSession();
+      if (!sess) return;
+      const db = loadDB();
+      db.employees[sess.eid] = (db.employees[sess.eid] || []).filter(e => e.id !== empId);
+      saveDB(db);
+      ttRenderEmpList();
+    }
+
+    /* ── Clock ──────────────────────────────────────────── */
+    let _timerInterval = null;
+    let _clockStart    = null;
+
+    function ttClockIn() {
+      hideErr('clock-in-err');
+      const type = val('clock-type');
+      const task = val('clock-task').trim();
+      if (!task) { showErr('clock-in-err', 'Please describe the task before clocking in.'); return; }
+
+      const sess = getSession();
+      if (!sess) return;
+
+      const db  = loadDB();
+      db.clock  = { eid: sess.eid, empName: sess.empName, type, task, startTime: Date.now() };
+      saveDB(db);
+
+      _clockStart = db.clock.startTime;
+      ttUpdateClockWidget(db.clock);
+      startTimer();
+    }
+
+    function ttClockOut() {
+      const db = loadDB();
+      if (!db.clock) return;
+
+      const { eid, empName, type, task, startTime } = db.clock;
+      const endTime  = Date.now();
+      const durationH = (endTime - startTime) / 3600000;
+      const hours    = roundQ(durationH);
+      const notes    = val('clock-out-notes').trim();
+
+      const entry = {
+        id: uid(),
+        type,
+        task,
+        date: todayStr(),
+        timeIn:  new Date(startTime).toTimeString().slice(0, 5),
+        timeOut: new Date(endTime).toTimeString().slice(0, 5),
+        proposedHours:  hours,
+        completedHours: hours,
+        notes,
+        createdAt: new Date().toISOString()
+      };
+
+      const key = `${eid}::${empName}`;
+      if (!db.entries[key]) db.entries[key] = [];
+      db.entries[key].unshift(entry);
+      db.clock = null;
+      saveDB(db);
+
+      setVal('clock-out-notes', '');
+      stopTimer();
+      ttUpdateClockWidget(null);
+      ttUpdateStats();
+    }
+
+    function startTimer() {
+      stopTimer();
+      _timerInterval = setInterval(tickTimer, 1000);
+      tickTimer();
+    }
+    function stopTimer() {
+      if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+    }
+    function tickTimer() {
+      if (!_clockStart) return;
+      const elapsed = Date.now() - _clockStart;
+      const h = Math.floor(elapsed / 3600000);
+      const m = Math.floor((elapsed % 3600000) / 60000);
+      const s = Math.floor((elapsed % 60000) / 1000);
+      const el = document.getElementById('clock-display');
+      if (el) el.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function ttUpdateClockWidget(clock) {
+      const widget    = document.getElementById('clock-widget');
+      const statusEl  = document.getElementById('clock-status');
+      const taskLabel = document.getElementById('clock-task-label');
+      const inSec     = document.getElementById('clock-in-section');
+      const outSec    = document.getElementById('clock-out-section');
+      if (!widget) return;
+
+      if (clock) {
+        widget.classList.add('is-clocked');
+        if (statusEl)  statusEl.textContent = 'Clocked In';
+        if (taskLabel) { taskLabel.textContent = `${clock.type} — ${clock.task}`; taskLabel.style.display = 'block'; }
+        if (inSec)  inSec.style.display  = 'none';
+        if (outSec) outSec.style.display = 'block';
+        document.title = '● Clocked In | Time Tracking Portal';
+      } else {
+        widget.classList.remove('is-clocked');
+        if (statusEl)  statusEl.textContent = 'Not Clocked In';
+        if (taskLabel) { taskLabel.textContent = ''; taskLabel.style.display = 'none'; }
+        if (inSec)  inSec.style.display  = 'block';
+        if (outSec) outSec.style.display = 'none';
+        const displayEl = document.getElementById('clock-display');
+        if (displayEl) displayEl.textContent = '00:00:00';
+        document.title = 'Time Tracking Portal | The Connect';
+      }
+    }
+
+    /* Warn before navigating away while clocked in */
+    window.addEventListener('beforeunload', (e) => {
+      const db = loadDB();
+      if (db.clock) {
+        e.preventDefault();
+        return (e.returnValue = 'You are currently clocked in. Your session is saved — the timer will resume when you return.');
+      }
+    });
+
+    /* ── Manual entry ───────────────────────────────────── */
+    function ttAddManualEntry() {
+      hideErr('me-err');
+      const sess = getSession();
+      if (!sess) return;
+
+      const type      = val('me-type');
+      const task      = val('me-task').trim();
+      const date      = val('me-date');
+      const proposed  = parseFloat(val('me-proposed')) || 0;
+      const completed = parseFloat(val('me-completed')) || 0;
+      const notes     = val('me-notes').trim();
+
+      if (!task || !date)     { showErr('me-err', 'Task and date are required.'); return; }
+      if (completed <= 0)     { showErr('me-err', 'Completed hours must be greater than 0.'); return; }
+
+      const db  = loadDB();
+      const key = `${sess.eid}::${sess.empName}`;
+      if (!db.entries[key]) db.entries[key] = [];
+
+      db.entries[key].unshift({
+        id: uid(), type, task, date,
+        timeIn: '', timeOut: '',
+        proposedHours:  Math.round(proposed * 100) / 100,
+        completedHours: Math.round(completed * 100) / 100,
+        notes, createdAt: new Date().toISOString()
+      });
+      saveDB(db);
+
+      setVal('me-task', '');
+      setVal('me-notes', '');
+      setVal('me-proposed', '');
+      setVal('me-completed', '');
+
+      ttUpdateStats();
+      ttDashTab('ee', 'ee-sheet');
+      ttRenderTimesheet();
+    }
+
+    function ttDeleteEntry(entryId) {
+      if (!confirm('Delete this time entry?')) return;
+      const sess = getSession();
+      if (!sess) return;
+      const db  = loadDB();
+      const key = `${sess.eid}::${sess.empName}`;
+      db.entries[key] = (db.entries[key] || []).filter(e => e.id !== entryId);
+      saveDB(db);
+      ttRenderTimesheet();
+      ttUpdateStats();
+    }
+
+    /* ── Contact records ────────────────────────────────── */
+    function ttAddContact() {
+      hideErr('cr-err');
+      const sess = getSession();
+      if (!sess) return;
+
+      const date        = val('cr-date');
+      const time        = val('cr-time');
+      const method      = val('cr-method');
+      const toFrom      = val('cr-tofrom').trim();
+      const affiliation = val('cr-affiliation').trim();
+      const content     = val('cr-content').trim();
+      const timeSpent   = parseFloat(val('cr-timespent')) || 0;
+
+      if (!date || !toFrom || !content) {
+        showErr('cr-err', 'Date, To/From, and Content are required.'); return;
+      }
+
+      const db  = loadDB();
+      const key = `${sess.eid}::${sess.empName}`;
+      if (!db.contacts[key]) db.contacts[key] = [];
+
+      db.contacts[key].unshift({
+        id: uid(), date, time, method, toFrom, affiliation, content,
+        timeSpent: Math.round(timeSpent * 100) / 100,
+        createdAt: new Date().toISOString()
+      });
+      saveDB(db);
+
+      setVal('cr-tofrom', '');
+      setVal('cr-affiliation', '');
+      setVal('cr-content', '');
+      setVal('cr-timespent', '');
+      setVal('cr-date', todayStr());
+
+      ttUpdateStats();
+      ttRenderContacts();
+    }
+
+    function ttDeleteContact(contactId) {
+      if (!confirm('Delete this contact record?')) return;
+      const sess = getSession();
+      if (!sess) return;
+      const db  = loadDB();
+      const key = `${sess.eid}::${sess.empName}`;
+      db.contacts[key] = (db.contacts[key] || []).filter(c => c.id !== contactId);
+      saveDB(db);
+      ttRenderContacts();
+      ttUpdateStats();
+    }
+
+    /* ── Week navigation ────────────────────────────────── */
+    let _currentWeekMon = getMonday(new Date());
+
+    function ttWeekShift(dir) {
+      _currentWeekMon = new Date(_currentWeekMon.getTime() + dir * 7 * 86400000);
+      ttRenderTimesheet();
+      ttRenderContacts();
+      ttRenderMileage();
+      ttBuildPrint();
+      const lbl2 = document.getElementById('ee-print-week-lbl');
+      if (lbl2) lbl2.textContent = weekLabel(_currentWeekMon);
+    }
+    function ttWeekReset() {
+      _currentWeekMon = getMonday(new Date());
+      ttRenderTimesheet();
+      ttRenderContacts();
+    }
+
+    /* ── Render: Timesheet ──────────────────────────────── */
+    function ttRenderTimesheet(eid, empName, mon) {
+      const sess = getSession();
+      if (!sess) return;
+      eid     = eid     || sess.eid;
+      empName = empName || sess.empName;
+      mon     = mon     || _currentWeekMon;
+
+      const db       = loadDB();
+      const key      = `${eid}::${empName}`;
+      const employer = db.employers[eid] || {};
+      const rate     = employer.payRate || 50;
+      const all      = (db.entries[key] || []).filter(e => inWeek(e.date, mon));
+      all.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      const lblEl = document.getElementById('ee-week-lbl');
+      if (lblEl) lblEl.textContent = weekLabel(mon);
+
+      const tbody = document.getElementById('ts-tbody');
+      if (!tbody) return;
+
+      const isEmployee = !eid || sess.role === 'employee';
+
+      if (!all.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No entries for ${weekLabel(mon)}</td></tr>`;
+        ttSetTotals(0, 0, 0);
+        return;
+      }
+
+      let totP = 0, totC = 0;
+      tbody.innerHTML = all.map(e => {
+        totP += e.proposedHours  || 0;
+        totC += e.completedHours || 0;
+        const pay = (e.completedHours || 0) * rate;
+        const badge = typeBadge(e.type);
+        const timeRange = e.timeIn ? `<span style="font-size:.72rem;color:var(--color-text-muted);display:block">${e.timeIn}–${e.timeOut}</span>` : '';
+        const noteTxt  = e.notes ? `<span style="font-size:.72rem;color:var(--color-text-muted);display:block">${esc(e.notes)}</span>` : '';
+        const delBtn = isEmployee
+          ? `<td class="no-print"><button class="del-btn" onclick="ttDeleteEntry('${esc(e.id)}')" title="Delete entry"><i class="bi bi-trash"></i></button></td>`
+          : '<td></td>';
+        return `<tr>
+          <td>${esc(e.task)}</td>
+          <td style="white-space:nowrap">${fmtDate(e.date)}</td>
+          <td style="text-align:center">${(e.proposedHours||0).toFixed(2)}</td>
+          <td style="text-align:center">${(e.completedHours||0).toFixed(2)}</td>
+          <td style="text-align:center;white-space:nowrap">$${rate.toFixed(2)}</td>
+          <td style="text-align:center;font-weight:600;white-space:nowrap">$${pay.toFixed(2)}</td>
+          <td><span class="badge ${badge}">${esc(e.type)}</span>${timeRange}${noteTxt}</td>
+          ${delBtn}
+        </tr>`;
+      }).join('');
+
+      ttSetTotals(totP, totC, totC * rate);
+    }
+
+    function ttSetTotals(p, c, pay) {
+      const pEl = document.getElementById('ts-tot-proposed');
+      const cEl = document.getElementById('ts-tot-completed');
+      const tEl = document.getElementById('ts-tot-pay');
+      if (pEl) pEl.textContent = p.toFixed(2);
+      if (cEl) cEl.textContent = c.toFixed(2);
+      if (tEl) tEl.textContent = `$${pay.toFixed(2)}`;
+    }
+
+    function typeBadge(type) {
+      const m = {
+        'Meeting': 'b-purple', 'Event': 'b-purple',
+        'Phone Call': 'b-green', 'Training': 'b-green'
+      };
+      return m[type] || 'b-gray';
+    }
+
+    /* ── Render: Contacts ───────────────────────────────── */
+    function ttRenderContacts(eid, empName, mon) {
+      const sess = getSession();
+      if (!sess) return;
+      eid     = eid     || sess.eid;
+      empName = empName || sess.empName;
+      mon     = mon     || _currentWeekMon;
+
+      const db  = loadDB();
+      const key = `${eid}::${empName}`;
+      const all = (db.contacts[key] || []).filter(c => inWeek(c.date, mon));
+      all.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      const tbody = document.getElementById('cr-tbody');
+      const totEl = document.getElementById('cr-tot-time');
+      if (!tbody) return;
+
+      if (!all.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No contact records for this week</td></tr>`;
+        if (totEl) totEl.textContent = '0';
+        return;
+      }
+
+      let totTime = 0;
+      const isEmployee = !eid || sess.role === 'employee';
+
+      tbody.innerHTML = all.map(c => {
+        totTime += c.timeSpent || 0;
+        const delBtn = isEmployee
+          ? `<td class="no-print"><button class="del-btn" onclick="ttDeleteContact('${esc(c.id)}')" title="Delete record"><i class="bi bi-trash"></i></button></td>`
+          : '<td></td>';
+        return `<tr>
+          <td style="white-space:nowrap">${fmtDate(c.date)}</td>
+          <td>${esc(c.time||'')}</td>
+          <td>${esc(c.method)}</td>
+          <td>${esc(c.toFrom)}</td>
+          <td>${esc(c.affiliation||'')}</td>
+          <td>${esc(c.content)}</td>
+          <td style="text-align:center">${(c.timeSpent||0).toFixed(2)}</td>
+          ${delBtn}
+        </tr>`;
+      }).join('');
+
+      if (totEl) totEl.textContent = totTime.toFixed(2);
+    }
+
+    /* ── Render: Stats ──────────────────────────────────── */
+    function ttUpdateStats() {
+      const sess = getSession();
+      if (!sess || sess.role !== 'employee') return;
+
+      const db       = loadDB();
+      const key      = `${sess.eid}::${sess.empName}`;
+      const mon      = _currentWeekMon;
+      const employer = db.employers[sess.eid] || {};
+      const rate     = employer.payRate || 50;
+
+      const entries  = (db.entries[key]  || []).filter(e => inWeek(e.date, mon));
+      const contacts = (db.contacts[key] || []).filter(c => inWeek(c.date, mon));
+      const hours    = entries.reduce((s, e) => s + (e.completedHours || 0), 0);
+
+      const h = document.getElementById('ee-stat-hours');
+      const p = document.getElementById('ee-stat-pay');
+      const e = document.getElementById('ee-stat-entries');
+      const c = document.getElementById('ee-stat-contacts');
+      if (h) h.textContent = hours.toFixed(1);
+      if (p) p.textContent = `$${(hours * rate).toFixed(0)}`;
+      if (e) e.textContent = entries.length;
+      if (c) c.textContent = contacts.length;
+    }
+
+    /* ── Render: Employer Dashboard ─────────────────────── */
+    function ttRenderEmployerDash() {
+      const sess = getSession();
+      if (!sess || sess.role !== 'employer') return;
+
+      const el = document.getElementById('er-org-name');
+      if (el) el.textContent = sess.orgName;
+
+      ttRenderEmpList();
+      ttLoadSettings();
+    }
+
+    function ttRenderEmpList() {
+      const sess = getSession();
+      if (!sess) return;
+      const db        = loadDB();
+      const employees = db.employees[sess.eid] || [];
+      const container = document.getElementById('er-emp-list-container');
+      if (!container) return;
+
+      if (!employees.length) {
+        container.innerHTML = '<div class="empty-st"><i class="bi bi-people"></i><p>No team members yet. Add them below.</p></div>';
+      } else {
+        container.innerHTML = `<ul class="emp-list">${employees.map(e => `
+          <li class="emp-item">
+            <div>
+              <span class="en">${esc(e.name)}</span>
+              <span class="ep" style="display:block">PIN: ${e.pin ? '••••' : 'None set'}</span>
+            </div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+              <button class="btn btn-sm btn-outline" onclick="ttViewEmpReport('${esc(e.name)}')">View Report</button>
+              <button class="btn btn-sm" style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca" onclick="ttRemoveEmployee('${esc(e.id)}')">Remove</button>
+            </div>
+          </li>`).join('')}</ul>`;
+      }
+
+      /* also populate report dropdown */
+      const sel = document.getElementById('er-rpt-emp');
+      if (sel) {
+        const prev = sel.value;
+        sel.innerHTML = '<option value="">-- Select a team member --</option>' +
+          employees.map(e => `<option value="${esc(e.name)}" ${e.name === prev ? 'selected' : ''}>${esc(e.name)}</option>`).join('');
+      }
+    }
+
+    function ttViewEmpReport(empName) {
+      ttDashTab('er', 'er-reports');
+      setVal('er-rpt-emp', empName);
+      ttRenderEmployerReport();
+    }
+
+    function ttRenderEmployerReport() {
+      const sess    = getSession();
+      if (!sess) return;
+      const empName = val('er-rpt-emp');
+      const container = document.getElementById('er-rpt-container');
+      if (!empName) {
+        if (container) container.innerHTML = '<div class="empty-st"><i class="bi bi-bar-chart"></i><p>Select a team member.</p></div>';
+        return;
+      }
+
+      /* Build report HTML directly into the container */
+      const db       = loadDB();
+      const employer = db.employers[sess.eid] || {};
+      const rate     = employer.payRate || 50;
+      const mon      = _currentWeekMon;
+      const key      = `${sess.eid}::${empName}`;
+
+      const entries  = (db.entries[key]  || []).filter(e => inWeek(e.date, mon)).sort((a, b) => new Date(a.date) - new Date(b.date));
+      const contacts = (db.contacts[key] || []).filter(c => inWeek(c.date, mon)).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      let totP = 0, totC = 0;
+      const tsRows = entries.length
+        ? entries.map(e => {
+            totP += e.proposedHours  || 0;
+            totC += e.completedHours || 0;
+            const pay = (e.completedHours || 0) * rate;
+            return `<tr>
+              <td>${esc(e.task)}</td>
+              <td>${fmtDate(e.date)}</td>
+              <td style="text-align:center">${(e.proposedHours||0).toFixed(2)}</td>
+              <td style="text-align:center">${(e.completedHours||0).toFixed(2)}</td>
+              <td style="text-align:center">$${rate.toFixed(2)}</td>
+              <td style="text-align:center;font-weight:600">$${pay.toFixed(2)}</td>
+              <td><span class="badge ${typeBadge(e.type)}">${esc(e.type)}</span>${e.notes?`<span style="display:block;font-size:.72rem;color:var(--color-text-muted)">${esc(e.notes)}</span>`:''}</td>
+            </tr>`;
+          }).join('')
+        : '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No entries this week</td></tr>';
+
+      let totTime = 0;
+      const crRows = contacts.length
+        ? contacts.map(c => {
+            totTime += c.timeSpent || 0;
+            return `<tr>
+              <td>${fmtDate(c.date)}</td>
+              <td>${esc(c.time||'')}</td>
+              <td>${esc(c.method)}</td>
+              <td>${esc(c.toFrom)}</td>
+              <td>${esc(c.affiliation||'')}</td>
+              <td>${esc(c.content)}</td>
+              <td style="text-align:center">${(c.timeSpent||0).toFixed(2)}</td>
+            </tr>`;
+          }).join('')
+        : '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No contact records this week</td></tr>';
+
+      if (container) container.innerHTML = `
+        <div class="tt-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:.75rem">
+            <h2 style="margin:0"><i class="bi bi-table"></i> ${esc(empName)} — Timesheet</h2>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap" class="no-print">
+              <button class="week-nav-btn" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev</button>
+              <span class="week-lbl">${weekLabel(mon)}</span>
+              <button class="week-nav-btn" onclick="ttWeekShift(1)">Next <i class="bi bi-chevron-right"></i></button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="ts-table">
+              <thead><tr><th>Project / Task</th><th>Date</th><th>Proposed Hrs</th><th>Completed Hrs</th><th>Pay Rate</th><th>Total</th><th>Notes / Type</th></tr></thead>
+              <tbody>${tsRows}</tbody>
+              <tfoot><tr class="tr-total"><td colspan="2"><strong>Totals</strong></td><td style="text-align:center">${totP.toFixed(2)}</td><td style="text-align:center">${totC.toFixed(2)}</td><td></td><td style="text-align:center">$${(totC*rate).toFixed(2)}</td><td></td></tr></tfoot>
+            </table>
+          </div>
+        </div>
+        <div class="tt-card">
+          <h2><i class="bi bi-card-list"></i> ${esc(empName)} — Contact Record</h2>
+          <div style="overflow-x:auto">
+            <table class="cr-table">
+              <thead><tr><th>Date</th><th>Time</th><th>Method</th><th>To/From</th><th>Name &amp; Affiliation</th><th>Content / Purpose</th><th>Time Spent</th></tr></thead>
+              <tbody>${crRows}</tbody>
+              <tfoot><tr style="background:var(--color-sage-bg);font-weight:600"><td colspan="6">Total Time Spent</td><td style="text-align:center">${totTime.toFixed(2)}</td></tr></tfoot>
+            </table>
+          </div>
+        </div>`;
+    }
+
+    /* ── Settings ───────────────────────────────────────── */
+    function ttLoadSettings() {
+      const sess = getSession();
+      if (!sess) return;
+      const db  = loadDB();
+      const emp = db.employers[sess.eid];
+      if (!emp) return;
+      setVal('er-set-org',      emp.orgName);
+      setVal('er-set-rate',     emp.payRate     || 50);
+      setVal('er-set-milerate', emp.mileageRate || 0.725);
+      setVal('er-set-template', emp.templateId  || 'yab');
+    }
+
+    function ttSaveSettings() {
+      hideErr('er-settings-err');
+      hideOk('er-settings-ok');
+      const sess = getSession();
+      if (!sess) return;
+      const orgName    = val('er-set-org').trim();
+      const rate       = parseFloat(val('er-set-rate'))     || 50;
+      const mileRate   = parseFloat(val('er-set-milerate')) || 0.725;
+      const templateId = val('er-set-template') || 'yab';
+      if (!orgName) { showErr('er-settings-err', 'Organization name cannot be empty.'); return; }
+
+      const db = loadDB();
+      if (!db.employers[sess.eid]) return;
+      db.employers[sess.eid].orgName     = orgName;
+      db.employers[sess.eid].payRate     = rate;
+      db.employers[sess.eid].mileageRate = mileRate;
+      db.employers[sess.eid].templateId  = templateId;
+      saveDB(db);
+
+      setSession({ ...sess, orgName });
+      const el = document.getElementById('er-org-name');
+      if (el) el.textContent = orgName;
+      showOk('er-settings-ok', 'Settings saved.');
+    }
+
+    function ttDeleteAccount() {
+      if (!confirm('Delete your account and ALL associated time data? This cannot be undone.')) return;
+      if (!confirm('Are you absolutely sure? All employee time entries will be permanently deleted.')) return;
+      const sess = getSession();
+      if (!sess) return;
+      const db = loadDB();
+
+      /* remove all entries/contacts/mileage for this employer's employees */
+      (db.employees[sess.eid] || []).forEach(e => {
+        const k = `${sess.eid}::${e.name}`;
+        delete db.entries[k];
+        delete db.contacts[k];
+        if (db.mileage) delete db.mileage[k];
+      });
+      delete db.employers[sess.eid];
+      delete db.employees[sess.eid];
+      saveDB(db);
+      clearSession();
+      ttShowView('start');
+    }
+
+    /* ── Print / Export ─────────────────────────────────── */
+    function ttPrint() { window.print(); }
+
+    /* Shared data helper for print templates */
+    function _printData(sess) {
+      const db          = loadDB();
+      const key         = `${sess.eid}::${sess.empName}`;
+      const employer    = db.employers[sess.eid] || {};
+      const rate        = employer.payRate     || 50;
+      const mileageRate = employer.mileageRate || 0.725;
+      const templateId  = employer.templateId  || 'yab';
+      const mon         = _currentWeekMon;
+      const period      = weekLabel(mon);
+      const sort        = (a, b) => new Date(a.date) - new Date(b.date);
+
+      const entries  = (db.entries[key]  || []).filter(e => inWeek(e.date, mon)).sort(sort);
+      const contacts = (db.contacts[key] || []).filter(c => inWeek(c.date, mon)).sort(sort);
+      const mileage  = ((db.mileage||{})[key] || []).filter(m => inWeek(m.date, mon)).sort(sort);
+
+      return { db, key, employer, rate, mileageRate, templateId, mon, period, entries, contacts, mileage };
+    }
+
+    function ttBuildPrint() {
+      const sess = getSession();
+      if (!sess || sess.role !== 'employee') return;
+
+      const d    = _printData(sess);
+      const html = d.templateId === 'standard'
+        ? _tplStandard(sess, d)
+        : _tplYAB(sess, d, d.templateId === 'yab-mileage');
+
+      const area = document.getElementById('print-preview-area');
+      if (area) area.innerHTML = html;
+
+      const lbl  = document.getElementById('ee-print-week-lbl');
+      if (lbl) lbl.textContent = d.period;
+    }
+
+    /* ── Template: YAB Stipend (+ optional Mileage section) ── */
+    function _tplYAB(sess, d, includeMileage) {
+      let totP = 0, totC = 0;
+      const tsRows = d.entries.length
+        ? d.entries.map(e => {
+            totP += e.proposedHours  || 0;
+            totC += e.completedHours || 0;
+            const pay = (e.completedHours || 0) * d.rate;
+            return `<tr>
+              <td>${esc(e.task)}</td><td>${fmtDateShort(e.date)}</td>
+              <td style="text-align:center">${(e.proposedHours||0).toFixed(2)}</td>
+              <td style="text-align:center">${(e.completedHours||0).toFixed(2)}</td>
+              <td style="text-align:center">$${d.rate.toFixed(2)}</td>
+              <td style="text-align:center;font-weight:600">$${pay.toFixed(2)}</td>
+              <td>${esc(e.notes||'')}</td>
+            </tr>`;
+          }).join('')
+        : `<tr><td colspan="7" style="text-align:center;padding:1rem;color:#888">No entries for this pay period</td></tr>`;
+
+      let totTime = 0;
+      const crRows = d.contacts.length
+        ? d.contacts.map(c => {
+            totTime += c.timeSpent || 0;
+            return `<tr>
+              <td>${fmtDateShort(c.date)}</td><td>${esc(c.time||'')}</td>
+              <td>${esc(c.method)}</td><td>${esc(c.toFrom)}</td>
+              <td>${esc(c.affiliation||'')}</td><td>${esc(c.content)}</td>
+              <td style="text-align:center">${(c.timeSpent||0).toFixed(2)}</td>
+            </tr>`;
+          }).join('')
+        : `<tr><td colspan="7" style="text-align:center;padding:1rem;color:#888">No contact records for this pay period</td></tr>`;
+
+      let mileageSection = '';
+      if (includeMileage) {
+        let totMi = 0, totMiPay = 0, totPark = 0;
+        const mlRows = d.mileage.length
+          ? d.mileage.map(m => {
+              totMi    += m.miles   || 0;
+              const mp  = (m.miles || 0) * d.mileageRate;
+              totMiPay += mp;
+              totPark  += m.parking || 0;
+              return `<tr>
+                <td>${fmtDateShort(m.date)}</td>
+                <td style="text-align:center">${(m.miles||0).toFixed(1)}</td>
+                <td style="text-align:center">$${d.mileageRate.toFixed(3)}</td>
+                <td>${esc(m.description)}</td>
+                <td style="text-align:center;font-weight:600">$${mp.toFixed(2)}</td>
+                <td style="text-align:center">$${(m.parking||0).toFixed(2)}</td>
+                <td>${esc(m.attachments||'')}</td>
+              </tr>`;
+            }).join('')
+          : `<tr><td colspan="7" style="text-align:center;padding:1rem;color:#888">No mileage entries for this period</td></tr>`;
+
+        mileageSection = `
+          <h3 style="margin-top:1rem">YHSI Youth Action Board Mileage Form</h3>
+          <div style="font-size:.82rem;margin-bottom:.75rem">
+            <strong>Program Home Cost Number:</strong> 10-6105-21007-648-100-Program &nbsp;|&nbsp;
+            <strong>Month/Year:</strong> ${d.mon.toLocaleDateString('en-US',{month:'long',year:'numeric'})} &nbsp;|&nbsp;
+            <strong>Name:</strong> ${esc(sess.empName)}
+          </div>
+          <div style="overflow-x:auto;margin-bottom:1.25rem">
+            <table class="ml-table" style="font-size:.8rem">
+              <thead><tr>
+                <th>Date</th><th>Miles</th><th>@ Rate</th>
+                <th>Description / Address of Trip</th>
+                <th>Mileage $$$</th><th>Parking</th><th>Attachments</th>
+              </tr></thead>
+              <tbody>${mlRows}</tbody>
+              <tfoot><tr class="tr-ml-total">
+                <td colspan="3"><strong>Total All Mileage &amp; Parking</strong></td>
+                <td></td>
+                <td style="text-align:center">$${totMiPay.toFixed(2)}</td>
+                <td style="text-align:center">$${totPark.toFixed(2)}</td>
+                <td style="text-align:right;font-weight:700">$${(totMiPay+totPark).toFixed(2)}</td>
+              </tr></tfoot>
+            </table>
+          </div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem">
+            <div><strong>Signature of Traveler:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
+            <div><strong>Date Signed:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          </div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap">
+            <div><strong>YHSI Manager Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
+            <div><strong>Date Signed:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          </div>`;
+      }
+
+      return `
+        <div class="print-preview">
+          <h3>Youth Action Board Member &mdash; Stipend Payment Form</h3>
+          <div class="print-header-grid">
+            <div>
+              <div class="ph-field"><strong>Name:</strong> ${esc(sess.empName)}</div>
+              <div class="ph-field"><strong>Pay Period:</strong> ${esc(d.period)}</div>
+              <div class="ph-field"><strong>Organization:</strong> ${esc(d.employer.orgName||'')}</div>
+            </div>
+            <div>
+              <div class="ph-field">I understand hours will be monitored. <strong>Initials:</strong> <span class="sig-line">&nbsp;</span></div>
+              <div class="ph-field"><span class="ph-box"></span> <strong>YHSI Manager Approval</strong></div>
+              <div class="ph-field"><span class="ph-box"></span> <strong>YHSI Youth Specialist Approval</strong></div>
+            </div>
+          </div>
+          <div style="overflow-x:auto;margin-bottom:1.25rem">
+            <table class="ts-table" style="font-size:.8rem">
+              <thead><tr>
+                <th>Project / Task (meetings, trainings, creating documents, etc.)</th>
+                <th>Date of Task / Date Due</th>
+                <th>Proposed Hours</th><th>Completed Hours</th>
+                <th>Pay Rate</th><th>Total</th><th>Notes / Attachments</th>
+              </tr></thead>
+              <tbody>${tsRows}</tbody>
+              <tfoot><tr class="tr-total">
+                <td colspan="2"><strong>Total Proposed &amp; Completed Hours. Total Gross Pay.</strong></td>
+                <td style="text-align:center">${totP.toFixed(2)}</td>
+                <td style="text-align:center">${totC.toFixed(2)}</td>
+                <td style="text-align:center">$${d.rate.toFixed(2)}</td>
+                <td style="text-align:center;font-weight:700">$${(totC*d.rate).toFixed(2)}</td>
+                <td></td>
+              </tr></tfoot>
+            </table>
+          </div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem">
+            <div><strong>Member Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
+            <div><strong>Date:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          </div>
+          <h3 style="margin-top:1rem">YAB Contact Record</h3>
+          <div style="overflow-x:auto;margin-bottom:1.25rem">
+            <table class="cr-table" style="font-size:.8rem">
+              <thead><tr>
+                <th>Date</th><th>Time</th><th>Method</th><th>To / From</th>
+                <th>Contact Name &amp; Affiliation</th><th>Content / Purpose</th><th>Time Spent</th>
+              </tr></thead>
+              <tbody>${crRows}</tbody>
+              <tfoot><tr style="background:#e8f3ed;font-weight:600">
+                <td colspan="6">Total Time Spent</td>
+                <td style="text-align:center">${totTime.toFixed(2)}</td>
+              </tr></tfoot>
+            </table>
+          </div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap">
+            <div><strong>Member Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
+            <div><strong>Date:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          </div>
+          ${mileageSection}
+        </div>`;
+    }
+
+    /* ── Template: Standard Weekly Timesheet ──────────── */
+    function _tplStandard(sess, d) {
+      let totH = 0;
+      const rows = d.entries.length
+        ? d.entries.map(e => {
+            totH += e.completedHours || 0;
+            const pay = (e.completedHours || 0) * d.rate;
+            return `<tr>
+              <td>${esc(e.task)}</td><td>${fmtDateShort(e.date)}</td>
+              <td style="text-align:center">${(e.completedHours||0).toFixed(2)}</td>
+              <td style="text-align:center"><span style="font-size:.72rem;background:#eef3f0;padding:.15em .4em;border-radius:4px">${esc(e.type)}</span></td>
+              <td style="text-align:center">$${d.rate.toFixed(2)}</td>
+              <td style="text-align:center;font-weight:600">$${pay.toFixed(2)}</td>
+              <td>${esc(e.notes||'')}</td>
+            </tr>`;
+          }).join('')
+        : `<tr><td colspan="7" style="text-align:center;padding:1rem;color:#888">No entries for this pay period</td></tr>`;
+
+      return `
+        <div class="print-preview">
+          <h3>${esc(d.employer.orgName||'Organization')} — Weekly Timesheet</h3>
+          <div style="font-size:.85rem;margin-bottom:1rem;display:flex;gap:2rem;flex-wrap:wrap">
+            <div><strong>Employee:</strong> ${esc(sess.empName)}</div>
+            <div><strong>Pay Period:</strong> ${esc(d.period)}</div>
+            <div><strong>Pay Rate:</strong> $${d.rate.toFixed(2)}/hr</div>
+          </div>
+          <div style="overflow-x:auto;margin-bottom:1.25rem">
+            <table class="ts-table" style="font-size:.8rem">
+              <thead><tr>
+                <th>Task / Description</th><th>Date</th><th>Hours</th>
+                <th>Activity</th><th>Rate</th><th>Total</th><th>Notes</th>
+              </tr></thead>
+              <tbody>${rows}</tbody>
+              <tfoot><tr class="tr-total">
+                <td colspan="2"><strong>Totals</strong></td>
+                <td style="text-align:center">${totH.toFixed(2)}</td>
+                <td></td>
+                <td style="text-align:center">$${d.rate.toFixed(2)}</td>
+                <td style="text-align:center;font-weight:700">$${(totH*d.rate).toFixed(2)}</td>
+                <td></td>
+              </tr></tfoot>
+            </table>
+          </div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap">
+            <div><strong>Employee Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
+            <div><strong>Supervisor Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
+            <div><strong>Date:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          </div>
+        </div>`;
+    }
+
+    /* ── CSV export ─────────────────────────────────────── */
+    function ttExportCSV(type) {
+      const sess = getSession();
+      if (!sess) return;
+      const db       = loadDB();
+      const key      = `${sess.eid}::${sess.empName}`;
+      const employer = db.employers[sess.eid] || {};
+      const rate     = employer.payRate || 50;
+      const mon      = _currentWeekMon;
+      let csv = '', filename = '';
+
+      if (type === 'timesheet') {
+        csv = 'Task,Date,Proposed Hours,Completed Hours,Pay Rate,Total,Notes,Type\n';
+        const rows = (db.entries[key] || []).filter(e => inWeek(e.date, mon));
+        rows.forEach(e => {
+          const pay = (e.completedHours || 0) * rate;
+          csv += `"${csvEsc(e.task)}","${e.date}","${e.proposedHours||0}","${e.completedHours||0}","${rate}","${pay.toFixed(2)}","${csvEsc(e.notes||'')}","${csvEsc(e.type)}"\n`;
+        });
+        filename = `timesheet_${key.replace('::','_')}_${mon.toISOString().slice(0,10)}.csv`;
+      } else if (type === 'mileage') {
+        const employer    = db.employers[sess.eid] || {};
+        const mileageRate = employer.mileageRate || 0.725;
+        csv = 'Date,Miles,Rate,Description,Mileage $,Parking,Attachments\n';
+        const rows = ((db.mileage||{})[key] || []).filter(m => inWeek(m.date, mon));
+        rows.forEach(m => {
+          const mp = (m.miles || 0) * mileageRate;
+          csv += `"${m.date}","${m.miles||0}","${mileageRate}","${csvEsc(m.description)}","${mp.toFixed(2)}","${m.parking||0}","${csvEsc(m.attachments||'')}"\n`;
+        });
+        filename = `mileage_${key.replace('::','_')}_${mon.toISOString().slice(0,10)}.csv`;
+      } else {
+        csv = 'Date,Time,Method,To/From,Affiliation,Content,Time Spent\n';
+        const rows = (db.contacts[key] || []).filter(c => inWeek(c.date, mon));
+        rows.forEach(c => {
+          csv += `"${c.date}","${c.time||''}","${csvEsc(c.method)}","${csvEsc(c.toFrom)}","${csvEsc(c.affiliation||'')}","${csvEsc(c.content)}","${c.timeSpent||0}"\n`;
+        });
+        filename = `contacts_${key.replace('::','_')}_${mon.toISOString().slice(0,10)}.csv`;
+      }
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+    function csvEsc(s) { return String(s||'').replace(/"/g,'""'); }
+
+    /* ── Mileage ────────────────────────────────────────── */
+    function ttAddMileage() {
+      hideErr('ml-err');
+      const sess = getSession();
+      if (!sess) return;
+      const date        = val('ml-date');
+      const miles       = parseFloat(val('ml-miles')) || 0;
+      const description = val('ml-description').trim();
+      const parking     = parseFloat(val('ml-parking')) || 0;
+      const attachments = val('ml-attachments').trim();
+
+      if (!date || !description)  { showErr('ml-err', 'Date and description are required.'); return; }
+      if (miles <= 0)              { showErr('ml-err', 'Miles must be greater than 0.'); return; }
+
+      const db          = loadDB();
+      const key         = `${sess.eid}::${sess.empName}`;
+      const employer    = db.employers[sess.eid] || {};
+      const mileageRate = employer.mileageRate || 0.725;
+      if (!db.mileage) db.mileage = {};
+      if (!db.mileage[key]) db.mileage[key] = [];
+
+      db.mileage[key].unshift({
+        id: uid(), date,
+        miles:   Math.round(miles * 100) / 100,
+        parking: Math.round(parking * 100) / 100,
+        description, attachments,
+        createdAt: new Date().toISOString()
+      });
+      saveDB(db);
+      setVal('ml-miles', '');
+      setVal('ml-description', '');
+      setVal('ml-parking', '');
+      setVal('ml-attachments', '');
+      setVal('ml-date', todayStr());
+      ttRenderMileage();
+    }
+
+    function ttDeleteMileage(mlId) {
+      if (!confirm('Delete this mileage entry?')) return;
+      const sess = getSession();
+      if (!sess) return;
+      const db  = loadDB();
+      const key = `${sess.eid}::${sess.empName}`;
+      if (db.mileage) db.mileage[key] = (db.mileage[key] || []).filter(m => m.id !== mlId);
+      saveDB(db);
+      ttRenderMileage();
+    }
+
+    function ttRenderMileage(eid, empName, mon) {
+      const sess = getSession();
+      if (!sess) return;
+      eid     = eid     || sess.eid;
+      empName = empName || sess.empName;
+      mon     = mon     || _currentWeekMon;
+
+      const db          = loadDB();
+      const key         = `${eid}::${empName}`;
+      const employer    = db.employers[eid] || {};
+      const mileageRate = employer.mileageRate || 0.725;
+      const all         = ((db.mileage||{})[key] || []).filter(m => inWeek(m.date, mon));
+      all.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      const tbody      = document.getElementById('ml-tbody');
+      const lblEl      = document.getElementById('ml-week-lbl');
+      const totMiEl    = document.getElementById('ml-tot-miles');
+      const totPayEl   = document.getElementById('ml-tot-pay');
+      const totParkEl  = document.getElementById('ml-tot-park');
+      const totAllEl   = document.getElementById('ml-tot-all');
+      if (lblEl) lblEl.textContent = weekLabel(mon);
+      if (!tbody) return;
+
+      if (!all.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No mileage entries for this week</td></tr>`;
+        [totMiEl, totPayEl, totParkEl, totAllEl].forEach(el => { if (el) el.textContent = el === totMiEl ? '0.00' : '$0.00'; });
+        return;
+      }
+
+      let totMiles = 0, totPay = 0, totPark = 0;
+      const isEmployee = sess.role === 'employee' && eid === sess.eid;
+
+      tbody.innerHTML = all.map(m => {
+        totMiles += m.miles   || 0;
+        const mp  = (m.miles || 0) * mileageRate;
+        totPay   += mp;
+        totPark  += m.parking || 0;
+        const delBtn = isEmployee
+          ? `<button class="del-btn" onclick="ttDeleteMileage('${esc(m.id)}')" title="Delete"><i class="bi bi-trash"></i></button>`
+          : '';
+        return `<tr>
+          <td style="white-space:nowrap">${fmtDate(m.date)}</td>
+          <td style="text-align:center">${(m.miles||0).toFixed(1)}</td>
+          <td style="text-align:center;white-space:nowrap">$${mileageRate.toFixed(3)}</td>
+          <td>${esc(m.description)}</td>
+          <td style="text-align:center;font-weight:600;white-space:nowrap">$${mp.toFixed(2)}</td>
+          <td style="text-align:center;white-space:nowrap">$${(m.parking||0).toFixed(2)}</td>
+          <td>${esc(m.attachments||'')}</td>
+          <td class="no-print">${delBtn}</td>
+        </tr>`;
+      }).join('');
+
+      if (totMiEl)   totMiEl.textContent   = totMiles.toFixed(2);
+      if (totPayEl)  totPayEl.textContent   = `$${totPay.toFixed(2)}`;
+      if (totParkEl) totParkEl.textContent  = `$${totPark.toFixed(2)}`;
+      if (totAllEl)  totAllEl.textContent   = `$${(totPay + totPark).toFixed(2)}`;
+    }
+
+    /* ── Employee Dashboard init ────────────────────────── */
+    function ttRenderEmployeeDash() {
+      const sess = getSession();
+      if (!sess || sess.role !== 'employee') return;
+
+      const nameEl = document.getElementById('ee-dash-name');
+      const orgEl  = document.getElementById('ee-dash-org');
+      if (nameEl) nameEl.textContent = sess.empName;
+      if (orgEl)  orgEl.textContent  = sess.orgName;
+
+      setVal('me-date', todayStr());
+      setVal('cr-date', todayStr());
+      setVal('cr-time', nowTimeStr());
+      setVal('ml-date', todayStr());
+
+      const db = loadDB();
+      if (db.clock && db.clock.eid === sess.eid && db.clock.empName === sess.empName) {
+        _clockStart = db.clock.startTime;
+        ttUpdateClockWidget(db.clock);
+        startTimer();
+      } else {
+        ttUpdateClockWidget(null);
+      }
+
+      ttRenderTimesheet();
+      ttRenderContacts();
+      ttUpdateStats();
+    }
+
+    /* ── Global init ────────────────────────────────────── */
+    function ttInit() {
+      const sess = getSession();
+      if (!sess) return;
+      if (sess.role === 'employer') {
+        ttRenderEmployerDash();
+        ttShowView('employer-dash');
+      } else if (sess.role === 'employee') {
+        ttRenderEmployeeDash();
+        ttShowView('employee-dash');
+      }
+    }
+
+    /* ── Expose to window for onclick handlers ──────────── */
+    Object.assign(window, {
+      ttShowView, ttAuthTab, ttDashTab,
+      /* async auth — browser discards the returned Promise; errors logged to console */
+      ttEmployerSignup: () => ttEmployerSignup().catch(e => { showErr('er-signup-err', 'Unexpected error — please try again.'); console.error(e); }),
+      ttEmployerLogin:  () => ttEmployerLogin().catch(e =>  { showErr('er-login-err',  'Unexpected error — please try again.'); console.error(e); }),
+      ttEmployerLogout,
+      ttPopulateOrgSelect, ttEmployeeLogin, ttEmployeeLogout,
+      ttAddEmployee, ttRemoveEmployee,
+      ttClockIn, ttClockOut,
+      ttAddManualEntry, ttDeleteEntry,
+      ttAddContact, ttDeleteContact,
+      ttAddMileage, ttDeleteMileage, ttRenderMileage,
+      ttWeekShift, ttWeekReset,
+      ttRenderTimesheet, ttRenderContacts,
+      ttRenderEmployerReport, ttViewEmpReport,
+      ttSaveSettings, ttDeleteAccount,
+      ttPrint, ttBuildPrint, ttExportCSV
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', ttInit);
+    } else {
+      ttInit();
+    }
+
+  })();
+  </script>
+</body>
+</html>
