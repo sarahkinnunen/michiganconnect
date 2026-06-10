@@ -119,6 +119,11 @@
       border-radius: var(--radius); padding: .55rem .8rem;
       font-size: var(--font-size-sm); margin-bottom: .85rem; display: none;
     }
+    .tt-link-btn {
+      background: none; border: none; cursor: pointer; padding: 0;
+      color: var(--color-accent); font-size: inherit; text-decoration: underline;
+    }
+    .tt-link-btn:hover { color: var(--color-accent-dark); }
 
     /* Back button */
     .tt-back {
@@ -477,6 +482,7 @@
           <div class="auth-tabs">
             <button id="er-tab-login"  class="auth-tab active" onclick="ttAuthTab('er','login')">Log In</button>
             <button id="er-tab-signup" class="auth-tab"        onclick="ttAuthTab('er','signup')">Sign Up</button>
+            <button id="er-tab-forgot" class="auth-tab"        onclick="ttAuthTab('er','forgot')">Forgot Password</button>
           </div>
 
           <!-- Login -->
@@ -515,6 +521,34 @@
             </div>
             <button class="btn btn-primary" style="width:100%" onclick="ttEmployerSignup()">Create Account</button>
           </div>
+
+          <!-- Forgot Password -->
+          <div id="er-panel-forgot" class="auth-panel">
+            <div id="er-forgot-err" class="tt-err"></div>
+            <!-- Step 1: verify email -->
+            <div id="er-fg-step1">
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:1rem">Enter the email address on your account. If it matches, you can set a new password.</p>
+              <div class="tt-fg">
+                <label for="er-fg-email">Email</label>
+                <input id="er-fg-email" type="email" class="tt-input" autocomplete="email" placeholder="you@example.com">
+              </div>
+              <button class="btn btn-primary" style="width:100%" onclick="ttEmployerForgotStep1()">Continue</button>
+            </div>
+            <!-- Step 2: set new password (shown after email verified) -->
+            <div id="er-fg-step2" style="display:none">
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:1rem">Email verified. Enter a new password for <strong id="er-fg-verified-email"></strong>.</p>
+              <div class="tt-fg">
+                <label for="er-fg-newpass">New Password * <span style="font-weight:400;color:var(--color-text-muted)">(min 6 chars)</span></label>
+                <input id="er-fg-newpass" type="password" class="tt-input" autocomplete="new-password">
+              </div>
+              <div class="tt-fg">
+                <label for="er-fg-confirm">Confirm New Password *</label>
+                <input id="er-fg-confirm" type="password" class="tt-input" autocomplete="new-password">
+              </div>
+              <button class="btn btn-primary" style="width:100%" onclick="ttEmployerForgotStep2()">Set New Password</button>
+            </div>
+            <div id="er-fg-ok" class="tt-ok" style="display:none"></div>
+          </div>
         </div>
       </div>
 
@@ -522,23 +556,107 @@
       <div id="view-employee-login" class="tt-view">
         <button class="tt-back no-print" onclick="ttShowView('start')"><i class="bi bi-arrow-left"></i> Back</button>
         <div class="tt-card" style="max-width:480px;margin:0 auto">
-          <h2><i class="bi bi-person-badge" aria-hidden="true"></i> Employee Login</h2>
-          <div id="ee-login-err" class="tt-err"></div>
-          <div class="tt-fg">
-            <label for="ee-org-select">Your Organization *</label>
-            <select id="ee-org-select" class="tt-select">
-              <option value="">-- Select your organization --</option>
-            </select>
+
+          <!-- Sub-panel: Login -->
+          <div id="ee-sub-login">
+            <h2><i class="bi bi-person-badge" aria-hidden="true"></i> Employee Login</h2>
+            <div id="ee-login-err" class="tt-err"></div>
+            <div class="tt-fg">
+              <label for="ee-org-select">Your Organization *</label>
+              <select id="ee-org-select" class="tt-select">
+                <option value="">-- Select your organization --</option>
+              </select>
+            </div>
+            <div class="tt-fg">
+              <label for="ee-name">Your Name *</label>
+              <input id="ee-name" type="text" class="tt-input" placeholder="First and Last Name">
+            </div>
+            <div class="tt-fg">
+              <label for="ee-email">Your Email *</label>
+              <input id="ee-email" type="email" class="tt-input" autocomplete="email" placeholder="your@email.com">
+            </div>
+            <div class="tt-fg">
+              <label for="ee-pass">Password *</label>
+              <input id="ee-pass" type="password" class="tt-input" autocomplete="current-password">
+            </div>
+            <button class="btn btn-primary" style="width:100%" onclick="ttEmployeeLogin()">Log In</button>
+            <p style="text-align:center;margin-top:.9rem;font-size:var(--font-size-sm)">
+              <button class="tt-link-btn" onclick="ttEePanel('forgot')">Forgot Password?</button>
+            </p>
           </div>
-          <div class="tt-fg">
-            <label for="ee-name">Your Name *</label>
-            <input id="ee-name" type="text" class="tt-input" placeholder="First and Last Name">
+
+          <!-- Sub-panel: Request reset -->
+          <div id="ee-sub-forgot" style="display:none">
+            <h2><i class="bi bi-envelope" aria-hidden="true"></i> Request Password Reset</h2>
+            <div id="ee-forgot-err" class="tt-err"></div>
+            <div id="ee-forgot-ok" class="tt-ok" style="display:none"></div>
+            <div id="ee-forgot-form">
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:1rem">Enter your details. A reset code will be generated for your employer to share with you.</p>
+              <div class="tt-fg">
+                <label for="ee-fg-org">Your Organization *</label>
+                <select id="ee-fg-org" class="tt-select">
+                  <option value="">-- Select your organization --</option>
+                </select>
+              </div>
+              <div class="tt-fg">
+                <label for="ee-fg-name">Your Name *</label>
+                <input id="ee-fg-name" type="text" class="tt-input" placeholder="First and Last Name">
+              </div>
+              <div class="tt-fg">
+                <label for="ee-fg-email">Your Email *</label>
+                <input id="ee-fg-email" type="email" class="tt-input" autocomplete="email" placeholder="your@email.com">
+              </div>
+              <button class="btn btn-primary" style="width:100%" onclick="ttEmployeeRequestReset()">Send Reset Request</button>
+            </div>
+            <div id="ee-forgot-result" style="display:none">
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:.75rem">Your reset code has been generated. Share it with your employer or use the button below to email them.</p>
+              <div style="text-align:center;margin:.75rem 0">
+                <span id="ee-fg-code-display" style="font-size:1.6rem;font-weight:700;letter-spacing:.2em;font-family:monospace;color:var(--color-accent)"></span>
+              </div>
+              <a id="ee-fg-mailto" href="#" class="btn btn-outline" style="width:100%;text-align:center;display:block;margin-bottom:.75rem">
+                <i class="bi bi-envelope"></i> Email My Employer
+              </a>
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted)">Once your employer resets your password, return here to log in. Or if they share the code with you:</p>
+              <button class="btn btn-outline btn-sm" style="margin-top:.4rem" onclick="ttEePanel('code')">Enter Reset Code</button>
+            </div>
+            <p style="text-align:center;margin-top:1rem;font-size:var(--font-size-sm)">
+              <button class="tt-link-btn" onclick="ttEePanel('login')">Back to Login</button>
+            </p>
           </div>
-          <div class="tt-fg">
-            <label for="ee-pass">Password *</label>
-            <input id="ee-pass" type="password" class="tt-input" autocomplete="current-password">
+
+          <!-- Sub-panel: Use reset code -->
+          <div id="ee-sub-code" style="display:none">
+            <h2><i class="bi bi-key" aria-hidden="true"></i> Enter Reset Code</h2>
+            <div id="ee-code-err" class="tt-err"></div>
+            <div id="ee-code-ok" class="tt-ok" style="display:none"></div>
+            <div class="tt-fg">
+              <label for="ee-cd-org">Your Organization *</label>
+              <select id="ee-cd-org" class="tt-select">
+                <option value="">-- Select your organization --</option>
+              </select>
+            </div>
+            <div class="tt-fg">
+              <label for="ee-cd-name">Your Name *</label>
+              <input id="ee-cd-name" type="text" class="tt-input" placeholder="First and Last Name">
+            </div>
+            <div class="tt-fg">
+              <label for="ee-cd-code">Reset Code *</label>
+              <input id="ee-cd-code" type="text" class="tt-input" placeholder="6-character code" style="font-family:monospace;letter-spacing:.1em;text-transform:uppercase" maxlength="6">
+            </div>
+            <div class="tt-fg">
+              <label for="ee-cd-newpass">New Password * <span style="font-weight:400;color:var(--color-text-muted)">(min 6 chars)</span></label>
+              <input id="ee-cd-newpass" type="password" class="tt-input" autocomplete="new-password">
+            </div>
+            <div class="tt-fg">
+              <label for="ee-cd-confirm">Confirm New Password *</label>
+              <input id="ee-cd-confirm" type="password" class="tt-input" autocomplete="new-password">
+            </div>
+            <button class="btn btn-primary" style="width:100%" onclick="ttEmployeeUseCode()">Set New Password</button>
+            <p style="text-align:center;margin-top:1rem;font-size:var(--font-size-sm)">
+              <button class="tt-link-btn" onclick="ttEePanel('login')">Back to Login</button>
+            </p>
           </div>
-          <button class="btn btn-primary" style="width:100%" onclick="ttEmployeeLogin()">Log In</button>
+
         </div>
       </div>
 
@@ -579,13 +697,35 @@
                 <input id="er-new-name" type="text" class="tt-input" placeholder="Full name">
               </div>
               <div class="tt-fg" style="margin:0">
-                <label for="er-new-pass">Password *</label>
-                <input id="er-new-pass" type="password" class="tt-input" autocomplete="new-password" placeholder="Create a password for this member">
+                <label for="er-new-email">Email *</label>
+                <input id="er-new-email" type="email" class="tt-input" placeholder="member@example.com">
               </div>
+            </div>
+            <div class="tt-fg">
+              <label for="er-new-pass">Password *</label>
+              <input id="er-new-pass" type="password" class="tt-input" autocomplete="new-password" placeholder="Create a password for this member">
             </div>
             <button class="btn btn-primary" style="margin-top:.85rem" onclick="ttAddEmployee()">
               <i class="bi bi-plus-circle" aria-hidden="true"></i> Add Member
             </button>
+          </div>
+          <div id="er-emp-reset-form" style="display:none" class="tt-card">
+            <h3 style="margin:0 0 .75rem">Reset Password for <span id="er-emp-reset-name"></span></h3>
+            <div id="er-emp-reset-err" class="tt-err"></div>
+            <div class="form-row">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-emp-reset-pass">New Password *</label>
+                <input id="er-emp-reset-pass" type="password" class="tt-input" autocomplete="new-password">
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-emp-reset-confirm">Confirm *</label>
+                <input id="er-emp-reset-confirm" type="password" class="tt-input" autocomplete="new-password">
+              </div>
+            </div>
+            <div style="display:flex;gap:.5rem;margin-top:.75rem">
+              <button class="btn btn-primary" onclick="ttDoEmpReset()">Save Password</button>
+              <button class="btn btn-outline" onclick="ttHideEmpResetForm()">Cancel</button>
+            </div>
           </div>
         </div>
 
@@ -1297,12 +1437,13 @@
 
     async function ttEmployeeLogin() {
       hideErr('ee-login-err');
-      const eid  = val('ee-org-select');
-      const name = val('ee-name').trim();
-      const pass = val('ee-pass').trim();
+      const eid        = val('ee-org-select');
+      const name       = val('ee-name').trim();
+      const loginEmail = val('ee-email').trim().toLowerCase();
+      const pass       = val('ee-pass').trim();
 
       if (!eid || !name) { showErr('ee-login-err', 'Please select your organization and enter your name.'); return; }
-      if (!pass) { showErr('ee-login-err', 'Please enter your password.'); return; }
+      if (!pass || !loginEmail) { showErr('ee-login-err', 'Please enter your email and password.'); return; }
 
       const db       = loadDB();
       const employer = db.employers[eid];
@@ -1313,6 +1454,18 @@
       if (!emp) {
         showErr('ee-login-err', 'Name not found. Ask your employer to add you.');
         return;
+      }
+
+      /* Email check: if emp has email stored, verify it; otherwise auto-enroll */
+      if (emp.email) {
+        if (loginEmail !== emp.email) {
+          showErr('ee-login-err', 'Email address does not match our records.');
+          return;
+        }
+      } else {
+        /* Legacy account — store the provided email */
+        emp.email = loginEmail;
+        saveDB(db);
       }
 
       let valid = false;
@@ -1351,10 +1504,12 @@
       hideErr('er-emp-add-err');
       const sess = getSession();
       if (!sess) return;
-      const name = val('er-new-name').trim();
-      const pass = val('er-new-pass').trim();
-      if (!name) { showErr('er-emp-add-err', 'Please enter a name.'); return; }
-      if (!pass) { showErr('er-emp-add-err', 'Please enter a password for this member.'); return; }
+      const name  = val('er-new-name').trim();
+      const email = val('er-new-email').trim().toLowerCase();
+      const pass  = val('er-new-pass').trim();
+      if (!name)  { showErr('er-emp-add-err', 'Please enter a name.'); return; }
+      if (!email || !email.includes('@')) { showErr('er-emp-add-err', 'Please enter a valid email.'); return; }
+      if (!pass)  { showErr('er-emp-add-err', 'Please enter a password for this member.'); return; }
 
       const db = loadDB();
       if (!db.employees[sess.eid]) db.employees[sess.eid] = [];
@@ -1364,9 +1519,10 @@
 
       const salt     = generateSalt();
       const passHash = await hashPassword(pass, salt);
-      db.employees[sess.eid].push({ id: uid(), name, salt, passHash });
+      db.employees[sess.eid].push({ id: uid(), name, email, salt, passHash });
       saveDB(db);
       setVal('er-new-name', '');
+      setVal('er-new-email', '');
       setVal('er-new-pass', '');
       ttRenderEmpList();
     }
@@ -1780,17 +1936,22 @@
       if (!employees.length) {
         container.innerHTML = '<div class="empty-st"><i class="bi bi-people"></i><p>No team members yet. Add them below.</p></div>';
       } else {
-        container.innerHTML = `<ul class="emp-list">${employees.map(e => `
+        container.innerHTML = `<ul class="emp-list">${employees.map(e => {
+          const hasPendingReset = (db.resetRequests||[]).some(r => r.empId === e.id && !r.used && Date.now() < r.expiresAt);
+          const resetBadge = hasPendingReset ? ' <span style="font-size:.7rem;background:#fef9c3;color:#854d0e;padding:.15em .5em;border-radius:3px">Reset Requested</span>' : '';
+          return `
           <li class="emp-item">
             <div>
-              <span class="en">${esc(e.name)}</span>
-              <span class="ep" style="display:block">Password: ${(e.passHash || e.pin) ? 'Set' : 'Not set'}</span>
+              <span class="en">${esc(e.name)}${resetBadge}</span>
+              <span class="ep" style="display:block">Password: ${(e.passHash || e.pin) ? 'Set' : 'Not set'}${e.email ? ' · ' + esc(e.email) : ''}</span>
             </div>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
               <button class="btn btn-sm btn-outline" onclick="ttViewEmpReport('${esc(e.name)}')">View Report</button>
+              <button class="btn btn-sm btn-outline" onclick="ttShowEmpResetForm('${esc(e.id)}')"><i class="bi bi-key"></i> Set Password</button>
               <button class="btn btn-sm" style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca" onclick="ttRemoveEmployee('${esc(e.id)}')">Remove</button>
             </div>
-          </li>`).join('')}</ul>`;
+          </li>`;
+        }).join('')}</ul>`;
       }
 
       /* also populate report dropdown */
@@ -2189,6 +2350,202 @@
         </div>`;
     }
 
+    /* ── Password Reset — Employer ─────────────────────── */
+    let _erFgVerifiedEmail = '';
+
+    async function ttEmployerForgotStep1() {
+      hideErr('er-forgot-err');
+      const email = val('er-fg-email').trim().toLowerCase();
+      if (!email) { showErr('er-forgot-err', 'Please enter your email.'); return; }
+      const db  = loadDB();
+      const emp = Object.values(db.employers).find(e => e.email === email);
+      if (!emp) { showErr('er-forgot-err', 'No account found with that email.'); return; }
+      _erFgVerifiedEmail = email;
+      document.getElementById('er-fg-step1').style.display = 'none';
+      document.getElementById('er-fg-step2').style.display = '';
+      const el = document.getElementById('er-fg-verified-email');
+      if (el) el.textContent = email;
+    }
+
+    async function ttEmployerForgotStep2() {
+      hideErr('er-forgot-err');
+      const email   = _erFgVerifiedEmail;
+      const newPass = val('er-fg-newpass').trim();
+      const confirm = val('er-fg-confirm').trim();
+      if (!email)                         { showErr('er-forgot-err', 'Session expired — please start over.'); return; }
+      if (!newPass || newPass.length < 6) { showErr('er-forgot-err', 'Password must be at least 6 characters.'); return; }
+      if (newPass !== confirm)            { showErr('er-forgot-err', 'Passwords do not match.'); return; }
+      const db  = loadDB();
+      const emp = Object.values(db.employers).find(e => e.email === email);
+      if (!emp) { showErr('er-forgot-err', 'Session expired — please start over.'); return; }
+      emp.salt     = generateSalt();
+      emp.passHash = await hashPassword(newPass, emp.salt);
+      db.employers[emp.id] = emp;
+      saveDB(db);
+      _erFgVerifiedEmail = '';
+      setSession({ role: 'employer', eid: emp.id, orgName: emp.orgName });
+      ttRenderEmployerDash();
+      ttShowView('employer-dash');
+    }
+
+    /* ── Password Reset — Employee ──────────────────────── */
+    function ttEePanel(name) {
+      ['login','forgot','code'].forEach(p => {
+        const el = document.getElementById('ee-sub-' + p);
+        if (el) el.style.display = p === name ? '' : 'none';
+      });
+      // Populate org selects in forgot and code panels
+      if (name === 'forgot' || name === 'code') {
+        const db  = loadDB();
+        ['ee-fg-org','ee-cd-org'].forEach(id => {
+          const sel = document.getElementById(id);
+          if (!sel) return;
+          sel.innerHTML = '<option value="">-- Select your organization --</option>';
+          Object.values(db.employers).forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = e.id;
+            opt.textContent = e.orgName;
+            sel.appendChild(opt);
+          });
+        });
+      }
+      // Reset forgot form state
+      if (name === 'forgot') {
+        const form = document.getElementById('ee-forgot-form');
+        const res  = document.getElementById('ee-forgot-result');
+        if (form) form.style.display = '';
+        if (res)  res.style.display  = 'none';
+        hideErr('ee-forgot-err');
+        const ok = document.getElementById('ee-forgot-ok');
+        if (ok) ok.style.display = 'none';
+      }
+    }
+
+    function ttEmployeeRequestReset() {
+      hideErr('ee-forgot-err');
+      const eid   = val('ee-fg-org');
+      const name  = val('ee-fg-name').trim();
+      const email = val('ee-fg-email').trim().toLowerCase();
+      if (!eid || !name || !email) { showErr('ee-forgot-err', 'Please fill in all fields.'); return; }
+      const db        = loadDB();
+      const employer  = db.employers[eid];
+      if (!employer) { showErr('ee-forgot-err', 'Organization not found.'); return; }
+      const employees = db.employees[eid] || [];
+      const emp = employees.find(e => e.name.toLowerCase() === name.toLowerCase());
+      if (!emp) { showErr('ee-forgot-err', 'Name not found in this organization.'); return; }
+      if (emp.email && emp.email !== email) { showErr('ee-forgot-err', 'Email does not match our records.'); return; }
+
+      // Generate 6-char code
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      const arr = new Uint8Array(6);
+      crypto.getRandomValues(arr);
+      arr.forEach(b => { code += chars[b % chars.length]; });
+
+      // Store reset request
+      if (!db.resetRequests) db.resetRequests = [];
+      // Remove old requests for this employee
+      db.resetRequests = db.resetRequests.filter(r => !(r.eid === eid && r.empId === emp.id));
+      db.resetRequests.push({
+        id: uid(), eid, empId: emp.id, empName: emp.name, email,
+        code, requestedAt: new Date().toISOString(),
+        expiresAt: Date.now() + 48 * 3600 * 1000, used: false
+      });
+      saveDB(db);
+
+      // Show code + mailto link
+      const codeEl = document.getElementById('ee-fg-code-display');
+      if (codeEl) codeEl.textContent = code;
+      const mailtoEl = document.getElementById('ee-fg-mailto');
+      if (mailtoEl) {
+        const subj = encodeURIComponent(`Password Reset Request — ${emp.name}`);
+        const body = encodeURIComponent(
+          `Hi,\n\n${emp.name} has requested a password reset on the Time Tracking Portal.\n\nReset Code: ${code}\n\nThis code expires in 48 hours. You can also reset their password directly in the employer dashboard under Team Members.\n\nThank you`
+        );
+        mailtoEl.href = `mailto:${employer.email}?subject=${subj}&body=${body}`;
+      }
+      document.getElementById('ee-forgot-form').style.display = 'none';
+      document.getElementById('ee-forgot-result').style.display = '';
+    }
+
+    async function ttEmployeeUseCode() {
+      hideErr('ee-code-err');
+      const eid     = val('ee-cd-org');
+      const name    = val('ee-cd-name').trim();
+      const code    = val('ee-cd-code').trim().toUpperCase();
+      const newPass = val('ee-cd-newpass').trim();
+      const confirm = val('ee-cd-confirm').trim();
+      if (!eid || !name || !code || !newPass) { showErr('ee-code-err', 'Please fill in all fields.'); return; }
+      if (newPass.length < 6)  { showErr('ee-code-err', 'Password must be at least 6 characters.'); return; }
+      if (newPass !== confirm)  { showErr('ee-code-err', 'Passwords do not match.'); return; }
+
+      const db = loadDB();
+      const req = (db.resetRequests||[]).find(r =>
+        r.eid === eid && r.empName.toLowerCase() === name.toLowerCase() && r.code === code && !r.used
+      );
+      if (!req)              { showErr('ee-code-err', 'Reset code not found or already used.'); return; }
+      if (Date.now() > req.expiresAt) { showErr('ee-code-err', 'Reset code has expired. Please request a new one.'); return; }
+
+      // Set new password
+      const employees = db.employees[eid] || [];
+      const emp = employees.find(e => e.id === req.empId);
+      if (!emp) { showErr('ee-code-err', 'Account not found.'); return; }
+      emp.salt     = generateSalt();
+      emp.passHash = await hashPassword(newPass, emp.salt);
+      delete emp.pin;
+      req.used = true;
+      saveDB(db);
+
+      const ok = document.getElementById('ee-code-ok');
+      if (ok) { ok.textContent = 'Password reset successfully! You can now log in.'; ok.style.display = 'block'; }
+      setTimeout(() => ttEePanel('login'), 2500);
+    }
+
+    /* ── Employer resets employee password from dashboard ── */
+    let _empResetTarget = null;
+    function ttShowEmpResetForm(empId) {
+      const db  = loadDB();
+      const sess = getSession();
+      if (!sess) return;
+      const employees = db.employees[sess.eid] || [];
+      const emp = employees.find(e => e.id === empId);
+      if (!emp) return;
+      _empResetTarget = empId;
+      const nameEl = document.getElementById('er-emp-reset-name');
+      if (nameEl) nameEl.textContent = emp.name;
+      const form = document.getElementById('er-emp-reset-form');
+      if (form) { form.style.display = ''; form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+      hideErr('er-emp-reset-err');
+    }
+    function ttHideEmpResetForm() {
+      const form = document.getElementById('er-emp-reset-form');
+      if (form) form.style.display = 'none';
+      _empResetTarget = null;
+    }
+    async function ttDoEmpReset() {
+      hideErr('er-emp-reset-err');
+      const newPass = val('er-emp-reset-pass').trim();
+      const confirm = val('er-emp-reset-confirm').trim();
+      if (!newPass || newPass.length < 6) { showErr('er-emp-reset-err', 'Password must be at least 6 characters.'); return; }
+      if (newPass !== confirm)             { showErr('er-emp-reset-err', 'Passwords do not match.'); return; }
+      const sess = getSession();
+      if (!sess || !_empResetTarget) return;
+      const db = loadDB();
+      const employees = db.employees[sess.eid] || [];
+      const emp = employees.find(e => e.id === _empResetTarget);
+      if (!emp) return;
+      emp.salt     = generateSalt();
+      emp.passHash = await hashPassword(newPass, emp.salt);
+      delete emp.pin;
+      // Mark any pending reset requests as used
+      if (db.resetRequests) db.resetRequests.filter(r => r.empId === emp.id).forEach(r => r.used = true);
+      saveDB(db);
+      ttHideEmpResetForm();
+      setVal('er-emp-reset-pass', '');
+      setVal('er-emp-reset-confirm', '');
+      ttRenderEmpList();
+    }
+
     /* ── CSV export ─────────────────────────────────────── */
     function ttExportCSV(type) {
       const sess = getSession();
@@ -2501,7 +2858,14 @@
       ttRenderTimesheet, ttRenderContacts,
       ttRenderEmployerReport, ttViewEmpReport,
       ttSaveSettings, ttDeleteAccount,
-      ttPrint, ttBuildPrint, ttExportCSV
+      ttPrint, ttBuildPrint, ttExportCSV,
+      ttEmployerForgotStep1: () => ttEmployerForgotStep1().catch(e => { showErr('er-forgot-err', 'Unexpected error.'); console.error(e); }),
+      ttEmployerForgotStep2: () => ttEmployerForgotStep2().catch(e => { showErr('er-forgot-err', 'Unexpected error.'); console.error(e); }),
+      ttEePanel,
+      ttEmployeeRequestReset,
+      ttEmployeeUseCode: () => ttEmployeeUseCode().catch(e => { showErr('ee-code-err', 'Unexpected error.'); console.error(e); }),
+      ttShowEmpResetForm, ttHideEmpResetForm,
+      ttDoEmpReset: () => ttDoEmpReset().catch(e => { showErr('er-emp-reset-err', 'Unexpected error.'); console.error(e); })
     });
 
     if (document.readyState === 'loading') {
