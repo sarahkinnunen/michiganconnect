@@ -819,6 +819,7 @@
             <button class="dash-tab"        data-tab="ee-contacts" onclick="ttDashTab('ee','ee-contacts');ttRenderContacts()" role="tab"><i class="bi bi-telephone" aria-hidden="true"></i> Contact Log</button>
             <button class="dash-tab"        data-tab="ee-mileage"  onclick="ttDashTab('ee','ee-mileage');ttRenderMileage()"  role="tab"><i class="bi bi-car-front" aria-hidden="true"></i> Mileage</button>
             <button class="dash-tab"        data-tab="ee-print"    onclick="ttDashTab('ee','ee-print');ttBuildPrint()"    role="tab"><i class="bi bi-printer" aria-hidden="true"></i> Print</button>
+            <button class="dash-tab"        data-tab="ee-account"  onclick="ttDashTab('ee','ee-account')"                 role="tab"><i class="bi bi-person-gear" aria-hidden="true"></i> Account</button>
           </div>
         </div>
 
@@ -1161,6 +1162,28 @@
           </div>
           <div id="print-preview-area"></div>
         </div>
+
+        <!-- ── Account tab ────────────────────────────────── -->
+        <div id="ee-panel-ee-account" class="dash-panel no-print" role="tabpanel">
+          <div class="tt-card" style="max-width:480px">
+            <h3 style="margin:0 0 1rem"><i class="bi bi-lock" aria-hidden="true"></i> Change Password</h3>
+            <div id="ee-chpw-err" class="tt-err"></div>
+            <div id="ee-chpw-ok"  class="tt-ok"  style="display:none"></div>
+            <div class="tt-fg">
+              <label for="ee-chpw-current">Current Password *</label>
+              <input id="ee-chpw-current" type="password" class="tt-input" autocomplete="current-password">
+            </div>
+            <div class="tt-fg">
+              <label for="ee-chpw-new">New Password * <span style="font-weight:400;color:var(--color-text-muted)">(min 6 chars)</span></label>
+              <input id="ee-chpw-new" type="password" class="tt-input" autocomplete="new-password">
+            </div>
+            <div class="tt-fg">
+              <label for="ee-chpw-confirm">Confirm New Password *</label>
+              <input id="ee-chpw-confirm" type="password" class="tt-input" autocomplete="new-password">
+            </div>
+            <button class="btn btn-primary" onclick="ttChangePassword()">Save New Password</button>
+          </div>
+        </div>
       </div>
       <!-- end employee dash -->
 
@@ -1497,6 +1520,42 @@
       clearSession();
       stopTimer();
       ttShowView('start');
+    }
+
+    async function ttChangePassword() {
+      hideErr('ee-chpw-err');
+      hideOk('ee-chpw-ok');
+      const sess    = getSession();
+      if (!sess) return;
+      const current = val('ee-chpw-current').trim();
+      const newPass = val('ee-chpw-new').trim();
+      const confirm = val('ee-chpw-confirm').trim();
+      if (!current || !newPass) { showErr('ee-chpw-err', 'Please fill in all fields.'); return; }
+      if (newPass.length < 6)   { showErr('ee-chpw-err', 'New password must be at least 6 characters.'); return; }
+      if (newPass !== confirm)   { showErr('ee-chpw-err', 'New passwords do not match.'); return; }
+
+      const db        = loadDB();
+      const employees = db.employees[sess.eid] || [];
+      const emp       = employees.find(e => e.name.toLowerCase() === sess.empName.toLowerCase());
+      if (!emp) { showErr('ee-chpw-err', 'Account not found.'); return; }
+
+      let valid = false;
+      if (emp.salt) {
+        valid = (await hashPassword(current, emp.salt)) === emp.passHash;
+      } else if (emp.pin) {
+        valid = emp.pin === current;
+      }
+      if (!valid) { showErr('ee-chpw-err', 'Current password is incorrect.'); return; }
+
+      emp.salt     = generateSalt();
+      emp.passHash = await hashPassword(newPass, emp.salt);
+      delete emp.pin;
+      saveDB(db);
+
+      setVal('ee-chpw-current', '');
+      setVal('ee-chpw-new', '');
+      setVal('ee-chpw-confirm', '');
+      showOk('ee-chpw-ok', 'Password changed successfully.');
     }
 
     /* ── Employee management ────────────────────────────── */
@@ -2865,7 +2924,8 @@
       ttEmployeeRequestReset,
       ttEmployeeUseCode: () => ttEmployeeUseCode().catch(e => { showErr('ee-code-err', 'Unexpected error.'); console.error(e); }),
       ttShowEmpResetForm, ttHideEmpResetForm,
-      ttDoEmpReset: () => ttDoEmpReset().catch(e => { showErr('er-emp-reset-err', 'Unexpected error.'); console.error(e); })
+      ttDoEmpReset: () => ttDoEmpReset().catch(e => { showErr('er-emp-reset-err', 'Unexpected error.'); console.error(e); }),
+      ttChangePassword: () => ttChangePassword().catch(e => { showErr('ee-chpw-err', 'Unexpected error.'); console.error(e); })
     });
 
     if (document.readyState === 'loading') {
