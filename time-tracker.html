@@ -514,11 +514,6 @@
               <label for="er-su-pass">Password * <span style="font-weight:400;color:var(--color-text-muted)">(min 6 chars)</span></label>
               <input id="er-su-pass" type="password" class="tt-input" autocomplete="new-password">
             </div>
-            <div class="tt-fg">
-              <label for="er-su-rate">Default Pay Rate ($/hr)</label>
-              <input id="er-su-rate" type="number" class="tt-input" value="50" min="0" step="0.01">
-              <p class="form-hint">Used to calculate weekly pay totals.</p>
-            </div>
             <button class="btn btn-primary" style="width:100%" onclick="ttEmployerSignup()">Create Account</button>
           </div>
 
@@ -705,6 +700,10 @@
               <label for="er-new-pass">Password *</label>
               <input id="er-new-pass" type="password" class="tt-input" autocomplete="new-password" placeholder="Create a password for this member">
             </div>
+            <div class="tt-fg">
+              <label for="er-new-rate">Pay Rate ($/hr)</label>
+              <input id="er-new-rate" type="number" class="tt-input" min="0" step="0.01" placeholder="0.00">
+            </div>
             <button class="btn btn-primary" style="margin-top:.85rem" onclick="ttAddEmployee()">
               <i class="bi bi-plus-circle" aria-hidden="true"></i> Add Member
             </button>
@@ -739,9 +738,15 @@
                   <option value="">-- Select a team member --</option>
                 </select>
               </div>
-              <div>
-                <button class="btn btn-outline btn-sm" onclick="ttPrint()" style="width:100%">
-                  <i class="bi bi-printer" aria-hidden="true"></i> Print Report
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                <button class="btn btn-outline btn-sm" onclick="ttPrint()">
+                  <i class="bi bi-printer" aria-hidden="true"></i> Print
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="ttExportEmployerXLSX()" title="Download as Excel (.xlsx)">
+                  <i class="bi bi-file-earmark-spreadsheet" aria-hidden="true"></i> Excel
+                </button>
+                <button id="er-rpt-fill-tpl" class="btn btn-outline btn-sm" onclick="ttFillSpreadsheetTemplate()" title="Fill your uploaded template and download" style="display:none">
+                  <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i> Fill Template
                 </button>
               </div>
             </div>
@@ -762,16 +767,10 @@
               <label for="er-set-org">Organization Name</label>
               <input id="er-set-org" type="text" class="tt-input">
             </div>
-            <div class="form-row">
-              <div class="tt-fg">
-                <label for="er-set-rate">Pay Rate ($/hr)</label>
-                <input id="er-set-rate" type="number" class="tt-input" min="0" step="0.01">
-              </div>
-              <div class="tt-fg">
-                <label for="er-set-milerate">Mileage Rate ($/mile)</label>
-                <input id="er-set-milerate" type="number" class="tt-input" min="0" step="0.001">
-                <p class="form-hint">IRS standard is $0.725/mile</p>
-              </div>
+            <div class="tt-fg">
+              <label for="er-set-milerate">Mileage Rate ($/mile)</label>
+              <input id="er-set-milerate" type="number" class="tt-input" min="0" step="0.001">
+              <p class="form-hint">IRS standard is $0.725/mile</p>
             </div>
             <div class="tt-fg">
               <label for="er-set-template">Print Template</label>
@@ -786,6 +785,40 @@
               <button class="btn btn-primary" onclick="ttSaveSettings()">Save Settings</button>
               <button class="btn btn-outline" style="color:var(--color-crisis);border-color:var(--color-crisis)" onclick="ttDeleteAccount()">Delete Account</button>
             </div>
+          </div>
+
+          <div class="tt-card">
+            <h2><i class="bi bi-file-earmark-spreadsheet" aria-hidden="true"></i> Spreadsheet Template</h2>
+            <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:1rem">
+              Upload an Excel (.xlsx) file with placeholder tokens. In the <strong>View Reports</strong> tab,
+              click <strong>Fill Template</strong> to download a copy with that employee's data filled in.
+              Use <strong>Excel</strong> to download a plain spreadsheet report without a custom template.
+            </p>
+            <div id="er-tpl-info" style="font-size:var(--font-size-sm);margin-bottom:.85rem;color:var(--color-text-muted)">No template uploaded.</div>
+            <div style="display:flex;gap:.65rem;flex-wrap:wrap;align-items:center">
+              <label class="btn btn-outline btn-sm" style="cursor:pointer;margin:0">
+                <i class="bi bi-upload" aria-hidden="true"></i> Upload Template (.xlsx)
+                <input id="er-tpl-file" type="file" accept=".xlsx,.xls" style="display:none" onchange="ttUploadSpreadsheetTemplate(this)">
+              </label>
+              <button id="er-tpl-remove" class="btn btn-sm" style="display:none;background:#fef2f2;color:#991b1b;border:1px solid #fecaca" onclick="ttRemoveSpreadsheetTemplate()">Remove</button>
+            </div>
+            <details style="margin-top:1.1rem">
+              <summary style="cursor:pointer;font-size:var(--font-size-sm);font-weight:500;color:var(--color-accent)">
+                <i class="bi bi-code-square" aria-hidden="true"></i> Available placeholder tokens
+              </summary>
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin:.6rem 0 .5rem">Type these tokens into any cell in your Excel template. They will be replaced with each employee's actual data when you click Fill Template.</p>
+              <div style="font-size:.78rem;font-family:monospace;background:var(--color-bg);border:1px solid var(--color-border);border-radius:var(--radius);padding:.85rem;line-height:2.2">
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em">Employee &amp; Org</div>
+                {{EMPLOYEE_NAME}} &nbsp; {{ORG_NAME}} &nbsp; {{TODAY}}<br>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Pay Period</div>
+                {{PAY_PERIOD}} &nbsp; {{WEEK_START}} &nbsp; {{WEEK_END}} &nbsp; {{PAY_RATE}}<br>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Totals</div>
+                {{TOTAL_PROPOSED_HOURS}} &nbsp; {{TOTAL_COMPLETED_HOURS}} &nbsp; {{TOTAL_HOURS}} &nbsp; {{TOTAL_PAY}}<br>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Per-row entry data — replace 1 with 2, 3, 4… for each row</div>
+                {{ROW1_DATE}} &nbsp; {{ROW1_TASK}} &nbsp; {{ROW1_TYPE}}<br>
+                {{ROW1_PROPOSED}} &nbsp; {{ROW1_COMPLETED}} &nbsp; {{ROW1_PAY}} &nbsp; {{ROW1_NOTES}}
+              </div>
+            </details>
           </div>
         </div>
       </div>
@@ -1379,7 +1412,6 @@
       const orgName = val('er-su-org').trim();
       const email   = val('er-su-email').trim().toLowerCase();
       const pass    = val('er-su-pass');
-      const payRate = parseFloat(val('er-su-rate')) || 50;
 
       if (!orgName || !email || !pass) { showErr('er-signup-err', 'Please fill in all required fields.'); return; }
       if (!email.includes('@'))        { showErr('er-signup-err', 'Please enter a valid email address.'); return; }
@@ -1396,7 +1428,7 @@
 
       db.employers[id] = {
         id, orgName, email, passHash, salt,
-        payRate, mileageRate: 0.725,
+        mileageRate: 0.725,
         templateId: 'hours',
         createdAt: new Date().toISOString()
       };
@@ -1576,13 +1608,15 @@
         showErr('er-emp-add-err', 'A member with this name already exists.'); return;
       }
 
+      const payRate  = parseFloat(val('er-new-rate'));
       const salt     = generateSalt();
       const passHash = await hashPassword(pass, salt);
-      db.employees[sess.eid].push({ id: uid(), name, email, salt, passHash });
+      db.employees[sess.eid].push({ id: uid(), name, email, salt, passHash, payRate: isNaN(payRate) ? null : payRate });
       saveDB(db);
       setVal('er-new-name', '');
       setVal('er-new-email', '');
       setVal('er-new-pass', '');
+      setVal('er-new-rate', '');
       ttRenderEmpList();
     }
 
@@ -1592,6 +1626,23 @@
       if (!sess) return;
       const db = loadDB();
       db.employees[sess.eid] = (db.employees[sess.eid] || []).filter(e => e.id !== empId);
+      saveDB(db);
+      ttRenderEmpList();
+    }
+
+    function ttSetEmpRate(empId) {
+      const sess = getSession();
+      if (!sess) return;
+      const db = loadDB();
+      const employees = db.employees[sess.eid] || [];
+      const emp = employees.find(e => e.id === empId);
+      if (!emp) return;
+      const current = emp.payRate != null ? String(emp.payRate) : '';
+      const input = prompt(`Pay rate ($/hr) for ${emp.name}:`, current);
+      if (input === null) return;
+      const rate = parseFloat(input);
+      if (isNaN(rate) || rate < 0) { alert('Please enter a valid pay rate.'); return; }
+      emp.payRate = rate;
       saveDB(db);
       ttRenderEmpList();
     }
@@ -1840,7 +1891,8 @@
       const db       = loadDB();
       const key      = `${eid}::${empName}`;
       const employer = db.employers[eid] || {};
-      const rate     = employer.payRate || 50;
+      const empRec   = (db.employees[eid] || []).find(e => e.name.toLowerCase() === empName.toLowerCase());
+      const rate     = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
       const all      = (db.entries[key] || []).filter(e => inWeek(e.date, mon));
       all.sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -1956,7 +2008,8 @@
       const key      = `${sess.eid}::${sess.empName}`;
       const mon      = _currentWeekMon;
       const employer = db.employers[sess.eid] || {};
-      const rate     = employer.payRate || 50;
+      const empRec   = (db.employees[sess.eid] || []).find(e => e.name.toLowerCase() === sess.empName.toLowerCase());
+      const rate     = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
 
       const entries  = (db.entries[key]  || []).filter(e => inWeek(e.date, mon));
       const contacts = (db.contacts[key] || []).filter(c => inWeek(c.date, mon));
@@ -1998,14 +2051,16 @@
         container.innerHTML = `<ul class="emp-list">${employees.map(e => {
           const hasPendingReset = (db.resetRequests||[]).some(r => r.empId === e.id && !r.used && Date.now() < r.expiresAt);
           const resetBadge = hasPendingReset ? ' <span style="font-size:.7rem;background:#fef9c3;color:#854d0e;padding:.15em .5em;border-radius:3px">Reset Requested</span>' : '';
+          const rateDisplay = e.payRate != null ? `$${Number(e.payRate).toFixed(2)}/hr` : 'Not set';
           return `
           <li class="emp-item">
             <div>
               <span class="en">${esc(e.name)}${resetBadge}</span>
-              <span class="ep" style="display:block">Password: ${(e.passHash || e.pin) ? 'Set' : 'Not set'}${e.email ? ' · ' + esc(e.email) : ''}</span>
+              <span class="ep" style="display:block">Rate: ${rateDisplay} · Password: ${(e.passHash || e.pin) ? 'Set' : 'Not set'}${e.email ? ' · ' + esc(e.email) : ''}</span>
             </div>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
               <button class="btn btn-sm btn-outline" onclick="ttViewEmpReport('${esc(e.name)}')">View Report</button>
+              <button class="btn btn-sm btn-outline" onclick="ttSetEmpRate('${esc(e.id)}')"><i class="bi bi-pencil"></i> Set Rate</button>
               <button class="btn btn-sm btn-outline" onclick="ttShowEmpResetForm('${esc(e.id)}')"><i class="bi bi-key"></i> Set Password</button>
               <button class="btn btn-sm" style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca" onclick="ttRemoveEmployee('${esc(e.id)}')">Remove</button>
             </div>
@@ -2041,7 +2096,8 @@
       /* Build report HTML directly into the container */
       const db       = loadDB();
       const employer = db.employers[sess.eid] || {};
-      const rate     = employer.payRate || 50;
+      const empRec   = (db.employees[sess.eid] || []).find(e => e.name === empName);
+      const rate     = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
       const mon      = _currentWeekMon;
       const key      = `${sess.eid}::${empName}`;
 
@@ -2120,9 +2176,9 @@
       const emp = db.employers[sess.eid];
       if (!emp) return;
       setVal('er-set-org',      emp.orgName);
-      setVal('er-set-rate',     emp.payRate     || 50);
       setVal('er-set-milerate', emp.mileageRate || 0.725);
       setVal('er-set-template', emp.templateId  || 'hours');
+      ttLoadTemplateSettings();
     }
 
     function ttSaveSettings() {
@@ -2131,7 +2187,6 @@
       const sess = getSession();
       if (!sess) return;
       const orgName    = val('er-set-org').trim();
-      const rate       = parseFloat(val('er-set-rate'))     || 50;
       const mileRate   = parseFloat(val('er-set-milerate')) || 0.725;
       const templateId = val('er-set-template') || 'hours';
       if (!orgName) { showErr('er-settings-err', 'Organization name cannot be empty.'); return; }
@@ -2139,7 +2194,6 @@
       const db = loadDB();
       if (!db.employers[sess.eid]) return;
       db.employers[sess.eid].orgName     = orgName;
-      db.employers[sess.eid].payRate     = rate;
       db.employers[sess.eid].mileageRate = mileRate;
       db.employers[sess.eid].templateId  = templateId;
       saveDB(db);
@@ -2171,6 +2225,213 @@
       ttShowView('start');
     }
 
+    /* ── Spreadsheet template ──────────────────────────── */
+    function loadSheetJS(cb) {
+      if (window.XLSX) { cb(); return; }
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload  = cb;
+      s.onerror = () => alert('Could not load the Excel library. Please check your internet connection.');
+      document.head.appendChild(s);
+    }
+
+    function ttLoadTemplateSettings() {
+      const sess = getSession();
+      if (!sess) return;
+      const db  = loadDB();
+      const emp = db.employers[sess.eid];
+      const tpl = emp && emp.spreadsheetTemplate;
+      const infoEl    = document.getElementById('er-tpl-info');
+      const removeBtn = document.getElementById('er-tpl-remove');
+      const fillBtn   = document.getElementById('er-rpt-fill-tpl');
+      if (infoEl)    infoEl.textContent      = tpl ? `Uploaded: ${tpl.name}` : 'No template uploaded.';
+      if (removeBtn) removeBtn.style.display = tpl ? '' : 'none';
+      if (fillBtn)   fillBtn.style.display   = tpl ? '' : 'none';
+    }
+
+    function ttUploadSpreadsheetTemplate(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) { alert('Template must be under 2 MB.'); input.value = ''; return; }
+      loadSheetJS(function () {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const arr = new Uint8Array(e.target.result);
+          let bin = '';
+          arr.forEach(b => { bin += String.fromCharCode(b); });
+          const sess = getSession();
+          if (!sess) return;
+          const db = loadDB();
+          if (!db.employers[sess.eid]) return;
+          db.employers[sess.eid].spreadsheetTemplate = { name: file.name, data: btoa(bin) };
+          saveDB(db);
+          ttLoadTemplateSettings();
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    function ttRemoveSpreadsheetTemplate() {
+      if (!confirm('Remove the uploaded spreadsheet template?')) return;
+      const sess = getSession();
+      if (!sess) return;
+      const db = loadDB();
+      if (db.employers[sess.eid]) delete db.employers[sess.eid].spreadsheetTemplate;
+      saveDB(db);
+      const fi = document.getElementById('er-tpl-file');
+      if (fi) fi.value = '';
+      ttLoadTemplateSettings();
+    }
+
+    function ttExportEmployerXLSX() {
+      const empName = val('er-rpt-emp');
+      if (!empName) { alert('Please select a team member first.'); return; }
+      loadSheetJS(function () {
+        const sess = getSession();
+        if (!sess) return;
+        const db        = loadDB();
+        const employer  = db.employers[sess.eid] || {};
+        const employees = db.employees[sess.eid] || [];
+        const empRec    = employees.find(e => e.name === empName);
+        const rate      = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
+        const mon       = _currentWeekMon;
+        const key       = `${sess.eid}::${empName}`;
+        const period    = weekLabel(mon);
+        const sort      = (a, b) => new Date(a.date) - new Date(b.date);
+        const entries   = (db.entries[key]  || []).filter(e => inWeek(e.date, mon)).sort(sort);
+        const contacts  = (db.contacts[key] || []).filter(c => inWeek(c.date, mon)).sort(sort);
+        const mileage   = ((db.mileage||{})[key] || []).filter(m => inWeek(m.date, mon)).sort(sort);
+        const wb        = XLSX.utils.book_new();
+
+        /* Sheet 1: Timesheet */
+        let totP = 0, totC = 0;
+        const tsData = [
+          [`Employee: ${empName}`, '', `Organization: ${employer.orgName || ''}`],
+          [`Pay Period: ${period}`, '', `Pay Rate: $${rate.toFixed(2)}/hr`],
+          [],
+          ['Project / Task', 'Date', 'Proposed Hrs', 'Completed Hrs', 'Pay Rate', 'Total Pay', 'Notes', 'Activity Type'],
+        ];
+        entries.forEach(e => {
+          totP += e.proposedHours  || 0;
+          totC += e.completedHours || 0;
+          tsData.push([e.task, e.date, e.proposedHours||0, e.completedHours||0, rate, (e.completedHours||0)*rate, e.notes||'', e.type]);
+        });
+        tsData.push(['TOTALS', '', totP, totC, '', totC * rate, '', '']);
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(tsData), 'Timesheet');
+
+        /* Sheet 2: Contact Log */
+        if (contacts.length) {
+          let totTime = 0;
+          const crData = [
+            [`Employee: ${empName}`, '', `Period: ${period}`],
+            [],
+            ['Date', 'Time', 'Method', 'To / From', 'Name & Affiliation', 'Content / Purpose', 'Time Spent (hrs)'],
+          ];
+          contacts.forEach(c => {
+            totTime += c.timeSpent || 0;
+            crData.push([c.date, c.time||'', c.method, c.toFrom, c.affiliation||'', c.content, c.timeSpent||0]);
+          });
+          crData.push(['', '', '', '', '', 'Total Time:', totTime]);
+          XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(crData), 'Contact Log');
+        }
+
+        /* Sheet 3: Mileage */
+        if (mileage.length) {
+          const mRate = employer.mileageRate || 0.725;
+          let totMi = 0, totPay = 0, totPark = 0;
+          const mlData = [
+            [`Employee: ${empName}`, '', `Period: ${period}`],
+            [],
+            ['Date', 'Miles', 'Rate/Mile', 'Description / Trip', 'Mileage $', 'Parking $', 'Notes'],
+          ];
+          mileage.forEach(m => {
+            totMi  += m.miles   || 0;
+            const mp = (m.miles||0) * mRate;
+            totPay += mp;
+            totPark += m.parking || 0;
+            mlData.push([m.date, m.miles||0, mRate, m.description, mp, m.parking||0, m.attachments||'']);
+          });
+          mlData.push(['Totals', totMi, '', '', totPay, totPark, `All: $${(totPay+totPark).toFixed(2)}`]);
+          XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(mlData), 'Mileage');
+        }
+
+        XLSX.writeFile(wb, `${empName.replace(/[^a-z0-9]/gi,'_')}_timesheet.xlsx`);
+      });
+    }
+
+    function ttFillSpreadsheetTemplate() {
+      const empName = val('er-rpt-emp');
+      if (!empName) { alert('Please select a team member first.'); return; }
+      const sess = getSession();
+      if (!sess) return;
+      const db       = loadDB();
+      const employer = db.employers[sess.eid] || {};
+      if (!employer.spreadsheetTemplate) {
+        alert('No template uploaded. Go to Settings → Spreadsheet Template to upload one.'); return;
+      }
+      loadSheetJS(function () {
+        const employees = db.employees[sess.eid] || [];
+        const empRec    = employees.find(e => e.name === empName);
+        const rate      = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
+        const mon       = _currentWeekMon;
+        const key       = `${sess.eid}::${empName}`;
+        const period    = weekLabel(mon);
+        const sort      = (a, b) => new Date(a.date) - new Date(b.date);
+        const entries   = (db.entries[key] || []).filter(e => inWeek(e.date, mon)).sort(sort);
+        let totP = 0, totC = 0;
+        entries.forEach(e => { totP += e.proposedHours||0; totC += e.completedHours||0; });
+
+        const monStr = mon.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+        const sunStr = getSunday(mon).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+
+        const tokens = {
+          'EMPLOYEE_NAME': empName,           'NAME': empName,
+          'ORG_NAME': employer.orgName || '', 'ORGANIZATION': employer.orgName || '',
+          'PAY_PERIOD': period,
+          'WEEK_START': monStr,               'WEEK_END': sunStr,
+          'PAY_RATE': rate.toFixed(2),
+          'TOTAL_PROPOSED_HOURS': totP.toFixed(2),   'TOTAL_PROPOSED': totP.toFixed(2),
+          'TOTAL_COMPLETED_HOURS': totC.toFixed(2),  'TOTAL_COMPLETED': totC.toFixed(2),
+          'TOTAL_HOURS': totC.toFixed(2),
+          'TOTAL_PAY': (totC * rate).toFixed(2),
+          'TODAY': new Date().toLocaleDateString('en-US'),
+        };
+        entries.forEach((e, i) => {
+          const n = i + 1;
+          tokens[`ROW${n}_TASK`]      = e.task;
+          tokens[`ROW${n}_DATE`]      = e.date;
+          tokens[`ROW${n}_TYPE`]      = e.type;
+          tokens[`ROW${n}_PROPOSED`]  = (e.proposedHours||0).toFixed(2);
+          tokens[`ROW${n}_COMPLETED`] = (e.completedHours||0).toFixed(2);
+          tokens[`ROW${n}_PAY`]       = ((e.completedHours||0) * rate).toFixed(2);
+          tokens[`ROW${n}_NOTES`]     = e.notes || '';
+        });
+
+        const binStr = atob(employer.spreadsheetTemplate.data);
+        const bytes  = new Uint8Array(binStr.length);
+        for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
+        const wb = XLSX.read(bytes, { type: 'array' });
+
+        wb.SheetNames.forEach(sn => {
+          const ws = wb.Sheets[sn];
+          Object.keys(ws).forEach(ref => {
+            if (ref.startsWith('!')) return;
+            const cell = ws[ref];
+            if (cell && (cell.t === 's' || cell.t === 'str') && typeof cell.v === 'string') {
+              let v = cell.v;
+              Object.keys(tokens).forEach(k => {
+                v = v.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'gi'), tokens[k]);
+              });
+              if (v !== cell.v) { cell.v = v; cell.w = v; }
+            }
+          });
+        });
+
+        const tplBase = employer.spreadsheetTemplate.name.replace(/\.[^.]+$/, '');
+        XLSX.writeFile(wb, `${tplBase}_${empName.replace(/[^a-z0-9]/gi,'_')}.xlsx`);
+      });
+    }
+
     /* ── Print / Export ─────────────────────────────────── */
     function ttPrint() { window.print(); }
 
@@ -2179,7 +2440,8 @@
       const db          = loadDB();
       const key         = `${sess.eid}::${sess.empName}`;
       const employer    = db.employers[sess.eid] || {};
-      const rate        = employer.payRate     || 50;
+      const empRec      = (db.employees[sess.eid] || []).find(e => e.name.toLowerCase() === sess.empName.toLowerCase());
+      const rate        = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
       const mileageRate = employer.mileageRate || 0.725;
       const templateId  = employer.templateId  || 'hours';
       const mon         = _currentWeekMon;
@@ -2612,7 +2874,8 @@
       const db       = loadDB();
       const key      = `${sess.eid}::${sess.empName}`;
       const employer = db.employers[sess.eid] || {};
-      const rate     = employer.payRate || 50;
+      const empRec   = (db.employees[sess.eid] || []).find(e => e.name.toLowerCase() === sess.empName.toLowerCase());
+      const rate     = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
       const mon      = _currentWeekMon;
       let csv = '', filename = '';
 
@@ -2891,7 +3154,9 @@
       ttEmployeeLogin:  () => ttEmployeeLogin().catch(e =>  { showErr('ee-login-err',   'Unexpected error — please try again.'); console.error(e); }),
       ttEmployeeLogout,
       ttAddEmployee:    () => ttAddEmployee().catch(e =>    { showErr('er-emp-add-err', 'Unexpected error — please try again.'); console.error(e); }),
-      ttRemoveEmployee,
+      ttRemoveEmployee, ttSetEmpRate,
+      ttUploadSpreadsheetTemplate, ttRemoveSpreadsheetTemplate,
+      ttExportEmployerXLSX, ttFillSpreadsheetTemplate,
       ttClockIn, ttClockOut,
       ttAddManualEntry, ttDeleteEntry,
       ttAddContact, ttDeleteContact,
