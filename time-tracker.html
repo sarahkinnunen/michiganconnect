@@ -726,6 +726,34 @@
               <button class="btn btn-outline" onclick="ttHideEmpResetForm()">Cancel</button>
             </div>
           </div>
+          <div id="er-emp-pay-form" style="display:none" class="tt-card">
+            <h3 style="margin:0 0 .4rem">Pay Period for <span id="er-emp-pay-name"></span></h3>
+            <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:.85rem">Set "Use org default" to inherit the organization-level pay frequency.</p>
+            <div class="form-row">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-emp-pay-freq">Pay Frequency</label>
+                <select id="er-emp-pay-freq" class="tt-select">
+                  <option value="">Use org default</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="biweekly">Biweekly (Every 2 Weeks)</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="daily">Daily</option>
+                </select>
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-emp-pay-start">Pay Period Start Date</label>
+                <input id="er-emp-pay-start" type="date" class="tt-input">
+                <p class="form-hint">Leave blank to use org default start date.</p>
+              </div>
+            </div>
+            <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;align-items:center">
+              <button class="btn btn-primary" onclick="ttSaveEmpPaySettings()">Save</button>
+              <button class="btn btn-outline" onclick="ttHideEmpPayForm()">Cancel</button>
+              <button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="ttApplyOrgPayToAll()">
+                <i class="bi bi-people" aria-hidden="true"></i> Apply Org Default to All Employees
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Panel: Reports -->
@@ -772,14 +800,39 @@
               <input id="er-set-milerate" type="number" class="tt-input" min="0" step="0.001">
               <p class="form-hint">IRS standard is $0.725/mile</p>
             </div>
+            <div class="form-row">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-set-freq">Default Pay Frequency</label>
+                <select id="er-set-freq" class="tt-select">
+                  <option value="weekly">Weekly</option>
+                  <option value="biweekly">Biweekly (Every 2 Weeks)</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="daily">Daily</option>
+                </select>
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-set-paystart">Pay Period Start Date</label>
+                <input id="er-set-paystart" type="date" class="tt-input">
+                <p class="form-hint">First day of your first pay period — anchors weekly/biweekly cycles.</p>
+              </div>
+            </div>
             <div class="tt-fg">
-              <label for="er-set-template">Print Template</label>
-              <select id="er-set-template" class="tt-select">
-                <option value="hours">Hours</option>
-                <option value="hours-mileage">Hours and Mileage</option>
-                <option value="hours-contacts-mileage">Hours, Contact Record, and Mileage</option>
-              </select>
-              <p class="form-hint">Controls the format of printed/exported reports for all team members.</p>
+              <label style="margin-bottom:.6rem;display:block">Report Sections to Include</label>
+              <div style="display:flex;flex-direction:column;gap:.55rem">
+                <label style="display:flex;align-items:center;gap:.6rem;font-weight:400;cursor:default">
+                  <input type="checkbox" checked disabled style="accent-color:var(--color-accent);width:1rem;height:1rem">
+                  Hours / Timesheet <span style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-left:.25rem">(always included)</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:.6rem;font-weight:400;cursor:pointer">
+                  <input type="checkbox" id="er-set-inc-contacts" style="accent-color:var(--color-accent);width:1rem;height:1rem">
+                  Contact Record
+                </label>
+                <label style="display:flex;align-items:center;gap:.6rem;font-weight:400;cursor:pointer">
+                  <input type="checkbox" id="er-set-inc-mileage" style="accent-color:var(--color-accent);width:1rem;height:1rem">
+                  Mileage
+                </label>
+              </div>
+              <p class="form-hint" style="margin-top:.5rem">Controls what sections appear when employees print or export reports.</p>
             </div>
             <div style="display:flex;gap:.75rem;flex-wrap:wrap">
               <button class="btn btn-primary" onclick="ttSaveSettings()">Save Settings</button>
@@ -811,12 +864,21 @@
                 <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em">Employee &amp; Org</div>
                 {{EMPLOYEE_NAME}} &nbsp; {{ORG_NAME}} &nbsp; {{TODAY}}<br>
                 <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Pay Period</div>
-                {{PAY_PERIOD}} &nbsp; {{WEEK_START}} &nbsp; {{WEEK_END}} &nbsp; {{PAY_RATE}}<br>
-                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Totals</div>
+                {{PAY_PERIOD}} &nbsp; {{WEEK_START}} &nbsp; {{WEEK_END}} &nbsp; {{MONTH_YEAR}}<br>
+                {{PAY_RATE}} &nbsp; {{MILEAGE_RATE}}<br>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Timesheet Totals</div>
                 {{TOTAL_PROPOSED_HOURS}} &nbsp; {{TOTAL_COMPLETED_HOURS}} &nbsp; {{TOTAL_HOURS}} &nbsp; {{TOTAL_PAY}}<br>
-                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Per-row entry data — replace 1 with 2, 3, 4… for each row</div>
-                {{ROW1_DATE}} &nbsp; {{ROW1_TASK}} &nbsp; {{ROW1_TYPE}}<br>
-                {{ROW1_PROPOSED}} &nbsp; {{ROW1_COMPLETED}} &nbsp; {{ROW1_PAY}} &nbsp; {{ROW1_NOTES}}
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Time Entry Rows — replace 1 with 2, 3, 4… for each row</div>
+                {{ROW1_TASK}} &nbsp; {{ROW1_DATE}} &nbsp; {{ROW1_TYPE}}<br>
+                {{ROW1_PROPOSED}} &nbsp; {{ROW1_COMPLETED}} &nbsp; {{ROW1_PAY}} &nbsp; {{ROW1_NOTES}}<br>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Contact Record Rows — replace 1 with 2, 3…</div>
+                {{CR_ROW1_DATE}} &nbsp; {{CR_ROW1_TIME}} &nbsp; {{CR_ROW1_METHOD}} &nbsp; {{CR_ROW1_TOFROM}}<br>
+                {{CR_ROW1_AFFILIATION}} &nbsp; {{CR_ROW1_CONTENT}} &nbsp; {{CR_ROW1_TIMESPENT}}<br>
+                {{TOTAL_CONTACT_TIME}}<br>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Mileage Rows — replace 1 with 2, 3…</div>
+                {{ML_ROW1_DATE}} &nbsp; {{ML_ROW1_MILES}} &nbsp; {{ML_ROW1_DESCRIPTION}}<br>
+                {{ML_ROW1_MILEAGE_PAY}} &nbsp; {{ML_ROW1_PARKING}} &nbsp; {{ML_ROW1_NOTES}}<br>
+                {{TOTAL_MILES}} &nbsp; {{TOTAL_MILEAGE_PAY}} &nbsp; {{TOTAL_PARKING}} &nbsp; {{TOTAL_MILEAGE_ALL}}
               </div>
             </details>
           </div>
@@ -967,9 +1029,9 @@
             </div>
             <div class="week-nav no-print">
               <button class="week-nav-btn" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev</button>
-              <span class="week-lbl" id="ee-week-lbl">This Week</span>
+              <span class="week-lbl" id="ee-week-lbl">This Period</span>
               <button class="week-nav-btn" onclick="ttWeekShift(1)">Next <i class="bi bi-chevron-right"></i></button>
-              <button class="week-nav-btn" onclick="ttWeekReset()">This Week</button>
+              <button class="week-nav-btn" onclick="ttWeekReset()">Current Period</button>
             </div>
             <div style="overflow-x:auto">
               <table class="ts-table" aria-label="Weekly timesheet entries">
@@ -1031,7 +1093,7 @@
                   <option value="Other">Other</option>
                 </select>
               </div>
-       8w1q11qqq'''''''''''''',]]]]]]t6[.'f7imf5no8rt4leob368']'       <div class="tt-fg">
+              <div class="tt-fg">
                 <label for="cr-tofrom">To / From *</label>
                 <input id="cr-tofrom" type="text" class="tt-input" placeholder="Name of person contacted">
               </div>
@@ -1140,9 +1202,9 @@
             </div>
             <div class="week-nav no-print">
               <button class="week-nav-btn" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev</button>
-              <span class="week-lbl" id="ml-week-lbl">This Week</span>
+              <span class="week-lbl" id="ml-week-lbl">This Period</span>
               <button class="week-nav-btn" onclick="ttWeekShift(1)">Next <i class="bi bi-chevron-right"></i></button>
-              <button class="week-nav-btn" onclick="ttWeekReset()">This Week</button>
+              <button class="week-nav-btn" onclick="ttWeekReset()">Current Period</button>
             </div>
             <div style="overflow-x:auto">
               <table class="ml-table" aria-label="Mileage log">
@@ -1380,6 +1442,75 @@
       sun.setHours(23, 59, 59, 999);
       return d >= mon && d <= sun;
     }
+
+    /* ── Pay period helpers ─────────────────────────────── */
+    function getEffectivePaySettings(eid, empName) {
+      const db       = loadDB();
+      const employer = db.employers[eid] || {};
+      const employees = db.employees[eid] || [];
+      const emp      = employees.find(e => e.name === empName);
+      return {
+        frequency: (emp && emp.payFrequency) || employer.payFrequency || 'weekly',
+        startDate: (emp && emp.payStartDate) || employer.payStartDate || todayStr()
+      };
+    }
+    function getPeriodStart(dateOrStr, frequency, refDateStr) {
+      const ref = new Date((refDateStr || todayStr()) + 'T00:00:00');
+      const d   = (typeof dateOrStr === 'string') ? new Date(dateOrStr + 'T12:00:00') : new Date(dateOrStr);
+      switch (frequency || 'weekly') {
+        case 'daily': { const s = new Date(d); s.setHours(0,0,0,0); return s; }
+        case 'weekly': {
+          const diff = Math.floor((d - ref) / 86400000);
+          const s = new Date(ref); s.setDate(s.getDate() + Math.floor(diff / 7) * 7); s.setHours(0,0,0,0); return s;
+        }
+        case 'biweekly': {
+          const diff = Math.floor((d - ref) / 86400000);
+          const s = new Date(ref); s.setDate(s.getDate() + Math.floor(diff / 14) * 14); s.setHours(0,0,0,0); return s;
+        }
+        case 'monthly': return new Date(d.getFullYear(), d.getMonth(), 1);
+        default: return getMonday(d);
+      }
+    }
+    function getPeriodEnd(start, frequency) {
+      const e = new Date(start);
+      switch (frequency || 'weekly') {
+        case 'daily':    break;
+        case 'weekly':   e.setDate(e.getDate() + 6); break;
+        case 'biweekly': e.setDate(e.getDate() + 13); break;
+        case 'monthly':  e.setMonth(e.getMonth() + 1); e.setDate(0); break;
+        default:         e.setDate(e.getDate() + 6);
+      }
+      e.setHours(23, 59, 59, 999);
+      return e;
+    }
+    function inPeriod(dateStr, start, frequency) {
+      const d = new Date(dateStr + 'T12:00:00');
+      return d >= start && d <= getPeriodEnd(start, frequency);
+    }
+    function periodLabel(start, frequency) {
+      const fmt = dt => dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      switch (frequency || 'weekly') {
+        case 'daily':
+          return start.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        case 'monthly':
+          return start.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        default: {
+          const end = getPeriodEnd(start, frequency);
+          return `${fmt(start)} – ${fmt(end)}, ${start.getFullYear()}`;
+        }
+      }
+    }
+    function shiftPeriodStart(start, frequency, dir) {
+      const n = new Date(start);
+      switch (frequency || 'weekly') {
+        case 'daily':    n.setDate(n.getDate() + dir); break;
+        case 'weekly':   n.setDate(n.getDate() + dir * 7); break;
+        case 'biweekly': n.setDate(n.getDate() + dir * 14); break;
+        case 'monthly':  n.setMonth(n.getMonth() + dir); break;
+        default:         n.setDate(n.getDate() + dir * 7);
+      }
+      return n;
+    }
     function roundQ(h) { return Math.round(h * 4) / 4; }
 
     /* ── View management ────────────────────────────────── */
@@ -1429,7 +1560,10 @@
       db.employers[id] = {
         id, orgName, email, passHash, salt,
         mileageRate: 0.725,
-        templateId: 'hours',
+        payFrequency: 'weekly',
+        payStartDate: getMonday(new Date()).toISOString().slice(0, 10),
+        templateIncludeContacts: false,
+        templateIncludeMileage: false,
         createdAt: new Date().toISOString()
       };
       db.employees[id] = [];
@@ -1644,6 +1778,54 @@
       if (isNaN(rate) || rate < 0) { alert('Please enter a valid pay rate.'); return; }
       emp.payRate = rate;
       saveDB(db);
+      ttRenderEmpList();
+    }
+
+    let _empPayFormId = '';
+    function ttShowEmpPayForm(empId) {
+      const sess = getSession();
+      if (!sess) return;
+      const db  = loadDB();
+      const emp = (db.employees[sess.eid] || []).find(e => e.id === empId);
+      if (!emp) return;
+      _empPayFormId = empId;
+      const nameEl = document.getElementById('er-emp-pay-name');
+      if (nameEl) nameEl.textContent = emp.name;
+      setVal('er-emp-pay-freq',  emp.payFrequency || '');
+      setVal('er-emp-pay-start', emp.payStartDate || '');
+      const form = document.getElementById('er-emp-pay-form');
+      if (form) { form.style.display = ''; form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    }
+    function ttHideEmpPayForm() {
+      const form = document.getElementById('er-emp-pay-form');
+      if (form) form.style.display = 'none';
+      _empPayFormId = '';
+    }
+    function ttSaveEmpPaySettings() {
+      const sess = getSession();
+      if (!sess || !_empPayFormId) return;
+      const db   = loadDB();
+      const emp  = (db.employees[sess.eid] || []).find(e => e.id === _empPayFormId);
+      if (!emp) return;
+      const freq  = val('er-emp-pay-freq');
+      const start = val('er-emp-pay-start');
+      emp.payFrequency = freq  || undefined;
+      emp.payStartDate = start || undefined;
+      saveDB(db);
+      ttHideEmpPayForm();
+      ttRenderEmpList();
+    }
+    function ttApplyOrgPayToAll() {
+      if (!confirm('Clear all individual pay period overrides? All employees will use the organization default frequency and start date.')) return;
+      const sess = getSession();
+      if (!sess) return;
+      const db = loadDB();
+      (db.employees[sess.eid] || []).forEach(e => {
+        delete e.payFrequency;
+        delete e.payStartDate;
+      });
+      saveDB(db);
+      ttHideEmpPayForm();
       ttRenderEmpList();
     }
 
@@ -1862,42 +2044,53 @@
     }
 
     /* ── Week navigation ────────────────────────────────── */
-    let _currentWeekMon = getMonday(new Date());
+    let _currentPeriodStart = getMonday(new Date());
+    let _currentPeriodFreq  = 'weekly';
+    let _reportEmpName      = '';
 
     function ttWeekShift(dir) {
-      _currentWeekMon = new Date(_currentWeekMon.getTime() + dir * 7 * 86400000);
+      _currentPeriodStart = shiftPeriodStart(_currentPeriodStart, _currentPeriodFreq, dir);
       ttRenderTimesheet();
       ttRenderContacts();
       ttRenderMileage();
       ttBuildPrint();
       const lbl2 = document.getElementById('ee-print-week-lbl');
-      if (lbl2) lbl2.textContent = weekLabel(_currentWeekMon);
+      if (lbl2) lbl2.textContent = periodLabel(_currentPeriodStart, _currentPeriodFreq);
     }
     function ttWeekReset() {
-      _currentWeekMon = getMonday(new Date());
+      const sess = getSession();
+      if (sess) {
+        const ps = getEffectivePaySettings(sess.eid, sess.empName || '');
+        _currentPeriodFreq  = ps.frequency;
+        _currentPeriodStart = getPeriodStart(new Date(), ps.frequency, ps.startDate);
+      } else {
+        _currentPeriodStart = getMonday(new Date());
+        _currentPeriodFreq  = 'weekly';
+      }
       ttRenderTimesheet();
       ttRenderContacts();
       ttRenderMileage();
     }
 
     /* ── Render: Timesheet ──────────────────────────────── */
-    function ttRenderTimesheet(eid, empName, mon) {
+    function ttRenderTimesheet(eid, empName, mon, freq) {
       const sess = getSession();
       if (!sess) return;
       eid     = eid     || sess.eid;
       empName = empName || sess.empName;
-      mon     = mon     || _currentWeekMon;
+      mon     = mon     || _currentPeriodStart;
+      freq    = freq    || _currentPeriodFreq;
 
       const db       = loadDB();
       const key      = `${eid}::${empName}`;
       const employer = db.employers[eid] || {};
       const empRec   = (db.employees[eid] || []).find(e => e.name.toLowerCase() === empName.toLowerCase());
       const rate     = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
-      const all      = (db.entries[key] || []).filter(e => inWeek(e.date, mon));
+      const all      = (db.entries[key] || []).filter(e => inPeriod(e.date, mon, freq));
       all.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       const lblEl = document.getElementById('ee-week-lbl');
-      if (lblEl) lblEl.textContent = weekLabel(mon);
+      if (lblEl) lblEl.textContent = periodLabel(mon, freq);
 
       const tbody = document.getElementById('ts-tbody');
       if (!tbody) return;
@@ -1905,7 +2098,7 @@
       const isEmployee = !eid || sess.role === 'employee';
 
       if (!all.length) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No entries for ${weekLabel(mon)}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No entries for ${periodLabel(mon, freq)}</td></tr>`;
         ttSetTotals(0, 0, 0);
         return;
       }
@@ -1954,16 +2147,17 @@
     }
 
     /* ── Render: Contacts ───────────────────────────────── */
-    function ttRenderContacts(eid, empName, mon) {
+    function ttRenderContacts(eid, empName, mon, freq) {
       const sess = getSession();
       if (!sess) return;
       eid     = eid     || sess.eid;
       empName = empName || sess.empName;
-      mon     = mon     || _currentWeekMon;
+      mon     = mon     || _currentPeriodStart;
+      freq    = freq    || _currentPeriodFreq;
 
       const db  = loadDB();
       const key = `${eid}::${empName}`;
-      const all = (db.contacts[key] || []).filter(c => inWeek(c.date, mon));
+      const all = (db.contacts[key] || []).filter(c => inPeriod(c.date, mon, freq));
       all.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       const tbody = document.getElementById('cr-tbody');
@@ -1971,7 +2165,7 @@
       if (!tbody) return;
 
       if (!all.length) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No contact records for this week</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No contact records for this period</td></tr>`;
         if (totEl) totEl.textContent = '0';
         return;
       }
@@ -2006,13 +2200,14 @@
 
       const db       = loadDB();
       const key      = `${sess.eid}::${sess.empName}`;
-      const mon      = _currentWeekMon;
+      const mon      = _currentPeriodStart;
+      const freq     = _currentPeriodFreq;
       const employer = db.employers[sess.eid] || {};
       const empRec   = (db.employees[sess.eid] || []).find(e => e.name.toLowerCase() === sess.empName.toLowerCase());
       const rate     = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
 
-      const entries  = (db.entries[key]  || []).filter(e => inWeek(e.date, mon));
-      const contacts = (db.contacts[key] || []).filter(c => inWeek(c.date, mon));
+      const entries  = (db.entries[key]  || []).filter(e => inPeriod(e.date, mon, freq));
+      const contacts = (db.contacts[key] || []).filter(c => inPeriod(c.date, mon, freq));
       const hours    = entries.reduce((s, e) => s + (e.completedHours || 0), 0);
 
       const h = document.getElementById('ee-stat-hours');
@@ -2042,6 +2237,7 @@
       if (!sess) return;
       const db        = loadDB();
       const employees = db.employees[sess.eid] || [];
+      const employer  = db.employers[sess.eid] || {};
       const container = document.getElementById('er-emp-list-container');
       if (!container) return;
 
@@ -2050,17 +2246,22 @@
       } else {
         container.innerHTML = `<ul class="emp-list">${employees.map(e => {
           const hasPendingReset = (db.resetRequests||[]).some(r => r.empId === e.id && !r.used && Date.now() < r.expiresAt);
-          const resetBadge = hasPendingReset ? ' <span style="font-size:.7rem;background:#fef9c3;color:#854d0e;padding:.15em .5em;border-radius:3px">Reset Requested</span>' : '';
+          const resetBadge  = hasPendingReset ? ' <span style="font-size:.7rem;background:#fef9c3;color:#854d0e;padding:.15em .5em;border-radius:3px">Reset Requested</span>' : '';
           const rateDisplay = e.payRate != null ? `$${Number(e.payRate).toFixed(2)}/hr` : 'Not set';
+          const freqLabels  = { weekly: 'Weekly', biweekly: 'Biweekly', monthly: 'Monthly', daily: 'Daily' };
+          const freqDisplay = e.payFrequency
+            ? `${freqLabels[e.payFrequency] || e.payFrequency} (custom)`
+            : `${freqLabels[employer.payFrequency || 'weekly'] || 'Weekly'} (org default)`;
           return `
           <li class="emp-item">
             <div>
               <span class="en">${esc(e.name)}${resetBadge}</span>
-              <span class="ep" style="display:block">Rate: ${rateDisplay} · Password: ${(e.passHash || e.pin) ? 'Set' : 'Not set'}${e.email ? ' · ' + esc(e.email) : ''}</span>
+              <span class="ep" style="display:block">Rate: ${rateDisplay} · Pay: ${freqDisplay} · Password: ${(e.passHash || e.pin) ? 'Set' : 'Not set'}${e.email ? ' · ' + esc(e.email) : ''}</span>
             </div>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
               <button class="btn btn-sm btn-outline" onclick="ttViewEmpReport('${esc(e.name)}')">View Report</button>
               <button class="btn btn-sm btn-outline" onclick="ttSetEmpRate('${esc(e.id)}')"><i class="bi bi-pencil"></i> Set Rate</button>
+              <button class="btn btn-sm btn-outline" onclick="ttShowEmpPayForm('${esc(e.id)}')"><i class="bi bi-calendar3"></i> Pay Period</button>
               <button class="btn btn-sm btn-outline" onclick="ttShowEmpResetForm('${esc(e.id)}')"><i class="bi bi-key"></i> Set Password</button>
               <button class="btn btn-sm" style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca" onclick="ttRemoveEmployee('${esc(e.id)}')">Remove</button>
             </div>
@@ -2098,11 +2299,23 @@
       const employer = db.employers[sess.eid] || {};
       const empRec   = (db.employees[sess.eid] || []).find(e => e.name === empName);
       const rate     = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
-      const mon      = _currentWeekMon;
       const key      = `${sess.eid}::${empName}`;
 
-      const entries  = (db.entries[key]  || []).filter(e => inWeek(e.date, mon)).sort((a, b) => new Date(a.date) - new Date(b.date));
-      const contacts = (db.contacts[key] || []).filter(c => inWeek(c.date, mon)).sort((a, b) => new Date(a.date) - new Date(b.date));
+      /* Update period state when employee selection changes */
+      if (empName !== _reportEmpName) {
+        _reportEmpName = empName;
+        const ps = getEffectivePaySettings(sess.eid, empName);
+        _currentPeriodFreq  = ps.frequency;
+        _currentPeriodStart = getPeriodStart(new Date(), ps.frequency, ps.startDate);
+      }
+      const mon  = _currentPeriodStart;
+      const freq = _currentPeriodFreq;
+
+      const mileageRate = employer.mileageRate || 0.725;
+      const sort     = (a, b) => new Date(a.date) - new Date(b.date);
+      const entries  = (db.entries[key]  || []).filter(e => inPeriod(e.date, mon, freq)).sort(sort);
+      const contacts = (db.contacts[key] || []).filter(c => inPeriod(c.date, mon, freq)).sort(sort);
+      const mileage  = ((db.mileage||{})[key] || []).filter(m => inPeriod(m.date, mon, freq)).sort(sort);
 
       let totP = 0, totC = 0;
       const tsRows = entries.length
@@ -2120,7 +2333,7 @@
               <td><span class="badge ${typeBadge(e.type)}">${esc(e.type)}</span>${e.notes?`<span style="display:block;font-size:.72rem;color:var(--color-text-muted)">${esc(e.notes)}</span>`:''}</td>
             </tr>`;
           }).join('')
-        : '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No entries this week</td></tr>';
+        : '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No entries this period</td></tr>';
 
       let totTime = 0;
       const crRows = contacts.length
@@ -2136,7 +2349,7 @@
               <td style="text-align:center">${(c.timeSpent||0).toFixed(2)}</td>
             </tr>`;
           }).join('')
-        : '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No contact records this week</td></tr>';
+        : '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No contact records this period</td></tr>';
 
       if (container) container.innerHTML = `
         <div class="tt-card">
@@ -2144,7 +2357,7 @@
             <h2 style="margin:0"><i class="bi bi-table"></i> ${esc(empName)} — Timesheet</h2>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap" class="no-print">
               <button class="week-nav-btn" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev</button>
-              <span class="week-lbl">${weekLabel(mon)}</span>
+              <span class="week-lbl">${periodLabel(mon, freq)}</span>
               <button class="week-nav-btn" onclick="ttWeekShift(1)">Next <i class="bi bi-chevron-right"></i></button>
             </div>
           </div>
@@ -2165,7 +2378,35 @@
               <tfoot><tr style="background:var(--color-sage-bg);font-weight:600"><td colspan="6">Total Time Spent</td><td style="text-align:center">${totTime.toFixed(2)}</td></tr></tfoot>
             </table>
           </div>
-        </div>`;
+        </div>
+        ${mileage.length ? (() => {
+          let totMi = 0, totMiPay = 0, totPark = 0;
+          const mlRows = mileage.map(m => {
+            totMi   += m.miles   || 0;
+            const mp = (m.miles||0) * mileageRate;
+            totMiPay += mp;
+            totPark  += m.parking || 0;
+            return `<tr>
+              <td style="white-space:nowrap">${fmtDate(m.date)}</td>
+              <td style="text-align:center">${(m.miles||0).toFixed(1)}</td>
+              <td style="text-align:center">$${mileageRate.toFixed(3)}</td>
+              <td>${esc(m.description)}</td>
+              <td style="text-align:center;font-weight:600">$${mp.toFixed(2)}</td>
+              <td style="text-align:center">$${(m.parking||0).toFixed(2)}</td>
+              <td>${esc(m.attachments||'')}</td>
+            </tr>`;
+          }).join('');
+          return `<div class="tt-card">
+            <h2><i class="bi bi-car-front"></i> ${esc(empName)} — Mileage</h2>
+            <div style="overflow-x:auto">
+              <table class="ml-table">
+                <thead><tr><th>Date</th><th>Miles</th><th>Rate/Mile</th><th>Description / Trip</th><th>Mileage $</th><th>Parking</th><th>Notes</th></tr></thead>
+                <tbody>${mlRows}</tbody>
+                <tfoot><tr class="tr-ml-total"><td><strong>Totals</strong></td><td style="text-align:center">${totMi.toFixed(1)}</td><td></td><td></td><td style="text-align:center">$${totMiPay.toFixed(2)}</td><td style="text-align:center">$${totPark.toFixed(2)}</td><td style="text-align:right;font-weight:700">Total: $${(totMiPay+totPark).toFixed(2)}</td></tr></tfoot>
+              </table>
+            </div>
+          </div>`;
+        })() : ''}`;
     }
 
     /* ── Settings ───────────────────────────────────────── */
@@ -2177,7 +2418,12 @@
       if (!emp) return;
       setVal('er-set-org',      emp.orgName);
       setVal('er-set-milerate', emp.mileageRate || 0.725);
-      setVal('er-set-template', emp.templateId  || 'hours');
+      setVal('er-set-freq',     emp.payFrequency || 'weekly');
+      setVal('er-set-paystart', emp.payStartDate || todayStr());
+      const cbCr = document.getElementById('er-set-inc-contacts');
+      const cbMi = document.getElementById('er-set-inc-mileage');
+      if (cbCr) cbCr.checked = emp.templateIncludeContacts === true;
+      if (cbMi) cbMi.checked = emp.templateIncludeMileage  === true;
       ttLoadTemplateSettings();
     }
 
@@ -2186,16 +2432,24 @@
       hideOk('er-settings-ok');
       const sess = getSession();
       if (!sess) return;
-      const orgName    = val('er-set-org').trim();
-      const mileRate   = parseFloat(val('er-set-milerate')) || 0.725;
-      const templateId = val('er-set-template') || 'hours';
+      const orgName      = val('er-set-org').trim();
+      const mileRate     = parseFloat(val('er-set-milerate')) || 0.725;
+      const payFrequency = val('er-set-freq') || 'weekly';
+      const payStartDate = val('er-set-paystart') || todayStr();
+      const cbCr = document.getElementById('er-set-inc-contacts');
+      const cbMi = document.getElementById('er-set-inc-mileage');
+      const inclContacts = cbCr ? cbCr.checked : false;
+      const inclMileage  = cbMi ? cbMi.checked : false;
       if (!orgName) { showErr('er-settings-err', 'Organization name cannot be empty.'); return; }
 
       const db = loadDB();
       if (!db.employers[sess.eid]) return;
-      db.employers[sess.eid].orgName     = orgName;
-      db.employers[sess.eid].mileageRate = mileRate;
-      db.employers[sess.eid].templateId  = templateId;
+      db.employers[sess.eid].orgName                 = orgName;
+      db.employers[sess.eid].mileageRate             = mileRate;
+      db.employers[sess.eid].payFrequency            = payFrequency;
+      db.employers[sess.eid].payStartDate            = payStartDate;
+      db.employers[sess.eid].templateIncludeContacts = inclContacts;
+      db.employers[sess.eid].templateIncludeMileage  = inclMileage;
       saveDB(db);
 
       setSession({ ...sess, orgName });
@@ -2294,13 +2548,14 @@
         const employees = db.employees[sess.eid] || [];
         const empRec    = employees.find(e => e.name === empName);
         const rate      = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
-        const mon       = _currentWeekMon;
+        const mon       = _currentPeriodStart;
+        const freq      = _currentPeriodFreq;
         const key       = `${sess.eid}::${empName}`;
-        const period    = weekLabel(mon);
+        const period    = periodLabel(mon, freq);
         const sort      = (a, b) => new Date(a.date) - new Date(b.date);
-        const entries   = (db.entries[key]  || []).filter(e => inWeek(e.date, mon)).sort(sort);
-        const contacts  = (db.contacts[key] || []).filter(c => inWeek(c.date, mon)).sort(sort);
-        const mileage   = ((db.mileage||{})[key] || []).filter(m => inWeek(m.date, mon)).sort(sort);
+        const entries   = (db.entries[key]  || []).filter(e => inPeriod(e.date, mon, freq)).sort(sort);
+        const contacts  = (db.contacts[key] || []).filter(c => inPeriod(c.date, mon, freq)).sort(sort);
+        const mileage   = ((db.mileage||{})[key] || []).filter(m => inPeriod(m.date, mon, freq)).sort(sort);
         const wb        = XLSX.utils.book_new();
 
         /* Sheet 1: Timesheet */
@@ -2370,14 +2625,19 @@
         alert('No template uploaded. Go to Settings → Spreadsheet Template to upload one.'); return;
       }
       loadSheetJS(function () {
-        const employees = db.employees[sess.eid] || [];
-        const empRec    = employees.find(e => e.name === empName);
-        const rate      = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
-        const mon       = _currentWeekMon;
-        const key       = `${sess.eid}::${empName}`;
-        const period    = weekLabel(mon);
-        const sort      = (a, b) => new Date(a.date) - new Date(b.date);
-        const entries   = (db.entries[key] || []).filter(e => inWeek(e.date, mon)).sort(sort);
+        const employees   = db.employees[sess.eid] || [];
+        const empRec      = employees.find(e => e.name === empName);
+        const rate        = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
+        const mileageRate = employer.mileageRate || 0.725;
+        const mon         = _currentPeriodStart;
+        const freq        = _currentPeriodFreq;
+        const key         = `${sess.eid}::${empName}`;
+        const period      = periodLabel(mon, freq);
+        const sort        = (a, b) => new Date(a.date) - new Date(b.date);
+        const entries     = (db.entries[key]  || []).filter(e => inPeriod(e.date, mon, freq)).sort(sort);
+        const contacts    = (db.contacts[key] || []).filter(c => inPeriod(c.date, mon, freq)).sort(sort);
+        const mileage     = ((db.mileage||{})[key] || []).filter(m => inPeriod(m.date, mon, freq)).sort(sort);
+
         let totP = 0, totC = 0;
         entries.forEach(e => { totP += e.proposedHours||0; totC += e.completedHours||0; });
 
@@ -2389,13 +2649,17 @@
           'ORG_NAME': employer.orgName || '', 'ORGANIZATION': employer.orgName || '',
           'PAY_PERIOD': period,
           'WEEK_START': monStr,               'WEEK_END': sunStr,
+          'MONTH_YEAR': mon.toLocaleDateString('en-US', { month:'long', year:'numeric' }),
           'PAY_RATE': rate.toFixed(2),
+          'MILEAGE_RATE': mileageRate.toFixed(3),
           'TOTAL_PROPOSED_HOURS': totP.toFixed(2),   'TOTAL_PROPOSED': totP.toFixed(2),
           'TOTAL_COMPLETED_HOURS': totC.toFixed(2),  'TOTAL_COMPLETED': totC.toFixed(2),
           'TOTAL_HOURS': totC.toFixed(2),
           'TOTAL_PAY': (totC * rate).toFixed(2),
           'TODAY': new Date().toLocaleDateString('en-US'),
         };
+
+        /* time entry row tokens */
         entries.forEach((e, i) => {
           const n = i + 1;
           tokens[`ROW${n}_TASK`]      = e.task;
@@ -2406,6 +2670,41 @@
           tokens[`ROW${n}_PAY`]       = ((e.completedHours||0) * rate).toFixed(2);
           tokens[`ROW${n}_NOTES`]     = e.notes || '';
         });
+
+        /* contact record row tokens */
+        let totContactTime = 0;
+        contacts.forEach((c, i) => {
+          const n = i + 1;
+          totContactTime += c.timeSpent || 0;
+          tokens[`CR_ROW${n}_DATE`]        = c.date;
+          tokens[`CR_ROW${n}_TIME`]        = c.time || '';
+          tokens[`CR_ROW${n}_METHOD`]      = c.method;
+          tokens[`CR_ROW${n}_TOFROM`]      = c.toFrom;
+          tokens[`CR_ROW${n}_AFFILIATION`] = c.affiliation || '';
+          tokens[`CR_ROW${n}_CONTENT`]     = c.content;
+          tokens[`CR_ROW${n}_TIMESPENT`]   = (c.timeSpent||0).toFixed(2);
+        });
+        tokens['TOTAL_CONTACT_TIME'] = totContactTime.toFixed(2);
+
+        /* mileage row tokens */
+        let totMiles = 0, totMiPay = 0, totPark = 0;
+        mileage.forEach((m, i) => {
+          const n  = i + 1;
+          const mp = (m.miles||0) * mileageRate;
+          totMiles += m.miles   || 0;
+          totMiPay += mp;
+          totPark  += m.parking || 0;
+          tokens[`ML_ROW${n}_DATE`]        = m.date;
+          tokens[`ML_ROW${n}_MILES`]       = (m.miles||0).toFixed(1);
+          tokens[`ML_ROW${n}_DESCRIPTION`] = m.description;
+          tokens[`ML_ROW${n}_MILEAGE_PAY`] = mp.toFixed(2);
+          tokens[`ML_ROW${n}_PARKING`]     = (m.parking||0).toFixed(2);
+          tokens[`ML_ROW${n}_NOTES`]       = m.attachments || '';
+        });
+        tokens['TOTAL_MILES']       = totMiles.toFixed(1);
+        tokens['TOTAL_MILEAGE_PAY'] = totMiPay.toFixed(2);
+        tokens['TOTAL_PARKING']     = totPark.toFixed(2);
+        tokens['TOTAL_MILEAGE_ALL'] = (totMiPay + totPark).toFixed(2);
 
         const binStr = atob(employer.spreadsheetTemplate.data);
         const bytes  = new Uint8Array(binStr.length);
@@ -2443,35 +2742,26 @@
       const empRec      = (db.employees[sess.eid] || []).find(e => e.name.toLowerCase() === sess.empName.toLowerCase());
       const rate        = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
       const mileageRate = employer.mileageRate || 0.725;
-      const templateId  = employer.templateId  || 'hours';
-      const mon         = _currentWeekMon;
-      const period      = weekLabel(mon);
+      const mon         = _currentPeriodStart;
+      const freq        = _currentPeriodFreq;
+      const period      = periodLabel(mon, freq);
       const sort        = (a, b) => new Date(a.date) - new Date(b.date);
 
-      const entries  = (db.entries[key]  || []).filter(e => inWeek(e.date, mon)).sort(sort);
-      const contacts = (db.contacts[key] || []).filter(c => inWeek(c.date, mon)).sort(sort);
-      const mileage  = ((db.mileage||{})[key] || []).filter(m => inWeek(m.date, mon)).sort(sort);
+      const entries  = (db.entries[key]  || []).filter(e => inPeriod(e.date, mon, freq)).sort(sort);
+      const contacts = (db.contacts[key] || []).filter(c => inPeriod(c.date, mon, freq)).sort(sort);
+      const mileage  = ((db.mileage||{})[key] || []).filter(m => inPeriod(m.date, mon, freq)).sort(sort);
 
-      return { db, key, employer, rate, mileageRate, templateId, mon, period, entries, contacts, mileage };
+      return { db, key, employer, rate, mileageRate, mon, freq, period, entries, contacts, mileage };
     }
 
     function ttBuildPrint() {
       const sess = getSession();
       if (!sess || sess.role !== 'employee') return;
 
-      const d   = _printData(sess);
-      const tid = d.templateId;
-      let html;
-      if (tid === 'hours-contacts-mileage' || tid === 'yab-mileage') {
-        html = _tplYAB(sess, d, true, true);
-      } else if (tid === 'hours-mileage') {
-        html = _tplYAB(sess, d, false, true);
-      } else if (tid === 'standard') {
-        html = _tplStandard(sess, d);
-      } else {
-        /* 'hours', 'yab', or any legacy default → hours only */
-        html = _tplYAB(sess, d, false, false);
-      }
+      const d            = _printData(sess);
+      const inclContacts = d.employer.templateIncludeContacts === true;
+      const inclMileage  = d.employer.templateIncludeMileage  === true;
+      const html         = _tplYAB(sess, d, inclContacts, inclMileage);
 
       const area = document.getElementById('print-preview-area');
       if (area) area.innerHTML = html;
@@ -2876,12 +3166,13 @@
       const employer = db.employers[sess.eid] || {};
       const empRec   = (db.employees[sess.eid] || []).find(e => e.name.toLowerCase() === sess.empName.toLowerCase());
       const rate     = (empRec && empRec.payRate != null) ? empRec.payRate : (employer.payRate || 0);
-      const mon      = _currentWeekMon;
+      const mon      = _currentPeriodStart;
+      const freq     = _currentPeriodFreq;
       let csv = '', filename = '';
 
       if (type === 'timesheet') {
         csv = 'Task,Date,Proposed Hours,Completed Hours,Pay Rate,Total,Notes,Type\n';
-        const rows = (db.entries[key] || []).filter(e => inWeek(e.date, mon));
+        const rows = (db.entries[key] || []).filter(e => inPeriod(e.date, mon, freq));
         rows.forEach(e => {
           const pay = (e.completedHours || 0) * rate;
           csv += `"${csvEsc(e.task)}","${e.date}","${e.proposedHours||0}","${e.completedHours||0}","${rate}","${pay.toFixed(2)}","${csvEsc(e.notes||'')}","${csvEsc(e.type)}"\n`;
@@ -2891,7 +3182,7 @@
         const employer    = db.employers[sess.eid] || {};
         const mileageRate = employer.mileageRate || 0.725;
         csv = 'Date,Miles,Rate,Description,Mileage $,Parking,Attachments\n';
-        const rows = ((db.mileage||{})[key] || []).filter(m => inWeek(m.date, mon));
+        const rows = ((db.mileage||{})[key] || []).filter(m => inPeriod(m.date, mon, freq));
         rows.forEach(m => {
           const mp = (m.miles || 0) * mileageRate;
           csv += `"${m.date}","${m.miles||0}","${mileageRate}","${csvEsc(m.description)}","${mp.toFixed(2)}","${m.parking||0}","${csvEsc(m.attachments||'')}"\n`;
@@ -2899,7 +3190,7 @@
         filename = `mileage_${key.replace('::','_')}_${mon.toISOString().slice(0,10)}.csv`;
       } else {
         csv = 'Date,Time,Method,To/From,Affiliation,Content,Time Spent\n';
-        const rows = (db.contacts[key] || []).filter(c => inWeek(c.date, mon));
+        const rows = (db.contacts[key] || []).filter(c => inPeriod(c.date, mon, freq));
         rows.forEach(c => {
           csv += `"${c.date}","${c.time||''}","${csvEsc(c.method)}","${csvEsc(c.toFrom)}","${csvEsc(c.affiliation||'')}","${csvEsc(c.content)}","${c.timeSpent||0}"\n`;
         });
@@ -3034,18 +3325,19 @@
       ttRenderMileage();
     }
 
-    function ttRenderMileage(eid, empName, mon) {
+    function ttRenderMileage(eid, empName, mon, freq) {
       const sess = getSession();
       if (!sess) return;
       eid     = eid     || sess.eid;
       empName = empName || sess.empName;
-      mon     = mon     || _currentWeekMon;
+      mon     = mon     || _currentPeriodStart;
+      freq    = freq    || _currentPeriodFreq;
 
       const db          = loadDB();
       const key         = `${eid}::${empName}`;
       const employer    = db.employers[eid] || {};
       const mileageRate = employer.mileageRate || 0.725;
-      const all         = ((db.mileage||{})[key] || []).filter(m => inWeek(m.date, mon));
+      const all         = ((db.mileage||{})[key] || []).filter(m => inPeriod(m.date, mon, freq));
       all.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       const tbody      = document.getElementById('ml-tbody');
@@ -3054,11 +3346,11 @@
       const totPayEl   = document.getElementById('ml-tot-pay');
       const totParkEl  = document.getElementById('ml-tot-park');
       const totAllEl   = document.getElementById('ml-tot-all');
-      if (lblEl) lblEl.textContent = weekLabel(mon);
+      if (lblEl) lblEl.textContent = periodLabel(mon, freq);
       if (!tbody) return;
 
       if (!all.length) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No mileage entries for this week</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-text-muted)">No mileage entries for this period</td></tr>`;
         [totMiEl, totPayEl, totParkEl, totAllEl].forEach(el => { if (el) el.textContent = el === totMiEl ? '0.00' : '$0.00'; });
         return;
       }
@@ -3110,6 +3402,11 @@
       if (nameEl) nameEl.textContent = sess.empName;
       if (orgEl)  orgEl.textContent  = sess.orgName;
 
+      /* Initialize period to this employee's effective pay frequency */
+      const ps = getEffectivePaySettings(sess.eid, sess.empName);
+      _currentPeriodFreq  = ps.frequency;
+      _currentPeriodStart = getPeriodStart(new Date(), ps.frequency, ps.startDate);
+
       setVal('me-date', todayStr());
       setVal('cr-date', todayStr());
       setVal('cr-time', nowTimeStr());
@@ -3155,6 +3452,7 @@
       ttEmployeeLogout,
       ttAddEmployee:    () => ttAddEmployee().catch(e =>    { showErr('er-emp-add-err', 'Unexpected error — please try again.'); console.error(e); }),
       ttRemoveEmployee, ttSetEmpRate,
+      ttShowEmpPayForm, ttHideEmpPayForm, ttSaveEmpPaySettings, ttApplyOrgPayToAll,
       ttUploadSpreadsheetTemplate, ttRemoveSpreadsheetTemplate,
       ttExportEmployerXLSX, ttFillSpreadsheetTemplate,
       ttClockIn, ttClockOut,
