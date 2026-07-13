@@ -348,6 +348,28 @@
       border-top: 1px solid #333; margin-top: .25rem; padding-top: .2rem;
       min-width: 160px; display: inline-block; font-size: .78rem; color: #666;
     }
+    .sig-typed {
+      font-family: 'Brush Script MT', 'Segoe Script', cursive, Georgia, serif;
+      font-size: 1.25rem; border-bottom: 1px solid #333; padding: 0 .4rem;
+      display: inline-block; min-width: 160px; line-height: 1.6;
+    }
+    .tab-badge {
+      display: inline-block; background: #dc2626; color: #fff;
+      border-radius: 10px; padding: .08em .45em; font-size: .68rem;
+      margin-left: .3rem; font-weight: 700; vertical-align: middle; line-height: 1.4;
+    }
+    .er-edit-row-btn {
+      background: none; border: none; cursor: pointer; padding: .2rem .35rem;
+      color: var(--color-accent); font-size: .78rem; border-radius: 4px;
+      line-height: 1;
+    }
+    .er-edit-row-btn:hover { background: var(--color-sage-bg); }
+    .er-del-row-btn {
+      background: none; border: none; cursor: pointer; padding: .2rem .35rem;
+      color: var(--color-crisis); font-size: .78rem; border-radius: 4px;
+      line-height: 1;
+    }
+    .er-del-row-btn:hover { background: #fef2f2; }
 
     /* ── Print styles ──────────────────────────────────────── */
     .print-only { display: none; }
@@ -371,7 +393,7 @@
       .print-preview { border: none; padding: 0; }
       .print-preview h3 { -webkit-print-color-adjust: exact; }
 
-      /* Only show the print preview panel — hide everything else */
+      /* Only show the print preview panel, hide everything else */
       .tt-view { display: none !important; }
       #view-employee-dash { display: block !important; }
       .dash-panel { display: none !important; }
@@ -670,7 +692,7 @@
         <div class="dash-tabs-wrap no-print">
           <div class="dash-tabs" role="tablist">
             <button class="dash-tab active" data-tab="er-employees" onclick="ttDashTab('er','er-employees')" role="tab"><i class="bi bi-people" aria-hidden="true"></i> Team Members</button>
-            <button class="dash-tab"        data-tab="er-reports"   onclick="ttDashTab('er','er-reports')"   role="tab"><i class="bi bi-bar-chart" aria-hidden="true"></i> View Reports</button>
+            <button class="dash-tab"        data-tab="er-reports"   onclick="ttDashTab('er','er-reports')"   role="tab"><i class="bi bi-bar-chart" aria-hidden="true"></i> View Reports<span id="er-reports-badge" class="tab-badge" style="display:none"></span></button>
             <button class="dash-tab"        data-tab="er-settings"  onclick="ttDashTab('er','er-settings')"  role="tab"><i class="bi bi-gear" aria-hidden="true"></i> Settings</button>
           </div>
         </div>
@@ -780,6 +802,135 @@
             </div>
           </div>
 
+          <!-- Pending approval requests for selected employee -->
+          <div id="er-rpt-approvals" style="display:none" class="tt-card">
+            <h3 style="margin:0 0 .6rem"><i class="bi bi-check-circle" aria-hidden="true"></i> Submitted Pay Period Approvals</h3>
+            <div id="er-rpt-approvals-list"></div>
+          </div>
+
+          <!-- Inline edit forms (hidden until needed) -->
+          <div id="er-edit-entry-form" style="display:none" class="tt-card">
+            <h3 style="margin:0 0 .75rem"><i class="bi bi-pencil-square"></i> Edit Time Entry</h3>
+            <input type="hidden" id="er-edit-entry-key">
+            <input type="hidden" id="er-edit-entry-id">
+            <div class="form-row">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-entry-task">Project / Task *</label>
+                <input id="er-edit-entry-task" type="text" class="tt-input">
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-entry-date">Date *</label>
+                <input id="er-edit-entry-date" type="date" class="tt-input">
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:.75rem">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-entry-type">Activity Type</label>
+                <select id="er-edit-entry-type" class="tt-select">
+                  <option>General Work</option><option>Meeting</option><option>Phone Call</option>
+                  <option>Event</option><option>Training</option><option>Document / Admin</option><option>Other</option>
+                </select>
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-entry-proposed">Proposed Hours</label>
+                <input id="er-edit-entry-proposed" type="number" class="tt-input" min="0" step="0.25">
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:.75rem">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-entry-completed">Completed Hours</label>
+                <input id="er-edit-entry-completed" type="number" class="tt-input" min="0" step="0.25">
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-entry-notes">Notes</label>
+                <input id="er-edit-entry-notes" type="text" class="tt-input">
+              </div>
+            </div>
+            <div style="display:flex;gap:.5rem;margin-top:.75rem">
+              <button class="btn btn-primary" onclick="ttSaveErEntry()">Save Changes</button>
+              <button class="btn btn-outline" onclick="ttCancelErEdit()">Cancel</button>
+            </div>
+          </div>
+
+          <div id="er-edit-contact-form" style="display:none" class="tt-card">
+            <h3 style="margin:0 0 .75rem"><i class="bi bi-pencil-square"></i> Edit Contact Record</h3>
+            <input type="hidden" id="er-edit-contact-key">
+            <input type="hidden" id="er-edit-contact-id">
+            <div class="form-row">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-contact-date">Date *</label>
+                <input id="er-edit-contact-date" type="date" class="tt-input">
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-contact-time">Time</label>
+                <input id="er-edit-contact-time" type="time" class="tt-input">
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:.75rem">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-contact-method">Method</label>
+                <select id="er-edit-contact-method" class="tt-select">
+                  <option>Phone</option><option>Email</option><option>In-Person</option>
+                  <option>Video Call</option><option>Text</option><option>Other</option>
+                </select>
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-contact-tofrom">To / From *</label>
+                <input id="er-edit-contact-tofrom" type="text" class="tt-input">
+              </div>
+            </div>
+            <div class="tt-fg" style="margin-top:.75rem">
+              <label for="er-edit-contact-affil">Contact's Name &amp; Affiliation</label>
+              <input id="er-edit-contact-affil" type="text" class="tt-input">
+            </div>
+            <div class="tt-fg">
+              <label for="er-edit-contact-content">Content / Purpose *</label>
+              <textarea id="er-edit-contact-content" class="tt-ta" rows="2"></textarea>
+            </div>
+            <div class="tt-fg">
+              <label for="er-edit-contact-time-spent">Time Spent (hours)</label>
+              <input id="er-edit-contact-time-spent" type="number" class="tt-input" min="0" step="0.08">
+            </div>
+            <div style="display:flex;gap:.5rem">
+              <button class="btn btn-primary" onclick="ttSaveErContact()">Save Changes</button>
+              <button class="btn btn-outline" onclick="ttCancelErEdit()">Cancel</button>
+            </div>
+          </div>
+
+          <div id="er-edit-mileage-form" style="display:none" class="tt-card">
+            <h3 style="margin:0 0 .75rem"><i class="bi bi-pencil-square"></i> Edit Mileage Entry</h3>
+            <input type="hidden" id="er-edit-mileage-key">
+            <input type="hidden" id="er-edit-mileage-id">
+            <div class="form-row">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-mileage-date">Date *</label>
+                <input id="er-edit-mileage-date" type="date" class="tt-input">
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-mileage-miles">Miles</label>
+                <input id="er-edit-mileage-miles" type="number" class="tt-input" min="0" step="0.1">
+              </div>
+            </div>
+            <div class="tt-fg" style="margin-top:.75rem">
+              <label for="er-edit-mileage-desc">Description / Trip *</label>
+              <input id="er-edit-mileage-desc" type="text" class="tt-input">
+            </div>
+            <div class="form-row">
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-mileage-parking">Parking ($)</label>
+                <input id="er-edit-mileage-parking" type="number" class="tt-input" min="0" step="0.01">
+              </div>
+              <div class="tt-fg" style="margin:0">
+                <label for="er-edit-mileage-notes">Notes / Attachments</label>
+                <input id="er-edit-mileage-notes" type="text" class="tt-input">
+              </div>
+            </div>
+            <div style="display:flex;gap:.5rem;margin-top:.75rem">
+              <button class="btn btn-primary" onclick="ttSaveErMileage()">Save Changes</button>
+              <button class="btn btn-outline" onclick="ttCancelErEdit()">Cancel</button>
+            </div>
+          </div>
+
           <div id="er-rpt-container">
             <div class="empty-st"><i class="bi bi-bar-chart"></i><p>Select a team member to view their report.</p></div>
           </div>
@@ -813,7 +964,7 @@
               <div class="tt-fg" style="margin:0">
                 <label for="er-set-paystart">Pay Period Start Date</label>
                 <input id="er-set-paystart" type="date" class="tt-input">
-                <p class="form-hint">First day of your first pay period — anchors weekly/biweekly cycles.</p>
+                <p class="form-hint">First day of your first pay period: anchors weekly/biweekly cycles.</p>
               </div>
             </div>
             <div class="tt-fg">
@@ -868,14 +1019,14 @@
                 {{PAY_RATE}} &nbsp; {{MILEAGE_RATE}}<br>
                 <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Timesheet Totals</div>
                 {{TOTAL_PROPOSED_HOURS}} &nbsp; {{TOTAL_COMPLETED_HOURS}} &nbsp; {{TOTAL_HOURS}} &nbsp; {{TOTAL_PAY}}<br>
-                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Time Entry Rows — replace 1 with 2, 3, 4… for each row</div>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Time Entry Rows. replace 1 with 2, 3, 4… for each row</div>
                 {{ROW1_TASK}} &nbsp; {{ROW1_DATE}} &nbsp; {{ROW1_TYPE}}<br>
                 {{ROW1_PROPOSED}} &nbsp; {{ROW1_COMPLETED}} &nbsp; {{ROW1_PAY}} &nbsp; {{ROW1_NOTES}}<br>
-                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Contact Record Rows — replace 1 with 2, 3…</div>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Contact Record Rows. replace 1 with 2, 3…</div>
                 {{CR_ROW1_DATE}} &nbsp; {{CR_ROW1_TIME}} &nbsp; {{CR_ROW1_METHOD}} &nbsp; {{CR_ROW1_TOFROM}}<br>
                 {{CR_ROW1_AFFILIATION}} &nbsp; {{CR_ROW1_CONTENT}} &nbsp; {{CR_ROW1_TIMESPENT}}<br>
                 {{TOTAL_CONTACT_TIME}}<br>
-                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Mileage Rows — replace 1 with 2, 3…</div>
+                <div style="font-family:inherit;font-weight:600;font-size:.72rem;text-transform:uppercase;color:var(--color-text-muted);letter-spacing:.06em;margin-top:.5rem">Mileage Rows. replace 1 with 2, 3…</div>
                 {{ML_ROW1_DATE}} &nbsp; {{ML_ROW1_MILES}} &nbsp; {{ML_ROW1_DESCRIPTION}}<br>
                 {{ML_ROW1_MILEAGE_PAY}} &nbsp; {{ML_ROW1_PARKING}} &nbsp; {{ML_ROW1_NOTES}}<br>
                 {{TOTAL_MILES}} &nbsp; {{TOTAL_MILEAGE_PAY}} &nbsp; {{TOTAL_PARKING}} &nbsp; {{TOTAL_MILEAGE_ALL}}
@@ -1249,12 +1400,46 @@
               </p>
             </div>
             <div style="display:flex;gap:.65rem;flex-wrap:wrap">
-              <button class="btn btn-outline btn-sm" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev Week</button>
+              <button class="btn btn-outline btn-sm" onclick="ttWeekShift(-1)"><i class="bi bi-chevron-left"></i> Prev</button>
               <span class="week-lbl" id="ee-print-week-lbl" style="align-self:center;font-size:var(--font-size-sm)"></span>
-              <button class="btn btn-outline btn-sm" onclick="ttWeekShift(1)">Next Week <i class="bi bi-chevron-right"></i></button>
+              <button class="btn btn-outline btn-sm" onclick="ttWeekShift(1)">Next <i class="bi bi-chevron-right"></i></button>
               <button class="btn btn-primary" onclick="ttPrint()"><i class="bi bi-printer" aria-hidden="true"></i> Print</button>
             </div>
           </div>
+          <!-- Signature pad -->
+          <div class="tt-card no-print">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.75rem;margin-bottom:.65rem">
+              <div>
+                <h3 style="margin:0 0 .2rem"><i class="bi bi-pen" aria-hidden="true"></i> Your Signature</h3>
+                <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin:0">Draw below, or click <strong>Use My Name</strong>. Saved signature appears on your form.</p>
+              </div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                <button class="btn btn-sm btn-outline" onclick="ttClearSigCanvas()"><i class="bi bi-eraser"></i> Clear</button>
+                <button class="btn btn-sm btn-outline" onclick="ttUseNameSignature()"><i class="bi bi-type"></i> Use My Name</button>
+                <button class="btn btn-sm btn-primary" onclick="ttSaveSig()">Save to Form</button>
+              </div>
+            </div>
+            <canvas id="ee-sig-canvas" style="border:1px solid var(--color-border);border-radius:var(--radius);width:100%;height:90px;cursor:crosshair;touch-action:none;background:#fff;display:block"></canvas>
+            <div id="ee-sig-saved-row" style="display:none;margin-top:.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+              <span style="font-size:var(--font-size-sm);color:var(--color-text-muted)">Saved signature:</span>
+              <div id="ee-sig-preview-content"></div>
+              <button class="btn btn-sm btn-outline" onclick="ttClearSig()" style="margin-left:auto">Remove</button>
+            </div>
+          </div>
+
+          <!-- Submit for approval -->
+          <div class="tt-card no-print">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem">
+              <div>
+                <h3 style="margin:0 0 .25rem"><i class="bi bi-send" aria-hidden="true"></i> Submit for Approval</h3>
+                <div id="ee-approval-status" style="font-size:var(--font-size-sm);color:var(--color-text-muted)">Ready to submit this pay period for your employer to review.</div>
+              </div>
+              <button class="btn btn-primary btn-sm" id="ee-approval-btn" onclick="ttSubmitApproval()">
+                <i class="bi bi-check-circle" aria-hidden="true"></i> Submit This Period
+              </button>
+            </div>
+          </div>
+
           <div id="print-preview-area"></div>
         </div>
 
@@ -1392,7 +1577,7 @@
       );
       return btoa(String.fromCharCode(...new Uint8Array(bits)));
     }
-    /* Legacy btoa hash — only used to migrate old accounts on first login */
+    /* Legacy btoa hash, only used to migrate old accounts on first login */
     function legacyHash(pass) { return btoa(unescape(encodeURIComponent(pass + ':tc_tt_salt'))); }
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -1589,7 +1774,7 @@
         /* Modern PBKDF2 path */
         valid = (await hashPassword(pass, emp.salt)) === emp.passHash;
       } else {
-        /* Legacy btoa — migrate to PBKDF2 automatically on successful login */
+        /* Legacy btoa, migrate to PBKDF2 automatically on successful login */
         valid = legacyHash(pass) === emp.passHash;
         if (valid) {
           emp.salt     = generateSalt();
@@ -1652,7 +1837,7 @@
           return;
         }
       } else {
-        /* Legacy account — store the provided email */
+        /* Legacy account, store the provided email */
         emp.email = loginEmail;
         saveDB(db);
       }
@@ -1662,7 +1847,7 @@
         /* Modern PBKDF2 path */
         valid = (await hashPassword(pass, emp.salt)) === emp.passHash;
       } else if (emp.pin !== undefined) {
-        /* Legacy plain-text PIN — migrate to PBKDF2 on success */
+        /* Legacy plain-text PIN, migrate to PBKDF2 on success */
         valid = (!emp.pin || emp.pin === pass);
         if (valid) {
           emp.salt     = generateSalt();
@@ -1829,6 +2014,325 @@
       ttRenderEmpList();
     }
 
+    /* ── Employer: Edit/Delete entries in View Reports ──── */
+    function ttCancelErEdit() {
+      ['er-edit-entry-form','er-edit-contact-form','er-edit-mileage-form'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+    }
+
+    function ttErEditEntry(key, entryId) {
+      const db    = loadDB();
+      const entry = (db.entries[key] || []).find(e => e.id === entryId);
+      if (!entry) return;
+      setVal('er-edit-entry-key',       key);
+      setVal('er-edit-entry-id',        entryId);
+      setVal('er-edit-entry-task',      entry.task || '');
+      setVal('er-edit-entry-date',      entry.date || '');
+      setVal('er-edit-entry-type',      entry.type || 'General Work');
+      setVal('er-edit-entry-proposed',  entry.proposedHours  || '');
+      setVal('er-edit-entry-completed', entry.completedHours || '');
+      setVal('er-edit-entry-notes',     entry.notes || '');
+      ttCancelErEdit();
+      const form = document.getElementById('er-edit-entry-form');
+      if (form) { form.style.display = ''; form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    }
+    function ttSaveErEntry() {
+      const db    = loadDB();
+      const key   = val('er-edit-entry-key');
+      const id    = val('er-edit-entry-id');
+      const entry = (db.entries[key] || []).find(e => e.id === id);
+      if (!entry) return;
+      entry.task           = val('er-edit-entry-task').trim();
+      entry.date           = val('er-edit-entry-date');
+      entry.type           = val('er-edit-entry-type');
+      entry.proposedHours  = parseFloat(val('er-edit-entry-proposed'))  || 0;
+      entry.completedHours = parseFloat(val('er-edit-entry-completed')) || 0;
+      entry.notes          = val('er-edit-entry-notes').trim();
+      saveDB(db);
+      ttCancelErEdit();
+      ttRenderEmployerReport();
+    }
+    function ttErDeleteEntry(key, entryId) {
+      if (!confirm('Delete this time entry?')) return;
+      const db = loadDB();
+      db.entries[key] = (db.entries[key] || []).filter(e => e.id !== entryId);
+      saveDB(db);
+      ttRenderEmployerReport();
+    }
+
+    function ttErEditContact(key, contactId) {
+      const db = loadDB();
+      const c  = (db.contacts[key] || []).find(c => c.id === contactId);
+      if (!c) return;
+      setVal('er-edit-contact-key',        key);
+      setVal('er-edit-contact-id',         contactId);
+      setVal('er-edit-contact-date',       c.date || '');
+      setVal('er-edit-contact-time',       c.time || '');
+      setVal('er-edit-contact-method',     c.method || 'Phone');
+      setVal('er-edit-contact-tofrom',     c.toFrom || '');
+      setVal('er-edit-contact-affil',      c.affiliation || '');
+      setVal('er-edit-contact-content',    c.content || '');
+      setVal('er-edit-contact-time-spent', c.timeSpent || '');
+      ttCancelErEdit();
+      const form = document.getElementById('er-edit-contact-form');
+      if (form) { form.style.display = ''; form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    }
+    function ttSaveErContact() {
+      const db  = loadDB();
+      const key = val('er-edit-contact-key');
+      const id  = val('er-edit-contact-id');
+      const c   = (db.contacts[key] || []).find(c => c.id === id);
+      if (!c) return;
+      c.date        = val('er-edit-contact-date');
+      c.time        = val('er-edit-contact-time');
+      c.method      = val('er-edit-contact-method');
+      c.toFrom      = val('er-edit-contact-tofrom').trim();
+      c.affiliation = val('er-edit-contact-affil').trim();
+      c.content     = val('er-edit-contact-content').trim();
+      c.timeSpent   = parseFloat(val('er-edit-contact-time-spent')) || 0;
+      saveDB(db);
+      ttCancelErEdit();
+      ttRenderEmployerReport();
+    }
+    function ttErDeleteContact(key, contactId) {
+      if (!confirm('Delete this contact record?')) return;
+      const db = loadDB();
+      db.contacts[key] = (db.contacts[key] || []).filter(c => c.id !== contactId);
+      saveDB(db);
+      ttRenderEmployerReport();
+    }
+
+    function ttErEditMileage(key, mileageId) {
+      const db = loadDB();
+      const m  = ((db.mileage||{})[key] || []).find(m => m.id === mileageId);
+      if (!m) return;
+      setVal('er-edit-mileage-key',     key);
+      setVal('er-edit-mileage-id',      mileageId);
+      setVal('er-edit-mileage-date',    m.date || '');
+      setVal('er-edit-mileage-miles',   m.miles || '');
+      setVal('er-edit-mileage-desc',    m.description || '');
+      setVal('er-edit-mileage-parking', m.parking || '');
+      setVal('er-edit-mileage-notes',   m.attachments || '');
+      ttCancelErEdit();
+      const form = document.getElementById('er-edit-mileage-form');
+      if (form) { form.style.display = ''; form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    }
+    function ttSaveErMileage() {
+      const db  = loadDB();
+      const key = val('er-edit-mileage-key');
+      const id  = val('er-edit-mileage-id');
+      if (!db.mileage) db.mileage = {};
+      const m = (db.mileage[key] || []).find(m => m.id === id);
+      if (!m) return;
+      m.date        = val('er-edit-mileage-date');
+      m.miles       = parseFloat(val('er-edit-mileage-miles'))   || 0;
+      m.description = val('er-edit-mileage-desc').trim();
+      m.parking     = parseFloat(val('er-edit-mileage-parking')) || 0;
+      m.attachments = val('er-edit-mileage-notes').trim();
+      saveDB(db);
+      ttCancelErEdit();
+      ttRenderEmployerReport();
+    }
+    function ttErDeleteMileage(key, mileageId) {
+      if (!confirm('Delete this mileage entry?')) return;
+      const db = loadDB();
+      if (db.mileage && db.mileage[key]) {
+        db.mileage[key] = db.mileage[key].filter(m => m.id !== mileageId);
+      }
+      saveDB(db);
+      ttRenderEmployerReport();
+    }
+
+    /* ── Approval system ─────────────────────────────────── */
+    function ttSubmitApproval() {
+      const sess = getSession();
+      if (!sess || sess.role !== 'employee') return;
+      const periodKey = _currentPeriodStart.toISOString().slice(0, 10);
+      const aKey      = `${sess.eid}::${sess.empName}::${periodKey}`;
+      const db        = loadDB();
+      if (!db.approvals) db.approvals = {};
+      const existing  = db.approvals[aKey];
+      if (existing && existing.status === 'approved') {
+        alert('This period has already been approved.'); return;
+      }
+      const label = periodLabel(_currentPeriodStart, _currentPeriodFreq);
+      db.approvals[aKey] = {
+        eid: sess.eid, empName: sess.empName,
+        periodLabel: label, periodStartStr: periodKey,
+        submittedAt: new Date().toISOString(),
+        status: 'pending'
+      };
+      saveDB(db);
+      ttUpdateApprovalStatus();
+    }
+
+    function ttApprovePayPeriod(aKey) {
+      const db = loadDB();
+      if (!db.approvals || !db.approvals[aKey]) return;
+      db.approvals[aKey].status     = 'approved';
+      db.approvals[aKey].reviewedAt = new Date().toISOString();
+      saveDB(db);
+      ttUpdateApprovalBadge();
+      ttRenderEmployerReport();
+    }
+
+    function ttRejectPayPeriod(aKey) {
+      const db = loadDB();
+      if (!db.approvals || !db.approvals[aKey]) return;
+      db.approvals[aKey].status     = 'rejected';
+      db.approvals[aKey].reviewedAt = new Date().toISOString();
+      saveDB(db);
+      ttUpdateApprovalBadge();
+      ttRenderEmployerReport();
+    }
+
+    function ttUpdateApprovalStatus() {
+      const sess      = getSession();
+      if (!sess || sess.role !== 'employee') return;
+      const periodKey = _currentPeriodStart.toISOString().slice(0, 10);
+      const aKey      = `${sess.eid}::${sess.empName}::${periodKey}`;
+      const db        = loadDB();
+      const approval  = (db.approvals||{})[aKey];
+      const statusEl  = document.getElementById('ee-approval-status');
+      const btnEl     = document.getElementById('ee-approval-btn');
+      if (!statusEl || !btnEl) return;
+      const label = periodLabel(_currentPeriodStart, _currentPeriodFreq);
+      if (!approval) {
+        statusEl.textContent = `Submit "${label}" for your employer to review and approve.`;
+        btnEl.disabled = false;
+        btnEl.innerHTML = '<i class="bi bi-send"></i> Submit This Period';
+      } else if (approval.status === 'approved') {
+        statusEl.innerHTML = `<span style="color:var(--color-accent);font-weight:600">✓ Approved</span> — ${esc(label)} approved by your employer.`;
+        btnEl.disabled = true;
+        btnEl.innerHTML = '<i class="bi bi-check2-circle"></i> Approved';
+      } else if (approval.status === 'rejected') {
+        statusEl.innerHTML = `<span style="color:var(--color-crisis);font-weight:600">Revision Requested</span> — Your employer asked for changes. Update your entries and resubmit.`;
+        btnEl.disabled = false;
+        btnEl.innerHTML = '<i class="bi bi-arrow-repeat"></i> Resubmit';
+      } else {
+        statusEl.innerHTML = `<span style="color:#b45309;font-weight:600">⏳ Pending</span> — Submitted ${new Date(approval.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}. Awaiting employer review.`;
+        btnEl.disabled = false;
+        btnEl.innerHTML = '<i class="bi bi-arrow-repeat"></i> Resubmit';
+      }
+    }
+
+    /* ── Signature pad ───────────────────────────────────── */
+    let _sigDrawing = false;
+    let _sigCanvas  = null;
+    let _sigCtx     = null;
+    let _sigReady   = false;
+
+    function ttInitSigPad() {
+      const canvas = document.getElementById('ee-sig-canvas');
+      if (!canvas || _sigReady) return;
+      _sigCanvas = canvas;
+      _sigCtx    = canvas.getContext('2d');
+      /* Size canvas pixels to display pixels */
+      const dpr  = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0) return;            // not visible yet
+      canvas.width  = rect.width  * dpr;
+      canvas.height = rect.height * dpr;
+      _sigCtx.scale(dpr, dpr);
+      _sigCtx.strokeStyle = '#1a1a1a';
+      _sigCtx.lineWidth   = 2;
+      _sigCtx.lineCap     = 'round';
+      _sigCtx.lineJoin    = 'round';
+      _sigReady = true;
+      canvas.addEventListener('mousedown',  _sigStart);
+      canvas.addEventListener('mousemove',  _sigMove);
+      canvas.addEventListener('mouseup',    _sigEnd);
+      canvas.addEventListener('mouseleave', _sigEnd);
+      canvas.addEventListener('touchstart', e => { e.preventDefault(); _sigStart(e.touches[0]); }, { passive: false });
+      canvas.addEventListener('touchmove',  e => { e.preventDefault(); _sigMove(e.touches[0]); },  { passive: false });
+      canvas.addEventListener('touchend',   _sigEnd);
+      /* Restore saved drawn signature onto canvas if present */
+      const sess = getSession();
+      if (sess) {
+        const db  = loadDB();
+        const sig = (db.signatures||{})[`${sess.eid}::${sess.empName}`];
+        if (sig && sig.type === 'drawn') {
+          const img = new Image();
+          img.onload = () => _sigCtx.drawImage(img, 0, 0, rect.width, rect.height);
+          img.src = sig.data;
+        }
+      }
+    }
+    function _sigPos(e) {
+      const rect = _sigCanvas.getBoundingClientRect();
+      return { x: (e.clientX !== undefined ? e.clientX : e.pageX) - rect.left,
+               y: (e.clientY !== undefined ? e.clientY : e.pageY) - rect.top };
+    }
+    function _sigStart(e) { _sigDrawing = true; const p = _sigPos(e); _sigCtx.beginPath(); _sigCtx.moveTo(p.x, p.y); }
+    function _sigMove(e)  { if (!_sigDrawing) return; const p = _sigPos(e); _sigCtx.lineTo(p.x, p.y); _sigCtx.stroke(); }
+    function _sigEnd()    { _sigDrawing = false; }
+
+    function ttClearSigCanvas() {
+      if (_sigCtx && _sigCanvas) _sigCtx.clearRect(0, 0, _sigCanvas.width, _sigCanvas.height);
+    }
+    function ttSaveSig() {
+      if (!_sigCanvas) { alert('Signature pad not ready — try switching to the Print tab first.'); return; }
+      const sess = getSession();
+      if (!sess) return;
+      const data = _sigCanvas.toDataURL('image/png');
+      const db   = loadDB();
+      if (!db.signatures) db.signatures = {};
+      db.signatures[`${sess.eid}::${sess.empName}`] = { type: 'drawn', data, updatedAt: new Date().toISOString() };
+      saveDB(db);
+      ttUpdateSigPreview();
+      ttBuildPrint();
+    }
+    function ttUseNameSignature() {
+      const sess = getSession();
+      if (!sess) return;
+      const db   = loadDB();
+      if (!db.signatures) db.signatures = {};
+      db.signatures[`${sess.eid}::${sess.empName}`] = {
+        type: 'typed', data: sess.empName, updatedAt: new Date().toISOString()
+      };
+      saveDB(db);
+      /* Also render the name on the canvas so the user sees it */
+      if (_sigCtx && _sigCanvas) {
+        const dpr  = window.devicePixelRatio || 1;
+        const rect = _sigCanvas.getBoundingClientRect();
+        _sigCtx.clearRect(0, 0, _sigCanvas.width, _sigCanvas.height);
+        _sigCtx.font = `${Math.round(rect.height * 0.52)}px 'Brush Script MT', cursive, Georgia, serif`;
+        _sigCtx.fillStyle = '#1a1a1a';
+        _sigCtx.fillText(sess.empName, 12, Math.round(rect.height * 0.7));
+      }
+      ttUpdateSigPreview();
+      ttBuildPrint();
+    }
+    function ttClearSig() {
+      const sess = getSession();
+      if (!sess) return;
+      const db = loadDB();
+      if (!db.signatures) return;
+      delete db.signatures[`${sess.eid}::${sess.empName}`];
+      saveDB(db);
+      ttClearSigCanvas();
+      ttUpdateSigPreview();
+      ttBuildPrint();
+    }
+    function ttUpdateSigPreview() {
+      const sess      = getSession();
+      if (!sess) return;
+      const db        = loadDB();
+      const sig       = (db.signatures||{})[`${sess.eid}::${sess.empName}`];
+      const rowEl     = document.getElementById('ee-sig-saved-row');
+      const contentEl = document.getElementById('ee-sig-preview-content');
+      if (!rowEl || !contentEl) return;
+      if (!sig) { rowEl.style.display = 'none'; return; }
+      rowEl.style.display = 'flex';
+      if (sig.type === 'drawn') {
+        contentEl.innerHTML = `<img src="${sig.data}" style="max-height:44px;border:1px solid var(--color-border);border-radius:4px;background:#fff">`;
+      } else {
+        contentEl.innerHTML = `<span class="sig-typed">${esc(sig.data)}</span>`;
+      }
+    }
+
     /* ── Clock ──────────────────────────────────────────── */
     let _timerInterval = null;
     let _clockStart    = null;
@@ -1937,7 +2441,7 @@
       const db = loadDB();
       if (db.clock) {
         e.preventDefault();
-        return (e.returnValue = 'You are currently clocked in. Your session is saved — the timer will resume when you return.');
+        return (e.returnValue = 'You are currently clocked in. Your session is saved, the timer will resume when you return.');
       }
     });
 
@@ -2230,6 +2734,19 @@
 
       ttRenderEmpList();
       ttLoadSettings();
+      ttUpdateApprovalBadge();
+    }
+
+    function ttUpdateApprovalBadge() {
+      const sess = getSession();
+      if (!sess) return;
+      const db = loadDB();
+      const pending = Object.values(db.approvals||{}).filter(a => a.eid === sess.eid && a.status === 'pending').length;
+      const badge = document.getElementById('er-reports-badge');
+      if (badge) {
+        badge.textContent = pending || '';
+        badge.style.display = pending ? '' : 'none';
+      }
     }
 
     function ttRenderEmpList() {
@@ -2317,6 +2834,33 @@
       const contacts = (db.contacts[key] || []).filter(c => inPeriod(c.date, mon, freq)).sort(sort);
       const mileage  = ((db.mileage||{})[key] || []).filter(m => inPeriod(m.date, mon, freq)).sort(sort);
 
+      /* Pending approvals for this employee */
+      const approvals = Object.values(db.approvals||{}).filter(a => a.eid === sess.eid && a.empName === empName);
+      const approvalsEl = document.getElementById('er-rpt-approvals');
+      const approvalsListEl = document.getElementById('er-rpt-approvals-list');
+      if (approvalsEl && approvalsListEl && approvals.length) {
+        approvalsEl.style.display = '';
+        approvalsListEl.innerHTML = approvals.sort((a,b) => new Date(b.submittedAt)-new Date(a.submittedAt)).map(a => {
+          const aKey = `${a.eid}::${a.empName}::${a.periodStartStr}`;
+          const statusColor = a.status === 'approved' ? 'var(--color-accent)' : a.status === 'rejected' ? 'var(--color-crisis)' : '#b45309';
+          const statusLabel = a.status === 'approved' ? '✓ Approved' : a.status === 'rejected' ? '✗ Revision Requested' : '⏳ Pending';
+          return `<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;padding:.5rem 0;border-bottom:1px solid var(--color-border)">
+            <div>
+              <strong>${esc(a.periodLabel)}</strong>
+              <span style="font-size:var(--font-size-sm);color:${statusColor};margin-left:.75rem;font-weight:600">${statusLabel}</span>
+              <span style="font-size:var(--font-size-sm);color:var(--color-text-muted);display:block">Submitted ${new Date(a.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span>
+            </div>
+            ${a.status === 'pending' ? `<div style="display:flex;gap:.4rem">
+              <button class="btn btn-sm btn-primary" onclick="ttApprovePayPeriod('${esc(aKey)}')"><i class="bi bi-check2"></i> Approve</button>
+              <button class="btn btn-sm btn-outline" style="color:var(--color-crisis);border-color:var(--color-crisis)" onclick="ttRejectPayPeriod('${esc(aKey)}')">Request Revision</button>
+            </div>` : ''}
+          </div>`;
+        }).join('');
+      } else if (approvalsEl) {
+        approvalsEl.style.display = 'none';
+      }
+      ttUpdateApprovalBadge();
+
       let totP = 0, totC = 0;
       const tsRows = entries.length
         ? entries.map(e => {
@@ -2331,9 +2875,13 @@
               <td style="text-align:center">$${rate.toFixed(2)}</td>
               <td style="text-align:center;font-weight:600">$${pay.toFixed(2)}</td>
               <td><span class="badge ${typeBadge(e.type)}">${esc(e.type)}</span>${e.notes?`<span style="display:block;font-size:.72rem;color:var(--color-text-muted)">${esc(e.notes)}</span>`:''}</td>
+              <td class="no-print" style="white-space:nowrap">
+                <button class="er-edit-row-btn" onclick="ttErEditEntry('${esc(key)}','${esc(e.id)}')" title="Edit"><i class="bi bi-pencil"></i></button>
+                <button class="er-del-row-btn" onclick="ttErDeleteEntry('${esc(key)}','${esc(e.id)}')" title="Delete"><i class="bi bi-trash"></i></button>
+              </td>
             </tr>`;
           }).join('')
-        : '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No entries this period</td></tr>';
+        : '<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No entries this period</td></tr>';
 
       let totTime = 0;
       const crRows = contacts.length
@@ -2347,9 +2895,13 @@
               <td>${esc(c.affiliation||'')}</td>
               <td>${esc(c.content)}</td>
               <td style="text-align:center">${(c.timeSpent||0).toFixed(2)}</td>
+              <td class="no-print" style="white-space:nowrap">
+                <button class="er-edit-row-btn" onclick="ttErEditContact('${esc(key)}','${esc(c.id)}')" title="Edit"><i class="bi bi-pencil"></i></button>
+                <button class="er-del-row-btn" onclick="ttErDeleteContact('${esc(key)}','${esc(c.id)}')" title="Delete"><i class="bi bi-trash"></i></button>
+              </td>
             </tr>`;
           }).join('')
-        : '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No contact records this period</td></tr>';
+        : '<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No contact records this period</td></tr>';
 
       if (container) container.innerHTML = `
         <div class="tt-card">
@@ -2363,9 +2915,9 @@
           </div>
           <div style="overflow-x:auto">
             <table class="ts-table">
-              <thead><tr><th>Project / Task</th><th>Date</th><th>Proposed Hrs</th><th>Completed Hrs</th><th>Pay Rate</th><th>Total</th><th>Notes / Type</th></tr></thead>
+              <thead><tr><th>Project / Task</th><th>Date</th><th>Proposed Hrs</th><th>Completed Hrs</th><th>Pay Rate</th><th>Total</th><th>Notes / Type</th><th class="no-print"></th></tr></thead>
               <tbody>${tsRows}</tbody>
-              <tfoot><tr class="tr-total"><td colspan="2"><strong>Totals</strong></td><td style="text-align:center">${totP.toFixed(2)}</td><td style="text-align:center">${totC.toFixed(2)}</td><td></td><td style="text-align:center">$${(totC*rate).toFixed(2)}</td><td></td></tr></tfoot>
+              <tfoot><tr class="tr-total"><td colspan="2"><strong>Totals</strong></td><td style="text-align:center">${totP.toFixed(2)}</td><td style="text-align:center">${totC.toFixed(2)}</td><td></td><td style="text-align:center">$${(totC*rate).toFixed(2)}</td><td></td><td class="no-print"></td></tr></tfoot>
             </table>
           </div>
         </div>
@@ -2373,9 +2925,9 @@
           <h2><i class="bi bi-card-list"></i> ${esc(empName)} — Contact Record</h2>
           <div style="overflow-x:auto">
             <table class="cr-table">
-              <thead><tr><th>Date</th><th>Time</th><th>Method</th><th>To/From</th><th>Name &amp; Affiliation</th><th>Content / Purpose</th><th>Time Spent</th></tr></thead>
+              <thead><tr><th>Date</th><th>Time</th><th>Method</th><th>To/From</th><th>Name &amp; Affiliation</th><th>Content / Purpose</th><th>Time Spent</th><th class="no-print"></th></tr></thead>
               <tbody>${crRows}</tbody>
-              <tfoot><tr style="background:var(--color-sage-bg);font-weight:600"><td colspan="6">Total Time Spent</td><td style="text-align:center">${totTime.toFixed(2)}</td></tr></tfoot>
+              <tfoot><tr style="background:var(--color-sage-bg);font-weight:600"><td colspan="6">Total Time Spent</td><td style="text-align:center">${totTime.toFixed(2)}</td><td class="no-print"></td></tr></tfoot>
             </table>
           </div>
         </div>
@@ -2394,15 +2946,19 @@
               <td style="text-align:center;font-weight:600">$${mp.toFixed(2)}</td>
               <td style="text-align:center">$${(m.parking||0).toFixed(2)}</td>
               <td>${esc(m.attachments||'')}</td>
+              <td class="no-print" style="white-space:nowrap">
+                <button class="er-edit-row-btn" onclick="ttErEditMileage('${esc(key)}','${esc(m.id)}')" title="Edit"><i class="bi bi-pencil"></i></button>
+                <button class="er-del-row-btn" onclick="ttErDeleteMileage('${esc(key)}','${esc(m.id)}')" title="Delete"><i class="bi bi-trash"></i></button>
+              </td>
             </tr>`;
           }).join('');
           return `<div class="tt-card">
             <h2><i class="bi bi-car-front"></i> ${esc(empName)} — Mileage</h2>
             <div style="overflow-x:auto">
               <table class="ml-table">
-                <thead><tr><th>Date</th><th>Miles</th><th>Rate/Mile</th><th>Description / Trip</th><th>Mileage $</th><th>Parking</th><th>Notes</th></tr></thead>
+                <thead><tr><th>Date</th><th>Miles</th><th>Rate/Mile</th><th>Description / Trip</th><th>Mileage $</th><th>Parking</th><th>Notes</th><th class="no-print"></th></tr></thead>
                 <tbody>${mlRows}</tbody>
-                <tfoot><tr class="tr-ml-total"><td><strong>Totals</strong></td><td style="text-align:center">${totMi.toFixed(1)}</td><td></td><td></td><td style="text-align:center">$${totMiPay.toFixed(2)}</td><td style="text-align:center">$${totPark.toFixed(2)}</td><td style="text-align:right;font-weight:700">Total: $${(totMiPay+totPark).toFixed(2)}</td></tr></tfoot>
+                <tfoot><tr class="tr-ml-total"><td><strong>Totals</strong></td><td style="text-align:center">${totMi.toFixed(1)}</td><td></td><td></td><td style="text-align:center">$${totMiPay.toFixed(2)}</td><td style="text-align:center">$${totPark.toFixed(2)}</td><td style="text-align:right;font-weight:700">Total: $${(totMiPay+totPark).toFixed(2)}</td><td class="no-print"></td></tr></tfoot>
               </table>
             </div>
           </div>`;
@@ -2768,10 +3324,26 @@
 
       const lbl  = document.getElementById('ee-print-week-lbl');
       if (lbl) lbl.textContent = d.period;
+
+      /* Init signature pad (needs tab visible first) */
+      setTimeout(ttInitSigPad, 80);
+      ttUpdateSigPreview();
+      ttUpdateApprovalStatus();
     }
 
     /* ── Template: YAB Stipend (configurable sections) ── */
     function _tplYAB(sess, d, includeContacts, includeMileage) {
+      /* Signature + today's date */
+      const sig     = (d.db.signatures||{})[`${sess.eid}::${sess.empName}`];
+      const todayFmt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      let sigHtml;
+      if (sig && sig.type === 'drawn') {
+        sigHtml = `<img src="${sig.data}" style="height:38px;vertical-align:bottom;border-bottom:1px solid #666;min-width:160px">`;
+      } else if (sig && sig.type === 'typed') {
+        sigHtml = `<span class="sig-typed">${esc(sig.data)}</span>`;
+      } else {
+        sigHtml = '<span class="sig-line" style="min-width:200px">&nbsp;</span>';
+      }
       let totP = 0, totC = 0;
       const tsRows = d.entries.length
         ? d.entries.map(e => {
@@ -2818,9 +3390,9 @@
               </tr></tfoot>
             </table>
           </div>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap">
-            <div><strong>Employee Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
-            <div><strong>Date:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end">
+            <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
+            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
           </div>`;
       }
 
@@ -2868,9 +3440,9 @@
               </tr></tfoot>
             </table>
           </div>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap">
-            <div><strong>Employee Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
-            <div><strong>Date:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end">
+            <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
+            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
           </div>`;
       }
 
@@ -2901,9 +3473,9 @@
               </tr></tfoot>
             </table>
           </div>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem">
-            <div><strong>Employee Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
-            <div><strong>Date:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:flex-end">
+            <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
+            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
           </div>
           ${contactSection}
           ${mileageSection}
@@ -2912,6 +3484,16 @@
 
     /* ── Template: Standard Weekly Timesheet ──────────── */
     function _tplStandard(sess, d) {
+      const sig2      = (d.db.signatures||{})[`${sess.eid}::${sess.empName}`];
+      const todayFmt2 = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      let sigHtml2;
+      if (sig2 && sig2.type === 'drawn') {
+        sigHtml2 = `<img src="${sig2.data}" style="height:38px;vertical-align:bottom;border-bottom:1px solid #666;min-width:160px">`;
+      } else if (sig2 && sig2.type === 'typed') {
+        sigHtml2 = `<span class="sig-typed">${esc(sig2.data)}</span>`;
+      } else {
+        sigHtml2 = '<span class="sig-line" style="min-width:200px">&nbsp;</span>';
+      }
       let totH = 0;
       const rows = d.entries.length
         ? d.entries.map(e => {
@@ -2953,10 +3535,10 @@
               </tr></tfoot>
             </table>
           </div>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap">
-            <div><strong>Employee Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
-            <div><strong>Supervisor Signature:</strong> <span class="sig-line" style="min-width:200px">&nbsp;</span></div>
-            <div><strong>Date:</strong> <span class="sig-line" style="min-width:120px">&nbsp;</span></div>
+          <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end">
+            <div><strong>Employee Signature:</strong><br>${sigHtml2}</div>
+            <div><strong>Supervisor Signature:</strong><br><span class="sig-line" style="min-width:200px">&nbsp;</span></div>
+            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt2}</span></div>
           </div>
         </div>`;
     }
@@ -3453,6 +4035,12 @@
       ttAddEmployee:    () => ttAddEmployee().catch(e =>    { showErr('er-emp-add-err', 'Unexpected error — please try again.'); console.error(e); }),
       ttRemoveEmployee, ttSetEmpRate,
       ttShowEmpPayForm, ttHideEmpPayForm, ttSaveEmpPaySettings, ttApplyOrgPayToAll,
+      ttCancelErEdit,
+      ttErEditEntry, ttSaveErEntry, ttErDeleteEntry,
+      ttErEditContact, ttSaveErContact, ttErDeleteContact,
+      ttErEditMileage, ttSaveErMileage, ttErDeleteMileage,
+      ttSubmitApproval, ttApprovePayPeriod, ttRejectPayPeriod,
+      ttClearSigCanvas, ttSaveSig, ttUseNameSignature, ttClearSig,
       ttUploadSpreadsheetTemplate, ttRemoveSpreadsheetTemplate,
       ttExportEmployerXLSX, ttFillSpreadsheetTemplate,
       ttClockIn, ttClockOut,
