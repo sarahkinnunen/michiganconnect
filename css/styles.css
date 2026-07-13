@@ -1891,6 +1891,9 @@ body { top: 0 !important; position: static !important; }
   outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }
+@media print {
+  .quick-exit-btn { display: none !important; }
+}
 
 /* =========================================================
    How-to Flow

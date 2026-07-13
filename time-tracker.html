@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Time tracking portal for employers and team members — clock in/out, log meetings and calls, and view weekly timesheets.">
+  <meta name="description" content="Time tracking portal for employers and team members: clock in/out, log meetings and calls, and view weekly timesheets.">
   <title>Time Tracking Portal | The Connect</title>
 
   <link rel="stylesheet" href="css/styles.css">
@@ -379,7 +379,8 @@
       .announcement-bar, .site-header, .site-footer,
       .tt-hero, .tt-back, .no-print,
       .dash-tabs, .dash-tabs-wrap, .week-nav, .del-btn,
-      #tt-top-bar, .stats-row { display: none !important; }
+      #tt-top-bar, .stats-row,
+      .quick-exit-btn, #quick-exit { display: none !important; }
 
       body { background: white; }
       .tt-wrap { max-width: 100%; margin: 0; padding: 0; }
@@ -2258,15 +2259,15 @@
         btnEl.disabled = false;
         btnEl.innerHTML = '<i class="bi bi-send"></i> Submit This Period';
       } else if (approval.status === 'approved') {
-        statusEl.innerHTML = `<span style="color:var(--color-accent);font-weight:600">✓ Approved</span> — ${esc(label)} approved by your employer.`;
+        statusEl.innerHTML = `<span style="color:var(--color-accent);font-weight:600">✓ Approved</span>: ${esc(label)} approved by your employer.`;
         btnEl.disabled = true;
         btnEl.innerHTML = '<i class="bi bi-check2-circle"></i> Approved';
       } else if (approval.status === 'rejected') {
-        statusEl.innerHTML = `<span style="color:var(--color-crisis);font-weight:600">Revision Requested</span> — Your employer asked for changes. Update your entries and resubmit.`;
+        statusEl.innerHTML = `<span style="color:var(--color-crisis);font-weight:600">Revision Requested</span>: Your employer asked for changes. Update your entries and resubmit.`;
         btnEl.disabled = false;
         btnEl.innerHTML = '<i class="bi bi-arrow-repeat"></i> Resubmit';
       } else {
-        statusEl.innerHTML = `<span style="color:#b45309;font-weight:600">⏳ Pending</span> — Submitted ${new Date(approval.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}. Awaiting employer review.`;
+        statusEl.innerHTML = `<span style="color:#b45309;font-weight:600">⏳ Pending</span>. Submitted ${new Date(approval.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}. Awaiting employer review.`;
         btnEl.disabled = false;
         btnEl.innerHTML = '<i class="bi bi-arrow-repeat"></i> Resubmit';
       }
@@ -2327,7 +2328,7 @@
       if (_sigCtx && _sigCanvas) _sigCtx.clearRect(0, 0, _sigCanvas.width, _sigCanvas.height);
     }
     function ttSaveSig() {
-      if (!_sigCanvas) { alert('Signature pad not ready — try switching to the Print tab first.'); return; }
+      if (!_sigCanvas) { alert('Signature pad not ready. Try switching to the Print tab first.'); return; }
       const sess = getSession();
       if (!sess) return;
       const data = _sigCanvas.toDataURL('image/png');
@@ -2474,7 +2475,7 @@
       if (clock) {
         widget.classList.add('is-clocked');
         if (statusEl)  statusEl.textContent = 'Clocked In';
-        if (taskLabel) { taskLabel.textContent = `${clock.type} — ${clock.task}`; taskLabel.style.display = 'block'; }
+        if (taskLabel) { taskLabel.textContent = `${clock.type}: ${clock.task}`; taskLabel.style.display = 'block'; }
         if (inSec)  inSec.style.display  = 'none';
         if (outSec) outSec.style.display = 'block';
         document.title = '● Clocked In | Time Tracking Portal';
@@ -3442,6 +3443,13 @@
         tokens['TOTAL_PARKING']     = totPark.toFixed(2);
         tokens['TOTAL_MILEAGE_ALL'] = (totMiPay + totPark).toFixed(2);
 
+        /* Signature tokens for Excel template */
+        const sigRec = (db.signatures||{})[key];
+        tokens['SIGNATURE']      = sigRec ? (sigRec.type === 'typed' ? sigRec.data : sess.empName) : '';
+        tokens['SIGNATURE_DATE'] = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        tokens['EE_SIGNATURE']   = tokens['SIGNATURE'];
+        tokens['EE_SIG_DATE']    = tokens['SIGNATURE_DATE'];
+
         const binStr = atob(employer.spreadsheetTemplate.data);
         const bytes  = new Uint8Array(binStr.length);
         for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
@@ -3449,19 +3457,39 @@
 
         wb.SheetNames.forEach(sn => {
           const ws = wb.Sheets[sn];
+          /* Track rows where every string cell was a pure token and is now blank */
+          const blankedRows = new Set();
           Object.keys(ws).forEach(ref => {
             if (ref.startsWith('!')) return;
             const cell = ws[ref];
             if (cell && (cell.t === 's' || cell.t === 'str') && typeof cell.v === 'string') {
-              let v = cell.v;
+              const orig = cell.v;
+              let v = orig;
               Object.keys(tokens).forEach(k => {
                 v = v.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'gi'), tokens[k]);
               });
-              /* blank any remaining unfilled placeholder tokens */
               v = v.replace(/\{\{[^}]+\}\}/g, '');
-              if (v !== cell.v) { cell.v = v; cell.w = v; }
+              if (v !== orig) { cell.v = v; cell.w = v; }
+              if (v === '' && /^\{\{[^}]+\}\}$/.test(orig.trim())) {
+                /* This cell was entirely a single unfilled token — mark its row */
+                const rowNum = parseInt(ref.replace(/[A-Za-z]+/, ''), 10);
+                blankedRows.add(rowNum);
+              }
             }
           });
+          /* Clear numeric cells on rows that had their tokens entirely blanked */
+          if (blankedRows.size) {
+            Object.keys(ws).forEach(ref => {
+              if (ref.startsWith('!')) return;
+              const cell = ws[ref];
+              if (cell && cell.t === 'n') {
+                const rowNum = parseInt(ref.replace(/[A-Za-z]+/, ''), 10);
+                if (blankedRows.has(rowNum)) {
+                  cell.t = 'z'; cell.v = undefined; delete cell.w; delete cell.f;
+                }
+              }
+            });
+          }
         });
 
         const tplBase = employer.spreadsheetTemplate.name.replace(/\.[^.]+$/, '');
@@ -3585,11 +3613,15 @@
               </tr></tfoot>
             </table>
           </div>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end">
-            <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
-            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
-            <div><strong>${esc(erTitle)} Signature:</strong><br>${erSigHtml}</div>
-            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${erSigDate || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+          <div style="display:flex;gap:2.5rem;flex-wrap:wrap;align-items:flex-end;page-break-inside:avoid">
+            <div style="display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:nowrap">
+              <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
+              <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
+            </div>
+            <div style="display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:nowrap">
+              <div><strong>${esc(erTitle)} Signature:</strong><br>${erSigHtml}</div>
+              <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${erSigDate || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+            </div>
           </div>`;
       }
 
@@ -3637,17 +3669,21 @@
               </tr></tfoot>
             </table>
           </div>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end">
-            <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
-            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
-            <div><strong>${esc(erTitle)} Signature:</strong><br>${erSigHtml}</div>
-            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${erSigDate || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+          <div style="display:flex;gap:2.5rem;flex-wrap:wrap;align-items:flex-end;page-break-inside:avoid">
+            <div style="display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:nowrap">
+              <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
+              <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
+            </div>
+            <div style="display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:nowrap">
+              <div><strong>${esc(erTitle)} Signature:</strong><br>${erSigHtml}</div>
+              <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${erSigDate || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+            </div>
           </div>`;
       }
 
       return `
         <div class="print-preview">
-          <h3>Youth Action Board Member &mdash; Stipend Payment Form</h3>
+          <h3>Youth Action Board Member: Stipend Payment Form</h3>
           <div style="font-size:.82rem;margin-bottom:1rem;display:flex;gap:2rem;flex-wrap:wrap">
             <div class="ph-field"><strong>Name:</strong> ${esc(sess.empName)}</div>
             <div class="ph-field"><strong>Pay Period:</strong> ${esc(d.period)}</div>
@@ -3672,11 +3708,15 @@
               </tr></tfoot>
             </table>
           </div>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:flex-end">
-            <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
-            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
-            <div><strong>${esc(erTitle)} Signature:</strong><br>${erSigHtml}</div>
-            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${erSigDate || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+          <div style="display:flex;gap:2.5rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:flex-end;page-break-inside:avoid">
+            <div style="display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:nowrap">
+              <div><strong>Employee Signature:</strong><br>${sigHtml}</div>
+              <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt}</span></div>
+            </div>
+            <div style="display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:nowrap">
+              <div><strong>${esc(erTitle)} Signature:</strong><br>${erSigHtml}</div>
+              <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${erSigDate || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+            </div>
           </div>
           ${contactSection}
           ${mileageSection}
@@ -3748,16 +3788,20 @@
               </tr></tfoot>
             </table>
           </div>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end">
-            <div><strong>Employee Signature:</strong><br>${sigHtml2}</div>
-            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt2}</span></div>
-            <div><strong>${esc(erTitle2)} Signature:</strong><br>${erSigHtml2}</div>
-            <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${erSigDate2 || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+          <div style="display:flex;gap:2.5rem;flex-wrap:wrap;align-items:flex-end;page-break-inside:avoid">
+            <div style="display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:nowrap">
+              <div><strong>Employee Signature:</strong><br>${sigHtml2}</div>
+              <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${todayFmt2}</span></div>
+            </div>
+            <div style="display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:nowrap">
+              <div><strong>${esc(erTitle2)} Signature:</strong><br>${erSigHtml2}</div>
+              <div><strong>Date:</strong><br><span style="border-bottom:1px solid #666;padding:0 .5rem;display:inline-block">${erSigDate2 || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+            </div>
           </div>
         </div>`;
     }
 
-    /* ── Password Reset — Employer ─────────────────────── */
+    /* ── Password Reset: Employer ─────────────────────── */
     let _erFgVerifiedEmail = '';
 
     async function ttEmployerForgotStep1() {
@@ -3779,12 +3823,12 @@
       const email   = _erFgVerifiedEmail;
       const newPass = val('er-fg-newpass').trim();
       const confirm = val('er-fg-confirm').trim();
-      if (!email)                         { showErr('er-forgot-err', 'Session expired — please start over.'); return; }
+      if (!email)                         { showErr('er-forgot-err', 'Session expired. Please start over.'); return; }
       if (!newPass || newPass.length < 6) { showErr('er-forgot-err', 'Password must be at least 6 characters.'); return; }
       if (newPass !== confirm)            { showErr('er-forgot-err', 'Passwords do not match.'); return; }
       const db  = loadDB();
       const emp = Object.values(db.employers).find(e => e.email === email);
-      if (!emp) { showErr('er-forgot-err', 'Session expired — please start over.'); return; }
+      if (!emp) { showErr('er-forgot-err', 'Session expired. Please start over.'); return; }
       emp.salt     = generateSalt();
       emp.passHash = await hashPassword(newPass, emp.salt);
       db.employers[emp.id] = emp;
@@ -3795,7 +3839,7 @@
       ttShowView('employer-dash');
     }
 
-    /* ── Password Reset — Employee ──────────────────────── */
+    /* ── Password Reset: Employee ──────────────────────── */
     function ttEePanel(name) {
       ['login','forgot','code'].forEach(p => {
         const el = document.getElementById('ee-sub-' + p);
@@ -4244,9 +4288,9 @@
       ttEmployerLogin:  () => ttEmployerLogin().catch(e =>  { showErr('er-login-err',  'Unexpected error please try again.'); console.error(e); }),
       ttEmployerLogout,
       ttPopulateOrgSelect,
-      ttEmployeeLogin:  () => ttEmployeeLogin().catch(e =>  { showErr('ee-login-err',   'Unexpected error — please try again.'); console.error(e); }),
+      ttEmployeeLogin:  () => ttEmployeeLogin().catch(e =>  { showErr('ee-login-err',   'Unexpected error please try again.'); console.error(e); }),
       ttEmployeeLogout,
-      ttAddEmployee:    () => ttAddEmployee().catch(e =>    { showErr('er-emp-add-err', 'Unexpected error — please try again.'); console.error(e); }),
+      ttAddEmployee:    () => ttAddEmployee().catch(e =>    { showErr('er-emp-add-err', 'Unexpected error please try again.'); console.error(e); }),
       ttRemoveEmployee, ttSetEmpRate,
       ttShowEmpPayForm, ttHideEmpPayForm, ttSaveEmpPaySettings, ttApplyOrgPayToAll,
       ttCancelErEdit,
