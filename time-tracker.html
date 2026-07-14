@@ -394,12 +394,16 @@
       .print-preview { border: none; padding: 0; }
       .print-preview h3 { -webkit-print-color-adjust: exact; }
 
-      /* Only show the print preview panel, hide everything else */
-      .tt-view { display: none !important; }
-      #view-employee-dash { display: block !important; }
-      .dash-panel { display: none !important; }
-      #ee-panel-ee-print { display: block !important; }
+      /* Show only whichever view/panel is currently active */
+      .tt-view:not(.active)   { display: none !important; }
+      .dash-panel:not(.active) { display: none !important; }
+
+      /* Always show print preview area when it contains content */
       #print-preview-area { display: block !important; }
+
+      /* Hide employer inline edit forms and sig panel from any print */
+      #er-edit-entry-form, #er-edit-contact-form, #er-edit-mileage-form,
+      #er-approve-sig-panel { display: none !important; }
     }
 
     @media (max-width: 640px) {
