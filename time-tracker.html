@@ -608,7 +608,7 @@
               <div id="ee-join-code-ok" class="tt-ok" style="display:none"></div>
               <div class="tt-fg" style="margin-bottom:.75rem">
                 <label for="ee-join-code-input">Join Code</label>
-                <textarea id="ee-join-code-input" class="tt-input" rows="4" style="font-family:monospace;font-size:11px;word-break:break-all" placeholder="Paste your Join Code here..."></textarea>
+                <input id="ee-join-code-input" type="text" class="tt-input" maxlength="15" style="font-family:monospace;font-size:1.2rem;letter-spacing:.12em" placeholder="e.g. aBcD12eF3G">
               </div>
               <button class="btn btn-primary btn-sm" onclick="ttApplyJoinCode()">Apply Code</button>
             </div>
@@ -807,11 +807,13 @@
           <div class="tt-card">
             <h2><i class="bi bi-share" aria-hidden="true"></i> Share with Employees</h2>
             <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:.85rem">Employees on other devices need a <strong>Join Code</strong> to find your organization. Generate a code and share it with each new employee (or anytime you add/update team members).</p>
-            <button class="btn btn-primary" onclick="ttGenerateJoinCode()"><i class="bi bi-key" aria-hidden="true"></i> Generate Join Code</button>
-            <div id="er-join-code-result" style="display:none;margin-top:1rem">
-              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:.5rem">Copy and share this code with your employees. They'll paste it on the Employee Login page.</p>
-              <textarea id="er-join-code-text" readonly style="width:100%;height:90px;font-family:monospace;font-size:11px;line-height:1.4;border:1px solid var(--color-border);border-radius:6px;padding:.5rem;resize:none;word-break:break-all;background:var(--color-bg-soft)"></textarea>
-              <button class="btn btn-outline btn-sm" style="margin-top:.5rem" onclick="ttCopyJoinCode(this)"><i class="bi bi-clipboard" aria-hidden="true"></i> Copy Code</button>
+            <button class="btn btn-primary" id="er-join-code-btn" onclick="ttGenerateJoinCode()"><i class="bi bi-key" aria-hidden="true"></i> Generate Join Code</button>
+            <div id="er-join-code-result" style="display:none;margin-top:1.25rem;text-align:center">
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-bottom:.75rem">Share this code with your employees:</p>
+              <div id="er-join-code-text" style="font-size:2.2rem;font-weight:700;letter-spacing:.3em;font-family:monospace;color:var(--color-accent);padding:.75rem 1.5rem;background:var(--color-bg-soft);border-radius:8px;border:2px solid var(--color-border);display:inline-block"></div>
+              <br>
+              <button class="btn btn-outline btn-sm" style="margin-top:.75rem" onclick="ttCopyJoinCode(this)"><i class="bi bi-clipboard" aria-hidden="true"></i> Copy Code</button>
+              <p style="font-size:var(--font-size-sm);color:var(--color-text-muted);margin-top:.6rem">Codes are valid for ~30 days. Regenerate after adding new team members.</p>
             </div>
           </div>
         </div>
@@ -1877,36 +1879,48 @@
       });
     }
 
-    function ttGenerateJoinCode() {
+    async function ttGenerateJoinCode() {
       const sess = getSession();
       if (!sess) return;
       const db = loadDB();
-      // Strip spreadsheetTemplate data — employees don't need it and it makes the code huge
       const empRecord = Object.assign({}, db.employers[sess.eid]);
-      if (empRecord.spreadsheetTemplate) {
-        empRecord.spreadsheetTemplate = { name: empRecord.spreadsheetTemplate.name };
-      }
-      const payload = {
+      delete empRecord.spreadsheetTemplate;
+      delete empRecord.passHash;
+      delete empRecord.salt;
+      const payload = JSON.stringify({
         v: 1, type: 'org-join',
         eid: sess.eid,
         employer: empRecord,
-        employees: db.employees[sess.eid] || []
-      };
+        employees: (db.employees[sess.eid] || []).map(e => ({
+          id: e.id, name: e.name, email: e.email || '',
+          passHash: e.passHash || '', salt: e.salt || '',
+          payRate: e.payRate, payFrequency: e.payFrequency
+        }))
+      });
+      const btn = document.getElementById('er-join-code-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="bi bi-hourglass-split" aria-hidden="true"></i> Generating...';
       try {
-        const code = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-        document.getElementById('er-join-code-text').value = code;
+        const res = await fetch('https://bytebin.lucko.me/post', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: payload
+        });
+        if (!res.ok) throw new Error('upload_failed');
+        const data = await res.json();
+        document.getElementById('er-join-code-text').textContent = data.key;
         document.getElementById('er-join-code-result').style.display = '';
       } catch(e) {
-        alert('Could not generate code. Please try again.');
+        alert('Could not generate code. Check your internet connection and try again.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-key" aria-hidden="true"></i> Generate Join Code';
       }
     }
 
     function ttCopyJoinCode(btn) {
-      const text = document.getElementById('er-join-code-text').value;
-      navigator.clipboard.writeText(text).catch(() => {
-        const ta = document.getElementById('er-join-code-text');
-        ta.select(); document.execCommand('copy');
-      });
+      const text = document.getElementById('er-join-code-text').textContent.trim();
+      navigator.clipboard.writeText(text).catch(() => document.execCommand('copy'));
       if (btn) {
         const orig = btn.innerHTML;
         btn.textContent = 'Copied!';
@@ -1919,37 +1933,51 @@
       panel.style.display = panel.style.display === 'none' ? '' : 'none';
     }
 
-    function ttApplyJoinCode() {
+    async function ttApplyJoinCode() {
       const raw   = val('ee-join-code-input').trim();
       const errEl = document.getElementById('ee-join-code-err');
       const okEl  = document.getElementById('ee-join-code-ok');
       errEl.style.display = 'none';
       okEl.style.display  = 'none';
-      if (!raw) { showErr('ee-join-code-err', 'Please paste your Join Code.'); return; }
-      let payload;
-      try { payload = JSON.parse(decodeURIComponent(escape(atob(raw)))); }
-      catch { showErr('ee-join-code-err', 'Invalid Join Code. Please copy it again from your employer.'); return; }
-      if (payload.type !== 'org-join' || !payload.employer || !payload.eid) {
-        showErr('ee-join-code-err', 'Invalid Join Code format.'); return;
+      if (!raw) { showErr('ee-join-code-err', 'Please enter your Join Code.'); return; }
+      const btn = document.querySelector('#ee-join-code-panel .btn-primary');
+      btn.disabled = true;
+      btn.textContent = 'Looking up...';
+      try {
+        const res = await fetch(`https://bytebin.lucko.me/${encodeURIComponent(raw)}`);
+        if (!res.ok) throw new Error('not_found');
+        const payload = await res.json();
+        if (payload.type !== 'org-join' || !payload.employer || !payload.eid) {
+          showErr('ee-join-code-err', 'Invalid code. Ask your employer to regenerate it.'); return;
+        }
+        const db = loadDB();
+        db.employers[payload.eid] = payload.employer;
+        db.employees[payload.eid] = payload.employees || [];
+        saveDB(db);
+        ttPopulateOrgSelect();
+        const fgSel = document.getElementById('ee-fg-org');
+        if (fgSel) {
+          fgSel.innerHTML = '<option value="">-- Select your organization --</option>';
+          Object.values(db.employers).forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = e.id; opt.textContent = e.orgName; fgSel.appendChild(opt);
+          });
+        }
+        document.getElementById('ee-org-select').value = payload.eid;
+        okEl.textContent = `Organization "${esc(payload.employer.orgName)}" added. Select it from the dropdown above.`;
+        okEl.style.display = '';
+        document.getElementById('ee-join-code-panel').style.display = 'none';
+        document.getElementById('ee-join-code-input').value = '';
+      } catch(e) {
+        if (e.message === 'not_found') {
+          showErr('ee-join-code-err', 'Code not found. Check for typos or ask your employer for a new one.');
+        } else {
+          showErr('ee-join-code-err', 'Could not look up that code. Check your internet connection and try again.');
+        }
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Apply Code';
       }
-      const db = loadDB();
-      db.employers[payload.eid] = payload.employer;
-      db.employees[payload.eid] = payload.employees || [];
-      saveDB(db);
-      ttPopulateOrgSelect();
-      const fgSel = document.getElementById('ee-fg-org');
-      if (fgSel) {
-        fgSel.innerHTML = '<option value="">-- Select your organization --</option>';
-        Object.values(db.employers).forEach(e => {
-          const opt = document.createElement('option');
-          opt.value = e.id; opt.textContent = e.orgName; fgSel.appendChild(opt);
-        });
-      }
-      document.getElementById('ee-org-select').value = payload.eid;
-      okEl.textContent = `Organization "${esc(payload.employer.orgName)}" added. Select it from the dropdown above.`;
-      okEl.style.display = '';
-      document.getElementById('ee-join-code-panel').style.display = 'none';
-      document.getElementById('ee-join-code-input').value = '';
     }
 
     async function ttEmployeeLogin() {
@@ -4390,7 +4418,9 @@
       ttEmployerLogin:  () => ttEmployerLogin().catch(e =>  { showErr('er-login-err',  'Unexpected error please try again.'); console.error(e); }),
       ttEmployerLogout,
       ttPopulateOrgSelect,
-      ttGenerateJoinCode, ttCopyJoinCode, ttToggleJoinCode, ttApplyJoinCode,
+      ttGenerateJoinCode: () => ttGenerateJoinCode().catch(e => { alert('Could not generate code. Please try again.'); console.error(e); }),
+      ttCopyJoinCode, ttToggleJoinCode,
+      ttApplyJoinCode: () => ttApplyJoinCode().catch(e => { showErr('ee-join-code-err', 'Unexpected error. Please try again.'); console.error(e); }),
       ttEmployeeLogin:  () => ttEmployeeLogin().catch(e =>  { showErr('ee-login-err',   'Unexpected error please try again.'); console.error(e); }),
       ttEmployeeLogout,
       ttAddEmployee:    () => ttAddEmployee().catch(e =>    { showErr('er-emp-add-err', 'Unexpected error please try again.'); console.error(e); }),
