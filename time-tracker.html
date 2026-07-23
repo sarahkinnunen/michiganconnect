@@ -1881,10 +1881,15 @@
       const sess = getSession();
       if (!sess) return;
       const db = loadDB();
+      // Strip spreadsheetTemplate data — employees don't need it and it makes the code huge
+      const empRecord = Object.assign({}, db.employers[sess.eid]);
+      if (empRecord.spreadsheetTemplate) {
+        empRecord.spreadsheetTemplate = { name: empRecord.spreadsheetTemplate.name };
+      }
       const payload = {
         v: 1, type: 'org-join',
         eid: sess.eid,
-        employer: db.employers[sess.eid],
+        employer: empRecord,
         employees: db.employees[sess.eid] || []
       };
       try {
