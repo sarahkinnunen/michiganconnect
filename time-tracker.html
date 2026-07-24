@@ -2739,12 +2739,17 @@
 
     function ttWeekShift(dir) {
       _currentPeriodStart = shiftPeriodStart(_currentPeriodStart, _currentPeriodFreq, dir);
-      ttRenderTimesheet();
-      ttRenderContacts();
-      ttRenderMileage();
-      ttBuildPrint();
-      const lbl2 = document.getElementById('ee-print-week-lbl');
-      if (lbl2) lbl2.textContent = periodLabel(_currentPeriodStart, _currentPeriodFreq);
+      const sess = getSession();
+      if (sess && sess.role === 'employer') {
+        ttRenderEmployerReport();
+      } else {
+        ttRenderTimesheet();
+        ttRenderContacts();
+        ttRenderMileage();
+        ttBuildPrint();
+        const lbl2 = document.getElementById('ee-print-week-lbl');
+        if (lbl2) lbl2.textContent = periodLabel(_currentPeriodStart, _currentPeriodFreq);
+      }
     }
     function ttWeekReset() {
       const sess = getSession();
